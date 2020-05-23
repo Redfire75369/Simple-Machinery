@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+	"model": "cube_all",
+	"textures": {
+	  "all": "simplemachines:blocks/regolith"
+	}
+  },
+  "variants": {
+	"normal": [{}],
+	"inventory": [{}]
+  }
+}

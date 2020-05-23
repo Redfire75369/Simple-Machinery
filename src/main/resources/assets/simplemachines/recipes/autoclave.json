@@ -1,0 +1,20 @@
+{
+	"result": {
+		"item": "simplemachines:autoclave"
+	},
+	"pattern": [
+		" c ",
+		"cfc",
+		" c "
+	],
+	"type": "forge:ore_shaped",
+	"key": {
+		"c": {
+			"type": "forge:ore_dict",
+			"ore": "cobblestone"
+		},
+		"f": {
+			"item": "minecraft:furnace"
+		}
+	}
+}

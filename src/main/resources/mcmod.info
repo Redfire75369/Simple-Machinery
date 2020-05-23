@@ -1,0 +1,15 @@
+[
+{
+  "modid": "simplemachines",
+  "name": "Simple Machines",
+  "description": "A mod with Simple Machines",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Redfire"],
+  "credits": "Redfire",
+  "logoFile": "",
+  "screenshots": []
+}
+]
