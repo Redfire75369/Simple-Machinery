@@ -26,12 +26,13 @@ import javax.annotation.Nullable;
 
 public class BlockAutoclave extends Block implements ITileEntityProvider {
 
-	public static final PropertyDirection faceDirection = PropertyDirection.create("facing");
+	public static final PropertyDirection faceDirection = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final int guiId = 1;
 
 	public BlockAutoclave() {
 		super(Material.IRON);
 		setRegistryName("autoclave");
-		setUnlocalizedName(SimpleMachines.modid + "autoclave");
+		setUnlocalizedName(SimpleMachines.modid + ".autoclave");
 		setHarvestLevel("pickaxe", 1);
 		setCreativeTab(SimpleMachines.creativeTab);
 
@@ -44,15 +45,16 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 		return new TileAutoclave();
 	}
 
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote) {
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (worldIn.isRemote) {
 			return true;
 		}
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = worldIn.getTileEntity(pos);
 		if (!(te instanceof TileAutoclave)) {
 			return false;
 		}
-		player.openGui(SimpleMachines.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+		playerIn.openGui(SimpleMachines.instance, guiId, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 

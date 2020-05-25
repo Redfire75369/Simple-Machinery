@@ -5,8 +5,8 @@ import net.minecraft.util.ResourceLocation;
 import redfire.mods.simplemachines.SimpleMachines;
 
 public class GuiAutoclave extends GuiContainer {
-	public static final int width = 180;
-	public static final int height = 152;
+	public static final int width = 176;
+	public static final int height = 166;
 
 	private static final ResourceLocation background = new ResourceLocation(SimpleMachines.modid, "textures/gui/container/autoclave.png");
 
@@ -21,5 +21,12 @@ public class GuiAutoclave extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		mc.getTextureManager().bindTexture(background);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+	}
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

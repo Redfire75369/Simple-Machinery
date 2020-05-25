@@ -40,11 +40,11 @@ public class SimpleMachines {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
-	    proxy.init(e);
+		proxy.init(e);
 	}
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
-	    proxy.postInit(e);
+		proxy.postInit(e);
 	}
 }

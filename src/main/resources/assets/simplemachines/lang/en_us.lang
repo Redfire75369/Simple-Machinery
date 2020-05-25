@@ -1,7 +1,4 @@
 itemGroup.Simple Machines=Simple Machines
 
-tile.simplemachines.autoclave.name=Basic Autoclave
+tile.simplemachines.autoclave.name=Autoclave
 tile.simplemachines.regolith.name=Asteroid Regolith
-
-item.simplemachines.autoclave.name=Basic Autoclave
-item.simplemachines.regolith.name=Asteroid Regolith

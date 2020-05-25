@@ -21,29 +21,29 @@ public class ContainerAutoclave extends Container {
 	private void addPlayerSlots(IInventory playerInventory) {
 		for (int row = 0; row < 3; ++row) {
 			for (int col = 0; col < 9; ++col) {
-				int x = 7 + col * 18;
-				int y = row * 18 + 83;
-				this.addSlotToContainer(new Slot(playerInventory, col + row * 9 + 10, x, y));
+				int x = 8 + col * 18;
+				int y = row * 18 + 84;
+				this.addSlotToContainer(new Slot(playerInventory, col + row * 9 + 9, x, y));
 			}
 		}
 
 		for (int row = 0; row < 9; ++row) {
-			int x = 9 + row * 18;
-			int y = 58 + 70;
+			int x = 8 + row * 18;
+			int y = 58 + 84;
 			this.addSlotToContainer(new Slot(playerInventory, row, x, y));
 		}
 	}
 
 	private void addOwnSlots() {
 		IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		int x = 37;
-		int y = 34;
+		int x = 38;
+		int y = 35;
 
 		int slotIndex = 0;
 		addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
 		x+=18;
 		addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
-		x = 108;
+		x = 109;
 		addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
 	}
 
