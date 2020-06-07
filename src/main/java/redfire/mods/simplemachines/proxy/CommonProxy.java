@@ -1,6 +1,7 @@
 package redfire.mods.simplemachines.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.config.Configuration;
@@ -12,12 +13,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import redfire.mods.simplemachines.Blocks;
-import redfire.mods.simplemachines.Config;
-import redfire.mods.simplemachines.SimpleMachines;
-import redfire.mods.simplemachines.blocks.Regolith;
+import redfire.mods.simplemachines.*;
 import redfire.mods.simplemachines.tileentities.autoclave.BlockAutoclave;
 import redfire.mods.simplemachines.tileentities.autoclave.TileAutoclave;
+import redfire.mods.simplemachines.util.GenericBlock;
 
 import java.io.File;
 
@@ -29,6 +28,8 @@ public class CommonProxy {
 		File directory = e.getModConfigurationDirectory();
 		config = new Configuration(new File(directory.getPath(), "simplemachines.cfg"));
 		Config.readConfig();
+
+		ModFluids.init();
 	}
 
 	public void init(FMLInitializationEvent e) {
@@ -43,14 +44,16 @@ public class CommonProxy {
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		event.getRegistry().register(new Regolith());
+		event.getRegistry().register(new GenericBlock("regolith", Material.SAND));
 		event.getRegistry().register(new BlockAutoclave());
 		GameRegistry.registerTileEntity(TileAutoclave.class, SimpleMachines.modid + "_autoclave");
 	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().register(new ItemBlock(Blocks.regolith).setRegistryName(Blocks.regolith.getRegistryName()));
-		event.getRegistry().register(new ItemBlock(Blocks.autoclave).setRegistryName(Blocks.autoclave.getRegistryName()));
+		event.getRegistry().register(ModItems.cell);
+
+		event.getRegistry().register(new ItemBlock(ModBlocks.regolith).setRegistryName(ModBlocks.regolith.getRegistryName()));
+		event.getRegistry().register(new ItemBlock(ModBlocks.autoclave).setRegistryName(ModBlocks.autoclave.getRegistryName()));
 	}
 }

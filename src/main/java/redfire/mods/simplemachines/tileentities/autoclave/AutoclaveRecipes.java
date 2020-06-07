@@ -3,7 +3,7 @@ package redfire.mods.simplemachines.tileentities.autoclave;
 import com.google.common.collect.Maps;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import redfire.mods.simplemachines.Blocks;
+import redfire.mods.simplemachines.ModBlocks;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class AutoclaveRecipes {
 	}
 
 	public AutoclaveRecipes() {
-		this.addAutoclaveRecipe(new ItemStack(Item.getItemFromBlock(Blocks.regolith), 1, 0), new ItemStack(Item.getItemFromBlock(Blocks.autoclave), 1, 32767));
+		this.addAutoclaveRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.regolith), 1, 0), new ItemStack(Item.getItemFromBlock(ModBlocks.autoclave), 1, 32767));
 	}
 
 	public void addAutoclaveRecipe(ItemStack output, ItemStack input) {

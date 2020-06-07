@@ -2,6 +2,7 @@ package redfire.mods.simplemachines;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -23,10 +24,13 @@ public class SimpleMachines {
 	public static final CreativeTabs creativeTab = new CreativeTabs("Simple Machines") {
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(Blocks.autoclave);
+			return new ItemStack(ModBlocks.autoclave);
 		}
 	};
 
+	public SimpleMachines() {
+		FluidRegistry.enableUniversalBucket();
+	}
 	@Mod.Instance
 	public static SimpleMachines instance;
 

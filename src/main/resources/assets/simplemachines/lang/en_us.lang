@@ -1,4 +1,8 @@
 itemGroup.Simple Machines=Simple Machines
 
+fluid.steam=Steam
+
+item.simplemachines.cell.name=Fluid Cell
+
 tile.simplemachines.autoclave.name=Autoclave
 tile.simplemachines.regolith.name=Asteroid Regolith
