@@ -1,8 +1,8 @@
 [
 {
-  "modid": "simplemachines",
-  "name": "Simple Machines",
-  "description": "A mod with Simple Machines",
+  "modid": "simplemachinery",
+  "name": "Simple Machinery",
+  "description": "A mod with Simple Machinery",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

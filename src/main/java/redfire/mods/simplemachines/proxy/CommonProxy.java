@@ -33,7 +33,7 @@ public class CommonProxy {
 	}
 
 	public void init(FMLInitializationEvent e) {
-		NetworkRegistry.INSTANCE.registerGuiHandler(SimpleMachines.instance, new GuiProxy());
+		NetworkRegistry.INSTANCE.registerGuiHandler(SimpleMachinery.instance, new GuiProxy());
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
@@ -46,7 +46,7 @@ public class CommonProxy {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		event.getRegistry().register(new GenericBlock("regolith", Material.SAND));
 		event.getRegistry().register(new BlockAutoclave());
-		GameRegistry.registerTileEntity(TileAutoclave.class, SimpleMachines.modid + "_autoclave");
+		GameRegistry.registerTileEntity(TileAutoclave.class, SimpleMachinery.modid + "_autoclave");
 	}
 
 	@SubscribeEvent

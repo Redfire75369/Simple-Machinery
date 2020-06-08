@@ -84,9 +84,9 @@ dependencies {
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
     //compileOnly fg.deobf(group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293', classifier: 'api')
-    //runtimeOnly group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293'
+    //runtime group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293'
     //compileOnly fg.deobf(group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17', classifier: 'api')
-    //runtimeOnly group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17'
+    //runtimeOnly fg.deobf(group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17')
 
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
@@ -108,12 +108,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "simplemachines",
-            "Specification-Vendor": "simplemachinesredfire",
+            "Specification-Title": "simplemachinery",
+            "Specification-Vendor": "simplemachineryredfire",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"simplemachinesredfire",
+            "Implementation-Vendor" :"simplemachineryredfire",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

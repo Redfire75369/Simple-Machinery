@@ -8,10 +8,10 @@ import redfire.mods.simplemachines.tileentities.autoclave.BlockAutoclave;
 import redfire.mods.simplemachines.util.GenericBlock;
 
 public class ModBlocks {
-	@GameRegistry.ObjectHolder("simplemachines:autoclave")
+	@GameRegistry.ObjectHolder("simplemachinery:autoclave")
 	public static BlockAutoclave autoclave;
 
-	@GameRegistry.ObjectHolder("simplemachines:regolith")
+	@GameRegistry.ObjectHolder("simplemachinery:regolith")
 	public static GenericBlock regolith = new GenericBlock("regolith", Material.SAND);
 
 	@SideOnly(Side.CLIENT)

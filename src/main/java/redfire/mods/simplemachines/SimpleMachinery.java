@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 import redfire.mods.simplemachines.proxy.CommonProxy;
 
-@Mod(modid = SimpleMachines.modid, name = SimpleMachines.modname, version = SimpleMachines.version, dependencies = "required-after:forge@[11.16.0.1865,)", useMetadata = true)
-public class SimpleMachines {
+@Mod(modid = SimpleMachinery.modid, name = SimpleMachinery.modname, version = SimpleMachinery.version, dependencies = "required-after:forge@[11.16.0.1865,)", useMetadata = true)
+public class SimpleMachinery {
 
-	public static final String modid = "simplemachines";
-	public static final String modname = "Simple Machines";
+	public static final String modid = "simplemachinery";
+	public static final String modname = "Simple Machinery";
 	public static final String version = "0.0.1";
 
 	@SidedProxy(clientSide = "redfire.mods.simplemachines.proxy.ClientProxy", serverSide = "redfire.mods.simplemachines.proxy.ServerProxy")
@@ -28,11 +28,11 @@ public class SimpleMachines {
 		}
 	};
 
-	public SimpleMachines() {
+	public SimpleMachinery() {
 		FluidRegistry.enableUniversalBucket();
 	}
 	@Mod.Instance
-	public static SimpleMachines instance;
+	public static SimpleMachinery instance;
 
 	public static Logger logger;
 

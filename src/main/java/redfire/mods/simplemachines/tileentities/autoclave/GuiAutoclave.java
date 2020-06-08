@@ -2,13 +2,13 @@ package redfire.mods.simplemachines.tileentities.autoclave;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
-import redfire.mods.simplemachines.SimpleMachines;
+import redfire.mods.simplemachines.SimpleMachinery;
 
 public class GuiAutoclave extends GuiContainer {
 	public static final int width = 176;
 	public static final int height = 166;
 
-	private static final ResourceLocation background = new ResourceLocation(SimpleMachines.modid, "textures/gui/container/autoclave.png");
+	private static final ResourceLocation background = new ResourceLocation(SimpleMachinery.modid, "textures/gui/container/autoclave.png");
 
 	public GuiAutoclave(TileAutoclave tileEntity, ContainerAutoclave container) {
 		super(container);

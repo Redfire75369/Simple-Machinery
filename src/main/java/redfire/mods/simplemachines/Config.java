@@ -19,7 +19,7 @@ public class Config {
 			cfg.load();
 			initGeneralConfig(cfg);
 		} catch (Exception e1) {
-			SimpleMachines.logger.log(Level.ERROR, "Problem loading config file!", e1);
+			SimpleMachinery.logger.log(Level.ERROR, "Problem loading config file!", e1);
 		} finally {
 			if (cfg.hasChanged()) {
 				cfg.save();

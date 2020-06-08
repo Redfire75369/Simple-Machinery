@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -20,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import redfire.mods.simplemachines.SimpleMachines;
+import redfire.mods.simplemachines.SimpleMachinery;
 
 import javax.annotation.Nullable;
 
@@ -32,9 +31,9 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 	public BlockAutoclave() {
 		super(Material.IRON);
 		setRegistryName("autoclave");
-		setUnlocalizedName(SimpleMachines.modid + ".autoclave");
+		setUnlocalizedName(SimpleMachinery.modid + ".autoclave");
 		setHarvestLevel("pickaxe", 1);
-		setCreativeTab(SimpleMachines.creativeTab);
+		setCreativeTab(SimpleMachinery.creativeTab);
 
 		setDefaultState(blockState.getBaseState().withProperty(faceDirection, EnumFacing.NORTH));
 	}
@@ -54,7 +53,7 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 		if (!(te instanceof TileAutoclave)) {
 			return false;
 		}
-		playerIn.openGui(SimpleMachines.instance, guiId, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		playerIn.openGui(SimpleMachinery.instance, guiId, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 

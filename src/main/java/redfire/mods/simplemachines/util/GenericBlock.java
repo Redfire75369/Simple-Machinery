@@ -7,14 +7,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import redfire.mods.simplemachines.SimpleMachines;
+import redfire.mods.simplemachines.SimpleMachinery;
 
 public class GenericBlock extends Block {
 	public GenericBlock(String registryName, Material materialIn) {
 		super(materialIn);
 		setRegistryName(registryName);
-		setUnlocalizedName(SimpleMachines.modid + "." + registryName);
-		setCreativeTab(SimpleMachines.creativeTab);
+		setUnlocalizedName(SimpleMachinery.modid + "." + registryName);
+		setCreativeTab(SimpleMachinery.creativeTab);
 	}
 
 	@SideOnly(Side.CLIENT)
