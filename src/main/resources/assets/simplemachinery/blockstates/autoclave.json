@@ -3,12 +3,12 @@
   "defaults": {
 	"model": "cube",
 	"textures": {
-	  "north": "simplemachines:blocks/autoclave_front",
-	  "south": "simplemachines:blocks/autoclave_side",
-	  "east": "simplemachines:blocks/autoclave_side",
-	  "west": "simplemachines:blocks/autoclave_side",
-	  "up": "simplemachines:blocks/autoclave_top",
-	  "down": "simplemachines:blocks/autoclave_top"
+	  "north": "simplemachinery:blocks/autoclave_front",
+	  "south": "simplemachinery:blocks/autoclave_side",
+	  "east": "simplemachinery:blocks/autoclave_side",
+	  "west": "simplemachinery:blocks/autoclave_side",
+	  "up": "simplemachinery:blocks/autoclave_top",
+	  "down": "simplemachinery:blocks/autoclave_top"
 	}
   },
   "variants": {

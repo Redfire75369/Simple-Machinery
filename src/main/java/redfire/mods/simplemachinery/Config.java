@@ -1,8 +1,8 @@
-package redfire.mods.simplemachines;
+package redfire.mods.simplemachinery;
 
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
-import redfire.mods.simplemachines.proxy.CommonProxy;
+import redfire.mods.simplemachinery.proxy.CommonProxy;
 
 
 public class Config {

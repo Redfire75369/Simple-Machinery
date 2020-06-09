@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.autoclave;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -55,12 +55,13 @@ public class ContainerAutoclave extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
+			TileAutoclave te = new TileAutoclave();
 
-			if (index < TileAutoclave.size) {
-				if (!this.mergeItemStack(itemstack1, TileAutoclave.size, this.inventorySlots.size(), true)) {
+			if (index < te.input_slots) {
+				if (!this.mergeItemStack(itemstack1, te.input_slots, this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, TileAutoclave.size, false)) {
+			} else if (!this.mergeItemStack(itemstack1, 0, te.input_slots, false)) {
 				return ItemStack.EMPTY;
 			}
 

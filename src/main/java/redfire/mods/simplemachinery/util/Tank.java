@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.util;
+package redfire.mods.simplemachinery.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;

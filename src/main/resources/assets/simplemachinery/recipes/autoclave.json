@@ -3,15 +3,18 @@
 		"item": "simplemachines:autoclave"
 	},
 	"pattern": [
-		" c ",
+		"bcb",
 		"cfc",
-		" c "
+		"bcb"
 	],
 	"type": "forge:ore_shaped",
 	"key": {
+		"b": {
+			"item": "minecraft:bucket"
+		},
 		"c": {
 			"type": "forge:ore_dict",
-			"ore": "cobblestone"
+			"ore": "ingotIron"
 		},
 		"f": {
 			"item": "minecraft:furnace"

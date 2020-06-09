@@ -1,8 +1,8 @@
-package redfire.mods.simplemachines.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.autoclave;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
-import redfire.mods.simplemachines.SimpleMachinery;
+import redfire.mods.simplemachinery.SimpleMachinery;
 
 public class GuiAutoclave extends GuiContainer {
 	public static final int width = 176;

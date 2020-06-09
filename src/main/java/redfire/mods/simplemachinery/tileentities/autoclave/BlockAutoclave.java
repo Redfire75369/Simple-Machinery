@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.autoclave;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -10,8 +10,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import redfire.mods.simplemachines.SimpleMachinery;
+import redfire.mods.simplemachinery.SimpleMachinery;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +35,7 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 		super(Material.IRON);
 		setRegistryName("autoclave");
 		setUnlocalizedName(SimpleMachinery.modid + ".autoclave");
+		setHardness(3.5F);
 		setHarvestLevel("pickaxe", 1);
 		setCreativeTab(SimpleMachinery.creativeTab);
 
@@ -57,6 +61,16 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 		return true;
 	}
 
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+
+		if (tileentity instanceof TileAutoclave) {
+			((TileAutoclave) tileentity).dropInventoryItems(worldIn, pos);
+		}
+
+		super.breakBlock(worldIn, pos, state);
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
@@ -64,7 +78,7 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 
 	@Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(faceDirection, EnumFacing.getDirectionFromEntityLiving(pos, placer));
+		return this.getDefaultState().withProperty(faceDirection, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override

@@ -1,8 +1,8 @@
-itemGroup.Simple Machines=Simple Machines
+itemGroup.simple_machinery=Simple Machinery
 
 fluid.steam=Steam
 
-item.simplemachines.cell.name=Fluid Cell
+item.simplemachinery.cell.name=Fluid Cell
 
-tile.simplemachines.autoclave.name=Autoclave
-tile.simplemachines.regolith.name=Asteroid Regolith
+tile.simplemachinery.autoclave.name=Autoclave
+tile.simplemachinery.regolith.name=Asteroid Regolith

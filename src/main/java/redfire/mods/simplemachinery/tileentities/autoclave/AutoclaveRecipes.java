@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.autoclave;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -10,7 +10,8 @@ import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import static java.util.Objects.isNull;
 
 public class AutoclaveRecipes {
 	public static final AutoclaveRecipes autoclave_base = new AutoclaveRecipes();
@@ -24,12 +25,12 @@ public class AutoclaveRecipes {
 
 	public AutoclaveRecipes() {
 		for (int i = 0; i < 16; i++) {
-			addAutoclaveRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE_POWDER), 1, i), new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE_POWDER), 1, i), FluidRegistry.getFluidStack("water", 1));
+			addAutoclaveRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE), 1, i), new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE_POWDER), 1, i), FluidRegistry.getFluidStack("water", 125));
 		}
 	}
 
 	public void addAutoclaveRecipe(ItemStack output, ItemStack input, FluidStack fluidInput) {
-		if (getAutoclaveOutput(input) != ItemStack.EMPTY) {
+		if (getAutoclaveOutput(input, fluidInput) != ItemStack.EMPTY) {
 			FMLLog.log.info("Ignored autoclave recipe with conflicting input: {} = {}", input, output);
 			return;
 		}
@@ -38,27 +39,36 @@ public class AutoclaveRecipes {
 		fluidInputs.add(fluidInput);
 	}
 
-	public ItemStack getAutoclaveOutput(ItemStack input) {
+	public ItemStack getAutoclaveOutput(ItemStack input, FluidStack fluidInput) {
 		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (this.compareItemStacks(input, itemInputs.get(i))) {
-				return itemInputs.get(i);
+			if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
+				return itemOutputs.get(i);
 			}
 		}
 
 		return ItemStack.EMPTY;
 	}
 
-	public FluidStack getAutoclaveFluidInput(ItemStack input) {
+	public FluidStack getAutoclaveFluidInput(ItemStack input , FluidStack fluidInput) {
 		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (this.compareItemStacks(input, itemInputs.get(i))) {
+			if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
 				return fluidInputs.get(i);
 			}
 		}
 
-		return FluidRegistry.getFluidStack("water", 1);
+		return null;
 	}
 
 	private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {
 		return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
+	}
+	private boolean compareFluidStacks(FluidStack stack1, FluidStack stack2) {
+		if (isNull(stack1) || isNull(stack2)) {
+			return false;
+		}
+		return stack1.getFluid() == stack2.getFluid() && stack1.amount == stack2.amount;
+	}
+	private boolean compareFluids(Fluid fluid1, Fluid fluid2) {
+		return compareFluidStacks(new FluidStack(fluid1, 1000), new FluidStack(fluid2, 1000));
 	}
 }

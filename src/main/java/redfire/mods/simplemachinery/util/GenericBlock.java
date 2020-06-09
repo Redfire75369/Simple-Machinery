@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.util;
+package redfire.mods.simplemachinery.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import redfire.mods.simplemachines.SimpleMachinery;
+import redfire.mods.simplemachinery.SimpleMachinery;
 
 public class GenericBlock extends Block {
 	public GenericBlock(String registryName, Material materialIn) {

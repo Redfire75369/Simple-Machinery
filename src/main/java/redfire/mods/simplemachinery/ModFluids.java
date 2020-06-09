@@ -1,8 +1,8 @@
-package redfire.mods.simplemachines;
+package redfire.mods.simplemachinery;
 
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import redfire.mods.simplemachines.util.GenericFluid;
+import redfire.mods.simplemachinery.util.GenericFluid;
 
 public class ModFluids {
 	public static final GenericFluid steam = new GenericFluid("steam");

@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines;
+package redfire.mods.simplemachinery;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
-import redfire.mods.simplemachines.proxy.CommonProxy;
+import redfire.mods.simplemachinery.proxy.CommonProxy;
 
 @Mod(modid = SimpleMachinery.modid, name = SimpleMachinery.modname, version = SimpleMachinery.version, dependencies = "required-after:forge@[11.16.0.1865,)", useMetadata = true)
 public class SimpleMachinery {
@@ -18,10 +18,10 @@ public class SimpleMachinery {
 	public static final String modname = "Simple Machinery";
 	public static final String version = "0.0.1";
 
-	@SidedProxy(clientSide = "redfire.mods.simplemachines.proxy.ClientProxy", serverSide = "redfire.mods.simplemachines.proxy.ServerProxy")
+	@SidedProxy(clientSide = "redfire.mods.simplemachinery.proxy.ClientProxy", serverSide = "redfire.mods.simplemachinery.proxy.ServerProxy")
 	public static CommonProxy proxy;
 
-	public static final CreativeTabs creativeTab = new CreativeTabs("Simple Machines") {
+	public static final CreativeTabs creativeTab = new CreativeTabs("simple_machinery") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(ModBlocks.autoclave);

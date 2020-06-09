@@ -1,23 +1,25 @@
-package redfire.mods.simplemachines.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.autoclave;
 
-import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import redfire.mods.simplemachines.util.GenericTileEntity;
+import redfire.mods.simplemachinery.util.GenericTileEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+
+import static java.util.Objects.isNull;
+
 
 public class TileAutoclave extends GenericTileEntity implements ITickable {
 	public static int size;
@@ -56,9 +58,17 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 
 	private void startAutoclave() {
 		for (int i = 0; i < input_slots; i++) {
-			ItemStack result = AutoclaveRecipes.instance().getAutoclaveOutput(inputHandler.getStackInSlot(i));
+			ItemStack input =  inputHandler.getStackInSlot(i);
+			FluidStack tank;
+			if (isNull(tanks.get(1).getFluid())) {
+				tank = null;
+			} else {
+				tank = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
+			}
+			ItemStack result = AutoclaveRecipes.instance().getAutoclaveOutput(input, tank);
 			if (!(result.isEmpty())) {
-				if (insertOutput(result.copy(), true)) {
+				FluidStack fluidUsed = AutoclaveRecipes.instance().getAutoclaveFluidInput(input, tank);
+				if (insertOutput(result.copy(), true) && tanks.get(1).canDrainFluidType(fluidUsed)) {
 					progress = max_progress;
 					markDirty();
 				}
@@ -69,14 +79,27 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 
 	private void attemptAutoclave() {
 		for (int i = 0; i < input_slots; i++) {
-			ItemStack result = AutoclaveRecipes.instance().getAutoclaveOutput(inputHandler.getStackInSlot(i));
+			ItemStack input =  inputHandler.getStackInSlot(i);
+			FluidStack tank = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
+			ItemStack result = AutoclaveRecipes.instance().getAutoclaveOutput(input, tank);
 			if (!(result.isEmpty())) {
-				if (insertOutput(result.copy(), false)) {
+				FluidStack fluidUsed = AutoclaveRecipes.instance().getAutoclaveFluidInput(input, tank);
+				if (insertOutput(result.copy(), false) && tanks.get(1).canDrainFluidType(fluidUsed)) {
 					inputHandler.extractItem(i, 1, false);
-					tanks.get(1).drain(AutoclaveRecipes.instance().getAutoclaveFluidInput(inputHandler.getStackInSlot(i)), true);
+					tanks.get(1).drain(fluidUsed, true);
 					markDirty();
 				}
 				break;
+			}
+		}
+	}
+
+	public void dropInventoryItems(World worldIn, BlockPos pos) {
+		for (int i = 0, ii = size; i < ii; i++) {
+			ItemStack stack = combinedHandler.getStackInSlot(i);
+			FMLLog.log.info("{}", stack);
+			if (!stack.isEmpty()) {
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), stack);
 			}
 		}
 	}
@@ -88,7 +111,6 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		super.readTanks(compound);
 		progress = compound.getInteger("progress");
 	}
-
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeInventory(compound);
@@ -101,6 +123,7 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
 	}
 
+
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -111,7 +134,6 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		}
 		return super.hasCapability(capability, facing);
 	}
-
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -124,7 +146,7 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 			}
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(0));
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(1));
 		}
 		return super.getCapability(capability, facing);
 	}

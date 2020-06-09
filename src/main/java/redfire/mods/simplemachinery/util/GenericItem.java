@@ -1,7 +1,7 @@
-package redfire.mods.simplemachines.util;
+package redfire.mods.simplemachinery.util;
 
 import net.minecraft.item.Item;
-import redfire.mods.simplemachines.SimpleMachinery;
+import redfire.mods.simplemachinery.SimpleMachinery;
 
 public class GenericItem extends Item {
 	public GenericItem(String registryName) {

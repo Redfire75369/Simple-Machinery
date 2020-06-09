@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.util;
+package redfire.mods.simplemachinery.util;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -23,7 +23,7 @@ public class GenericTileEntity extends TileEntity {
 	protected ItemStackHandler outputHandler;
 	protected CombinedInvWrapper combinedHandler;
 
-	public GenericTileEntity(int input, int output,int fluid1, int fluid2) {
+	public GenericTileEntity(int input, int output, int fluid1, int fluid2) {
 		this.input_slots = input;
 		this.output_slots = output;
 		this.fluidStorage.add(0, fluid1);
