@@ -1,13 +1,13 @@
-package redfire.mods.simplemachines.proxy;
+package redfire.mods.simplemachinery.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import redfire.mods.simplemachines.tileentities.autoclave.ContainerAutoclave;
-import redfire.mods.simplemachines.tileentities.autoclave.GuiAutoclave;
-import redfire.mods.simplemachines.tileentities.autoclave.TileAutoclave;
+import redfire.mods.simplemachinery.tileentities.autoclave.ContainerAutoclave;
+import redfire.mods.simplemachinery.tileentities.autoclave.GuiAutoclave;
+import redfire.mods.simplemachinery.tileentities.autoclave.TileAutoclave;
 
 public class GuiProxy implements IGuiHandler {
 	@Override

@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.proxy;
+package redfire.mods.simplemachinery.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -13,10 +13,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import redfire.mods.simplemachines.*;
-import redfire.mods.simplemachines.tileentities.autoclave.BlockAutoclave;
-import redfire.mods.simplemachines.tileentities.autoclave.TileAutoclave;
-import redfire.mods.simplemachines.util.GenericBlock;
+import redfire.mods.simplemachinery.*;
+import redfire.mods.simplemachinery.tileentities.autoclave.BlockAutoclave;
+import redfire.mods.simplemachinery.tileentities.autoclave.TileAutoclave;
+import redfire.mods.simplemachinery.util.GenericBlock;
 
 import java.io.File;
 
@@ -26,7 +26,7 @@ public class CommonProxy {
 
 	public void preInit(FMLPreInitializationEvent e) {
 		File directory = e.getModConfigurationDirectory();
-		config = new Configuration(new File(directory.getPath(), "simplemachines.cfg"));
+		config = new Configuration(new File(directory.getPath(), "simplemachinery.cfg"));
 		Config.readConfig();
 
 		ModFluids.init();
@@ -51,7 +51,7 @@ public class CommonProxy {
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().register(ModItems.cell);
+		//event.getRegistry().register(ModItems.cell);
 
 		event.getRegistry().register(new ItemBlock(ModBlocks.regolith).setRegistryName(ModBlocks.regolith.getRegistryName()));
 		event.getRegistry().register(new ItemBlock(ModBlocks.autoclave).setRegistryName(ModBlocks.autoclave.getRegistryName()));

@@ -1,4 +1,4 @@
-package redfire.mods.simplemachines.proxy;
+package redfire.mods.simplemachinery.proxy;
 
 public class ServerProxy {
 }
