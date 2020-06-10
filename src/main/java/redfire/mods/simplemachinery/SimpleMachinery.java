@@ -16,7 +16,7 @@ public class SimpleMachinery {
 
 	public static final String modid = "simplemachinery";
 	public static final String modname = "Simple Machinery";
-	public static final String version = "0.0.1";
+	public static final String version = "0.0.2";
 
 	@SidedProxy(clientSide = "redfire.mods.simplemachinery.proxy.ClientProxy", serverSide = "redfire.mods.simplemachinery.proxy.ServerProxy")
 	public static CommonProxy proxy;

@@ -95,4 +95,5 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(faceDirection).getIndex();
 	}
+
 }
