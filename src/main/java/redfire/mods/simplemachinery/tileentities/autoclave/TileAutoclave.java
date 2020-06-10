@@ -24,7 +24,6 @@ import static java.util.Objects.isNull;
 public class TileAutoclave extends GenericTileEntity implements ITickable {
 	public static int size;
 	private int progress = 0;
-	private int max_progress = 40;
 
 	public TileAutoclave() {
 		super(2, 1, 4000, 4000);
@@ -36,6 +35,13 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		if (!(world.isRemote)) {
 			if (progress > 0) {
 				progress--;
+				for (int i = 0; i < input_slots; i++) {
+					if (!inputHandler.getStackInSlot(i).isEmpty()) {
+						tanks.get(0).drain(AutoclaveRecipes.instance().getAutoclaveSteamUsage(inputHandler.getStackInSlot(i), new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount())),true);
+						break;
+					}
+				}
+
 				if (progress <= 0) {
 					attemptAutoclave();
 				}
@@ -60,16 +66,17 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		for (int i = 0; i < input_slots; i++) {
 			ItemStack input =  inputHandler.getStackInSlot(i);
 			FluidStack tank;
+			AutoclaveRecipes recipes = new AutoclaveRecipes();
 			if (isNull(tanks.get(1).getFluid())) {
 				tank = null;
 			} else {
 				tank = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
 			}
-			ItemStack result = AutoclaveRecipes.instance().getAutoclaveOutput(input, tank);
+			ItemStack result = recipes.getAutoclaveOutput(input, tank);
 			if (!(result.isEmpty())) {
 				FluidStack fluidUsed = AutoclaveRecipes.instance().getAutoclaveFluidInput(input, tank);
-				if (insertOutput(result.copy(), true) && tanks.get(1).canDrainFluidType(fluidUsed)) {
-					progress = max_progress;
+				if (insertOutput(result.copy(), true) && tanks.get(1).canDrainFluidType(fluidUsed) && recipes.getAutoclaveSteamRequired(input, tank) < tanks.get(0).getFluidAmount()) {
+					progress = recipes.getAutoclaveTicks(input, tank);
 					markDirty();
 				}
 				break;
@@ -146,7 +153,11 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 			}
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(1));
+			if (facing == EnumFacing.UP) {
+				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(0));
+			} else {
+				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(1));
+			}
 		}
 		return super.getCapability(capability, facing);
 	}

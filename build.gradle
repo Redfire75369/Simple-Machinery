@@ -17,9 +17,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.0.1'
-group = 'redfire.mods.simplemachines' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'simplemachines'
+version = '0.0.2'
+group = 'redfire.mods.simplemachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'simplemachinery'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -61,6 +61,10 @@ minecraft {
 
 repositories {
     maven {
+        name 'BlameJared'
+        url 'https://maven.blamejared.com/'
+    }
+    maven {
         name 'tterrag maven'
         url 'https://maven.tterrag.com/'
     }
@@ -75,32 +79,25 @@ repositories {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
+    /*
+    // CraftTweaker API
+    compile fg.deobf(group: 'CraftTweaker2', name: 'CraftTweaker2-API', version: '4.1.20.555') {
+        exclude group: 'org.ow2.asm'
+        exclude group: 'com.google.code.gson'
+    }
+    // CraftTweaker 2
+    runtime(group: 'CraftTweaker2', name: 'CraftTweaker2-MC1120-Main', version: '1.12-4.1.20.555') {
+        exclude group: 'org.ow2.asm'
+        exclude group: 'com.google.code.gson'
+    }*/
+
+
     //compileOnly fg.deobf(group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293', classifier: 'api')
     //runtime group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293'
     //compileOnly fg.deobf(group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17', classifier: 'api')
     //runtimeOnly fg.deobf(group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17')
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 }
 

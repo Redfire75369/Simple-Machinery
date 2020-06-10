@@ -18,6 +18,7 @@ public class GenericTileEntity extends TileEntity {
 	public IntList fluidStorage = new IntArrayList(2);
 
 	protected List<Tank> tanks = new ArrayList<>(2);
+	protected CombinedTank fluidHandler;
 
 	protected ItemStackHandler inputHandler;
 	protected ItemStackHandler outputHandler;
@@ -42,7 +43,7 @@ public class GenericTileEntity extends TileEntity {
 			}
 		};
 
-		this.combinedHandler =  new CombinedInvWrapper(inputHandler, outputHandler);
+		this.combinedHandler = new CombinedInvWrapper(inputHandler, outputHandler);
 		this.tanks.add(0, new Tank(fluid1));
 		this.tanks.add(1, new Tank(fluid2));
 	}
