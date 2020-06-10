@@ -2,4 +2,4 @@
 
 ![Commits](https://img.shields.io/github/commit-activity/m/Redfire75369/Simple-Machinery)
 
-will be expanded later
+This mod adds simple machines to Minecraft 1.12.2
