@@ -17,6 +17,7 @@ import redfire.mods.simplemachinery.*;
 import redfire.mods.simplemachinery.tileentities.autoclave.BlockAutoclave;
 import redfire.mods.simplemachinery.tileentities.autoclave.TileAutoclave;
 import redfire.mods.simplemachinery.tileentities.turntable.BlockTurntable;
+import redfire.mods.simplemachinery.tileentities.turntable.TileTurntable;
 import redfire.mods.simplemachinery.util.GenericBlock;
 
 import java.io.File;
@@ -49,6 +50,7 @@ public class CommonProxy {
 		event.getRegistry().register(new BlockAutoclave());
 		event.getRegistry().register(new BlockTurntable());
 		GameRegistry.registerTileEntity(TileAutoclave.class, SimpleMachinery.modid + "_autoclave");
+		GameRegistry.registerTileEntity(TileTurntable.class, SimpleMachinery.modid + "_turntable");
 	}
 
 	@SubscribeEvent

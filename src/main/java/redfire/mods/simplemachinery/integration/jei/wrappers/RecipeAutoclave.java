@@ -1,31 +1,37 @@
 package redfire.mods.simplemachinery.integration.jei.wrappers;
 
+import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collections;
 import java.util.List;
 
-public class WrapperAutoclave implements IRecipeWrapper {
+public class RecipeAutoclave implements IRecipeWrapper {
 	private final List<List<ItemStack>> inputs;
-	private final List<List<FluidStack>> fluidInputs;
+	private final FluidStack fluidInput;
 	private final ItemStack output;
 
-	public WrapperAutoclave(List<ItemStack> inputs, List<FluidStack> fluidInputs, ItemStack output) {
+	public RecipeAutoclave(List<ItemStack> inputs, FluidStack fluidInput, ItemStack output) {
 		this.inputs = Collections.singletonList(inputs);
-		this.fluidInputs = Collections.singletonList(fluidInputs);
+		this.fluidInput = fluidInput;
 		this.output = output;
+	}
+
+	public RecipeAutoclave(IJeiHelpers jeiHelpers, RecipeAutoclave recipe) {
+		this.inputs = recipe.inputs;
+		this.fluidInput = recipe.fluidInput;
+		this.output = recipe.output;
 	}
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputLists(VanillaTypes.ITEM, inputs);
-		ingredients.setInputLists(VanillaTypes.FLUID, fluidInputs);
+		ingredients.setInput(VanillaTypes.FLUID, fluidInput);
 		ingredients.setOutput(VanillaTypes.ITEM, output);
 	}
 
