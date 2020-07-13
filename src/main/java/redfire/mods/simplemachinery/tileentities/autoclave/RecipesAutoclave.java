@@ -1,5 +1,6 @@
 package redfire.mods.simplemachinery.tileentities.autoclave;
 
+import crafttweaker.socket.SingleError;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.init.Blocks;
@@ -9,6 +10,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLLog;
+import org.apache.logging.log4j.Level;
+import redfire.mods.simplemachinery.SimpleMachinery;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -16,19 +19,19 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-public class AutoclaveRecipes {
-	public static final AutoclaveRecipes autoclave_base = new AutoclaveRecipes();
+public class RecipesAutoclave {
+	public static final RecipesAutoclave autoclave_base = new RecipesAutoclave();
 	private List<ItemStack> itemInputs = new ArrayList();
 	private List<ItemStack> itemOutputs = new ArrayList();
 	private List<FluidStack> fluidInputs = new ArrayList();
 	private IntList ticks = new IntArrayList();
 	private IntList steamPerTick = new IntArrayList();
 
-	public static AutoclaveRecipes instance() {
+	public static RecipesAutoclave instance() {
 		return autoclave_base;
 	}
 
-	public AutoclaveRecipes() {
+	public RecipesAutoclave() {
 		for (int i = 0; i < 16; i++) {
 			addAutoclaveRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE), 1, i), new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE_POWDER), 1, i), FluidRegistry.getFluidStack("water", 125), 25, 5);
 		}
@@ -49,7 +52,7 @@ public class AutoclaveRecipes {
 	public ItemStack getAutoclaveOutput(ItemStack input, FluidStack fluidInput) {
 		if (!isNull(fluidInput)) {
 			for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-				if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
+				if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
 					return itemOutputs.get(i);
 				}
 			}
@@ -59,7 +62,7 @@ public class AutoclaveRecipes {
 	}
 	public FluidStack getAutoclaveFluidInput(ItemStack input , FluidStack fluidInput) {
 		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
+			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
 				return fluidInputs.get(i);
 			}
 		}
@@ -68,7 +71,7 @@ public class AutoclaveRecipes {
 	}
 	public int getAutoclaveSteamUsage(ItemStack input, FluidStack fluidInput) {
 		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
+			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
 				return steamPerTick.get(i);
 			}
 		}
@@ -77,7 +80,7 @@ public class AutoclaveRecipes {
 	}
 	public int getAutoclaveTicks(ItemStack input, FluidStack fluidInput) {
 		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
+			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
 				return ticks.get(i);
 			}
 		}
@@ -86,12 +89,22 @@ public class AutoclaveRecipes {
 	}
 	public int getAutoclaveSteamRequired(ItemStack input, FluidStack fluidInput) {
 		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (this.compareItemStacks(input, itemInputs.get(i)) && this.compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
+			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
 				return ticks.get(i) * steamPerTick.get(i);
 			}
 		}
 
 		return 0;
+	}
+
+	public List<ItemStack> getItemInputs() {
+		return itemInputs;
+	}
+	public List<ItemStack> getItemOutputs() {
+		return itemOutputs;
+	}
+	public List<FluidStack> getFluidInputs() {
+		return fluidInputs;
 	}
 
 	private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {

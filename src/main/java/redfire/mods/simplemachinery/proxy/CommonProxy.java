@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import redfire.mods.simplemachinery.*;
 import redfire.mods.simplemachinery.tileentities.autoclave.BlockAutoclave;
 import redfire.mods.simplemachinery.tileentities.autoclave.TileAutoclave;
+import redfire.mods.simplemachinery.tileentities.turntable.BlockTurntable;
 import redfire.mods.simplemachinery.util.GenericBlock;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class CommonProxy {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		event.getRegistry().register(new GenericBlock("regolith", Material.SAND));
 		event.getRegistry().register(new BlockAutoclave());
+		event.getRegistry().register(new BlockTurntable());
 		GameRegistry.registerTileEntity(TileAutoclave.class, SimpleMachinery.modid + "_autoclave");
 	}
 
@@ -55,5 +57,6 @@ public class CommonProxy {
 
 		event.getRegistry().register(new ItemBlock(ModBlocks.regolith).setRegistryName(ModBlocks.regolith.getRegistryName()));
 		event.getRegistry().register(new ItemBlock(ModBlocks.autoclave).setRegistryName(ModBlocks.autoclave.getRegistryName()));
+		event.getRegistry().register(new ItemBlock(ModBlocks.turntable).setRegistryName(ModBlocks.turntable.getRegistryName()));
 	}
 }

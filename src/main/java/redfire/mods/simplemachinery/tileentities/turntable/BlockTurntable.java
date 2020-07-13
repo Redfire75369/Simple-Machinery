@@ -1,4 +1,4 @@
-package redfire.mods.simplemachinery.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.turntable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -23,15 +23,15 @@ import redfire.mods.simplemachinery.SimpleMachinery;
 
 import javax.annotation.Nullable;
 
-public class BlockAutoclave extends Block implements ITileEntityProvider {
+public class BlockTurntable extends Block implements ITileEntityProvider {
 
 	public static final PropertyDirection faceDirection = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final int guiId = 1;
+	public static final int guiId = 2;
 
-	public BlockAutoclave() {
+	public BlockTurntable() {
 		super(Material.IRON);
-		setRegistryName("autoclave");
-		setUnlocalizedName(SimpleMachinery.modid + ".autoclave");
+		setRegistryName("turntable");
+		setUnlocalizedName(SimpleMachinery.modid + ".turntable");
 		setHardness(3.5F);
 		setHarvestLevel("pickaxe", 1);
 		setCreativeTab(SimpleMachinery.creativeTab);
@@ -42,7 +42,7 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 	@Nullable
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileAutoclave();
+		return new TileTurntable();
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 			return true;
 		}
 		TileEntity te = worldIn.getTileEntity(pos);
-		if (!(te instanceof TileAutoclave)) {
+		if (!(te instanceof TileTurntable)) {
 			return false;
 		}
 		playerIn.openGui(SimpleMachinery.instance, guiId, worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -61,8 +61,8 @@ public class BlockAutoclave extends Block implements ITileEntityProvider {
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 
-		if (tileentity instanceof TileAutoclave) {
-			((TileAutoclave) tileentity).dropInventoryItems(worldIn, pos);
+		if (tileentity instanceof TileTurntable) {
+			((TileTurntable) tileentity).dropInventoryItems(worldIn, pos);
 		}
 
 		super.breakBlock(worldIn, pos, state);

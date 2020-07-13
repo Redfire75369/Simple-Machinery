@@ -1,136 +1,108 @@
 buildscript {
-    repositories {
-        maven {
-            name 'Minecraft Forge'
-            url = 'https://files.minecraftforge.net/maven'
-        }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
-    }
+	repositories {
+		jcenter()
+		maven {
+
+			url = "https://files.minecraftforge.net/maven"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+	}
 }
-        
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+apply plugin: 'net.minecraftforge.gradle.forge'
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-version = '0.0.2'
-group = 'redfire.mods.simplemachinery' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'simplemachinery'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+version = "0.1.0"
+group = "redfire.mods.simplemachinery" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "simplemachinery"
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+	sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    //mappings channel: 'snapshot', version: '20171003-1.12'
-    mappings channel: 'snapshot', version: '20171003-1.12'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+	version = "1.12.2-14.23.5.2847"
+	runDir = "run"
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-
-        server {
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-        }
-    }
+	// the mappings can be changed at any time, and must be in the following format.
+	// snapshot_YYYYMMDD   snapshot are built nightly.
+	// stable_#            stables are built at the discretion of the MCP team.
+	// Use non-default mappings at your own risk. they may not always work.
+	// simply re-run your setup task after changing the mappings to update your workspace.
+	mappings = "snapshot_20171003"
+	// makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 repositories {
-    maven {
-        name 'BlameJared'
-        url 'https://maven.blamejared.com/'
-    }
-    maven {
-        name 'tterrag maven'
-        url 'https://maven.tterrag.com/'
-    }
-    maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
+	mavenCentral()
+	jcenter()
+	maven {
+		name 'BlameJared'
+		url 'https://maven.blamejared.com/'
+	}
+	maven {
+		name 'Progwml6 maven'
+		url 'https://dvs1.progwml6.com/files/maven/'
+	}
+	maven {
+		name 'TehNut'
+		url 'https://maven.tehnut.info/'
+	}
+	maven {
+		name 'tterrag maven'
+		url 'https://maven.tterrag.com/'
+	}
+	maven {
+		name 'ModMaven'
+		url 'https://modmaven.k-4u.nl/'
+	}
 }
-
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+	// CraftTweaker 2
+	deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.555"
 
-    /*
-    // CraftTweaker API
-    compile fg.deobf(group: 'CraftTweaker2', name: 'CraftTweaker2-API', version: '4.1.20.555') {
-        exclude group: 'org.ow2.asm'
-        exclude group: 'com.google.code.gson'
-    }
-    // CraftTweaker 2
-    runtime(group: 'CraftTweaker2', name: 'CraftTweaker2-MC1120-Main', version: '1.12-4.1.20.555') {
-        exclude group: 'org.ow2.asm'
-        exclude group: 'com.google.code.gson'
-    }*/
+	// Hwyla
+	deobfProvided group: 'mcp.mobius.waila', name: 'Hwyla', version: '1.8.26-B41_1.12.2', classifier: 'api'
 
+	// JustEnoughItems
+	deobfProvided group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293'
 
-    //compileOnly fg.deobf(group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293', classifier: 'api')
-    //runtime group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293'
-    //compileOnly fg.deobf(group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17', classifier: 'api')
-    //runtimeOnly fg.deobf(group: 'mcjty.theoneprobe', name: 'TheOneProbe-1.12', version: '1.12-1.4.28-17')
+	// CraftTweaker 2
+	runtime(group: 'CraftTweaker2', name: 'CraftTweaker2-MC1120-Main', version: '1.12-4.1.20.554') {
+		exclude group: 'org.ow2.asm'
+		exclude group: 'com.google.code.gson'
+	}
 
+	// CraftTweaker 2 JEI Plugin
+	runtime(group: 'CraftTweaker2', name: 'CraftTweaker2-MC1120-Mod-JEI', version: '1.12-4.1.20.555') {
+		exclude group: 'deobf.mezz.jei'
+	}
+
+	// Hwyla
+	runtime group: 'mcp.mobius.waila', name: 'Hwyla', version: '1.8.26-B41_1.12.2'
+
+	// JustEnoughItems
+	runtime group: 'mezz.jei', name: 'jei_1.12.2', version: '4.15.0.293'
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "simplemachinery",
-            "Specification-Vendor": "simplemachineryredfire",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"simplemachineryredfire",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
+processResources {
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
 
-// Example configuration to allow publishing using the maven-publish task
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-//publish.dependsOn('reobfJar')
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
+		// replace version and mcversion
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+
+	// copy everything else except the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
 }

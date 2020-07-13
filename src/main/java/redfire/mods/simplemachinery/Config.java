@@ -7,10 +7,11 @@ import redfire.mods.simplemachinery.proxy.CommonProxy;
 
 public class Config {
 	private static final String category_general = "General";
-	private static final String category_other = "other";
 
-	public static boolean testVar = true;
-	public static String realName = "Steve";
+	public static int autoclave_steam_storage;
+	public static int autoclave_tank_storage;
+	public static int turntable_fe_storage;
+	public static int turntable_fe_usage;
 
 	public static void readConfig() {
 		Configuration cfg = CommonProxy.config;
@@ -30,7 +31,9 @@ public class Config {
 	public static void initGeneralConfig(Configuration cfg) {
 		cfg.addCustomCategoryComment(category_general, "General Configuration");
 
-		testVar = cfg.getBoolean("testVar", category_general, testVar, "Set to false for testing");
-		realName = cfg.getString("realName", category_general, realName, "Set your real name here");
+		autoclave_steam_storage = cfg.getInt("autoclave_steam_storage", category_general, 4000, 1, Integer.MAX_VALUE, "This is the amount of Steam (in mB) that the Autoclave can store in its steam tank.");
+		autoclave_tank_storage = cfg.getInt("autoclave_tank_storage", category_general, 4000, 1, Integer.MAX_VALUE, "This is the amount of fluid (in mB) that the Autoclave can store in its secondary tank.");
+		turntable_fe_storage = cfg.getInt("turntable_fe_storage", category_general, 48000, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Turntable can store in its buffer.");
+		turntable_fe_usage = cfg.getInt("turntable_fe_usage", category_general, 80, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Turntable will use per tick.");
 	}
 }

@@ -4,11 +4,15 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 public class GenericTileEntity extends TileEntity {
 	public int input_slots;
@@ -44,6 +48,8 @@ public class GenericTileEntity extends TileEntity {
 		};
 
 		this.combinedHandler = new CombinedInvWrapper(inputHandler, outputHandler);
+
+
 		this.tanks.add(0, new Tank(fluid1));
 		this.tanks.add(1, new Tank(fluid2));
 	}

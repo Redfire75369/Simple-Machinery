@@ -8,6 +8,9 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import redfire.mods.simplemachinery.tileentities.autoclave.ContainerAutoclave;
 import redfire.mods.simplemachinery.tileentities.autoclave.GuiAutoclave;
 import redfire.mods.simplemachinery.tileentities.autoclave.TileAutoclave;
+import redfire.mods.simplemachinery.tileentities.turntable.ContainerTurntable;
+import redfire.mods.simplemachinery.tileentities.turntable.GuiTurntable;
+import redfire.mods.simplemachinery.tileentities.turntable.TileTurntable;
 
 public class GuiProxy implements IGuiHandler {
 	@Override
@@ -16,6 +19,8 @@ public class GuiProxy implements IGuiHandler {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileAutoclave) {
 			return new ContainerAutoclave(player.inventory, (TileAutoclave) te);
+		} else if (te instanceof TileTurntable) {
+			return new ContainerTurntable(player.inventory, (TileTurntable) te);
 		}
 		return null;
 	}
@@ -27,6 +32,10 @@ public class GuiProxy implements IGuiHandler {
 		if (te instanceof TileAutoclave) {
 			TileAutoclave containerTileEntity = (TileAutoclave) te;
 			return new GuiAutoclave(containerTileEntity, new ContainerAutoclave(player.inventory, containerTileEntity));
+		}
+		else if (te instanceof TileTurntable) {
+			TileTurntable containerTileEntity = (TileTurntable) te;
+			return new GuiTurntable(containerTileEntity, new ContainerTurntable(player.inventory, containerTileEntity));
 		}
 		return null;
 	}

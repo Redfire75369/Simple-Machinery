@@ -1,4 +1,4 @@
-package redfire.mods.simplemachinery.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.turntable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -9,8 +9,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import redfire.mods.simplemachinery.Config;
 import redfire.mods.simplemachinery.util.GenericTileEntity;
@@ -18,15 +18,14 @@ import redfire.mods.simplemachinery.util.GenericTileEntity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static java.util.Objects.isNull;
 
-
-public class TileAutoclave extends GenericTileEntity implements ITickable {
+public class TileTurntable extends GenericTileEntity implements ITickable {
 	public static int size;
+	public static EnergyStorage energy = new EnergyStorage(Config.turntable_fe_storage, Config.turntable_fe_usage, Config.turntable_fe_usage,0);
 	private int progress = 0;
 
-	public TileAutoclave() {
-		super(2, 1, Config.autoclave_steam_storage, Config.autoclave_tank_storage);
+	public TileTurntable() {
+		super(1, 1, 0, 0);
 		size = input_slots + output_slots;
 	}
 
@@ -34,20 +33,16 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 	public void update() {
 		if (!(world.isRemote)) {
 			if (progress > 0) {
-				progress--;
-				for (int i = 0; i < input_slots; i++) {
-					if (!inputHandler.getStackInSlot(i).isEmpty()) {
-						tanks.get(0).drain(RecipesAutoclave.instance().getAutoclaveSteamUsage(inputHandler.getStackInSlot(i), new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount())),true);
-						break;
-					}
+				if (energy.getEnergyStored() > Config.turntable_fe_usage) {
+					progress--;
+					energy.extractEnergy(Config.turntable_fe_usage, false);
 				}
-
 				if (progress <= 0) {
-					attemptAutoclave();
+					attemptTurntable();
 				}
 				markDirty();
 			} else {
-				startAutoclave();
+				startTurntable();
 			}
 		}
 	}
@@ -62,20 +57,13 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		return false;
 	}
 
-	private void startAutoclave() {
+	private void startTurntable() {
 		for (int i = 0; i < input_slots; i++) {
 			ItemStack input =  inputHandler.getStackInSlot(i);
-			FluidStack tank;
-			if (isNull(tanks.get(1).getFluid())) {
-				tank = null;
-			} else {
-				tank = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
-			}
-			ItemStack result = RecipesAutoclave.instance().getAutoclaveOutput(input, tank);
+			ItemStack result = RecipesTurntable.instance().getTurntableOutput(input);
 			if (!(result.isEmpty())) {
-				FluidStack fluidUsed = RecipesAutoclave.instance().getAutoclaveFluidInput(input, tank);
-				if (insertOutput(result.copy(), true) && tanks.get(1).canDrainFluidType(fluidUsed) && RecipesAutoclave.instance().getAutoclaveSteamRequired(input, tank) < tanks.get(0).getFluidAmount()) {
-					progress = RecipesAutoclave.instance().getAutoclaveTicks(input, tank);
+				if (insertOutput(result.copy(), true) && energy.getEnergyStored() >= RecipesTurntable.instance().getTurntableEnergyRequired(input)) {
+					progress = (int) Math.ceil(RecipesTurntable.instance().getTurntableEnergyRequired(input) / Config.turntable_fe_usage);
 					markDirty();
 				}
 				break;
@@ -83,16 +71,13 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		}
 	}
 
-	private void attemptAutoclave() {
+	private void attemptTurntable() {
 		for (int i = 0; i < input_slots; i++) {
 			ItemStack input =  inputHandler.getStackInSlot(i);
-			FluidStack tank = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
-			ItemStack result = RecipesAutoclave.instance().getAutoclaveOutput(input, tank);
+			ItemStack result = RecipesTurntable.instance().getTurntableOutput(input);
 			if (!(result.isEmpty())) {
-				FluidStack fluidUsed = RecipesAutoclave.instance().getAutoclaveFluidInput(input, tank);
-				if (insertOutput(result.copy(), false) && tanks.get(1).canDrainFluidType(fluidUsed)) {
+				if (insertOutput(result.copy(), false)) {
 					inputHandler.extractItem(i, 1, false);
-					tanks.get(1).drain(fluidUsed, true);
 					markDirty();
 				}
 				break;
@@ -112,14 +97,13 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readInventory(compound);
-		super.readInventory(compound);
-		super.readTanks(compound);
+		energy = new EnergyStorage(Config.turntable_fe_storage, Config.turntable_fe_usage, Config.turntable_fe_usage, compound.getInteger("energyStored"));
 		progress = compound.getInteger("progress");
 	}
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeInventory(compound);
-		super.writeTanks(compound);
+		compound.setInteger("energyStored", energy.getEnergyStored());
 		compound.setInteger("progress", progress);
 		return compound;
 	}
@@ -134,7 +118,7 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return true;
 		}
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if (capability == CapabilityEnergy.ENERGY) {
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -150,12 +134,8 @@ public class TileAutoclave extends GenericTileEntity implements ITickable {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(outputHandler);
 			}
 		}
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			if (facing == EnumFacing.UP) {
-				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(0));
-			} else {
-				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tanks.get(1));
-			}
+		if (capability == CapabilityEnergy.ENERGY) {
+			return CapabilityEnergy.ENERGY.cast(energy);
 		}
 		return super.getCapability(capability, facing);
 	}

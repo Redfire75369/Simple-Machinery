@@ -1,4 +1,4 @@
-package redfire.mods.simplemachinery.tileentities.autoclave;
+package redfire.mods.simplemachinery.tileentities.turntable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -9,10 +9,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerAutoclave extends Container {
-	private TileAutoclave te;
+public class ContainerTurntable extends Container {
+	private TileTurntable te;
 
-	public ContainerAutoclave(IInventory playerInventory, TileAutoclave te) {
+	public ContainerTurntable(IInventory playerInventory, TileTurntable te) {
 		this.te = te;
 		addOwnSlots();
 		addPlayerSlots(playerInventory);
@@ -36,14 +36,12 @@ public class ContainerAutoclave extends Container {
 
 	private void addOwnSlots() {
 		IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		int x = 44;
+		int x = 53;
 		int y = 35;
 
 		int slotIndex = 0;
 		addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
-		x += 18;
-		addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
-		x = 116;
+		x = 107;
 		addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
 	}
 
@@ -55,7 +53,7 @@ public class ContainerAutoclave extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			TileAutoclave te = new TileAutoclave();
+			TileTurntable te = new TileTurntable();
 
 			if (index < te.input_slots) {
 				if (!this.mergeItemStack(itemstack1, te.input_slots, this.inventorySlots.size(), true)) {
