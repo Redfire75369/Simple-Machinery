@@ -10,8 +10,10 @@ public class Config {
 
 	public static int autoclave_steam_storage;
 	public static int autoclave_tank_storage;
+	public static int fluidcentrifuge_fe_storage;
+	public static int fluidcentrifuge_fe_io;
 	public static int turntable_fe_storage;
-	public static int turntable_fe_usage;
+	public static int turntable_fe_io;
 
 	public static void readConfig() {
 		Configuration cfg = CommonProxy.config;
@@ -33,7 +35,9 @@ public class Config {
 
 		autoclave_steam_storage = cfg.getInt("autoclave_steam_storage", category_general, 4000, 1, Integer.MAX_VALUE, "This is the amount of Steam (in mB) that the Autoclave can store in its steam tank.");
 		autoclave_tank_storage = cfg.getInt("autoclave_tank_storage", category_general, 4000, 1, Integer.MAX_VALUE, "This is the amount of fluid (in mB) that the Autoclave can store in its secondary tank.");
+		fluidcentrifuge_fe_storage = cfg.getInt("fluidcentrifuge_fe_storage", category_general, 96000, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Fluid Centrifuge can store in its buffer.");
+		fluidcentrifuge_fe_io = cfg.getInt("fluidcentrifuge_fe_io", category_general, 480, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Fluid Centrifuge can store in its buffer.");
 		turntable_fe_storage = cfg.getInt("turntable_fe_storage", category_general, 48000, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Turntable can store in its buffer.");
-		turntable_fe_usage = cfg.getInt("turntable_fe_usage", category_general, 80, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Turntable will use per tick.");
+		turntable_fe_io = cfg.getInt("turntable_fe_io", category_general, 240, 1, Integer.MAX_VALUE, "This is the amount of Forge Energy that the Turntable can store in its buffer.");
 	}
 }

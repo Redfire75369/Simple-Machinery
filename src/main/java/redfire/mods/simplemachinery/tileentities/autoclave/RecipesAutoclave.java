@@ -1,31 +1,20 @@
 package redfire.mods.simplemachinery.tileentities.autoclave;
 
-import crafttweaker.socket.SingleError;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLLog;
-import org.apache.logging.log4j.Level;
-import redfire.mods.simplemachinery.SimpleMachinery;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Objects.isNull;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class RecipesAutoclave {
 	public static final RecipesAutoclave autoclave_base = new RecipesAutoclave();
-	private List<ItemStack> itemInputs = new ArrayList();
-	private List<ItemStack> itemOutputs = new ArrayList();
-	private List<FluidStack> fluidInputs = new ArrayList();
-	private IntList ticks = new IntArrayList();
-	private IntList steamPerTick = new IntArrayList();
+	public final HashMap<String, RecipeAutoclave> recipes = new HashMap<>();
 
 	public static RecipesAutoclave instance() {
 		return autoclave_base;
@@ -33,93 +22,78 @@ public class RecipesAutoclave {
 
 	public RecipesAutoclave() {
 		for (int i = 0; i < 16; i++) {
-			addAutoclaveRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE), 1, i), new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE_POWDER), 1, i), FluidRegistry.getFluidStack("water", 125), 25, 5);
+			addAutoclaveRecipe("simplemachinery:concrete_" + i,
+					Ingredient.fromStacks(new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE_POWDER), 1, i)),
+					new ItemStack(Item.getItemFromBlock(Blocks.CONCRETE), 1, i),
+					FluidRegistry.getFluidStack("water", 125),
+					30,
+					5
+			);
 		}
 	}
 
-	public void addAutoclaveRecipe(ItemStack output, ItemStack input, FluidStack fluidInput, int tickTime, int steam) {
-		if (getAutoclaveOutput(input, fluidInput) != ItemStack.EMPTY) {
-			FMLLog.log.info("Ignored autoclave recipe with conflicting input: {} = {}", input, output);
+	public void addAutoclaveRecipe(String recipeName, Ingredient input,  ItemStack output, FluidStack fluidInput, int ticks, int steamPower) {
+		if (recipes.containsKey(recipeName)) {
+			FMLLog.log.warn("Ignored autoclave recipe with recipe name: {}", recipeName);
 			return;
 		}
-		itemInputs.add(input);
-		itemOutputs.add(output);
-		fluidInputs.add(fluidInput);
-		ticks.add(tickTime);
-		steamPerTick.add(steam);
-	}
-
-	public ItemStack getAutoclaveOutput(ItemStack input, FluidStack fluidInput) {
-		if (!isNull(fluidInput)) {
-			for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-				if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
-					return itemOutputs.get(i);
-				}
-			}
+		if (getOutput(recipeName) != ItemStack.EMPTY) {
+			FMLLog.log.warn("Ignored autoclave recipe with conflicting input: {} = {}", input, output);
+			return;
 		}
 
+		recipes.put(recipeName, new RecipeAutoclave(input,
+				output,
+				fluidInput,
+				ticks,
+				steamPower
+		));
+	}
+
+	public void removeAutoclaveRecipe(String recipeName) {
+
+	}
+
+	public ItemStack getOutput(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).outputs.get(0);
+		}
 		return ItemStack.EMPTY;
 	}
-	public FluidStack getAutoclaveFluidInput(ItemStack input , FluidStack fluidInput) {
-		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
-				return fluidInputs.get(i);
-			}
+	public FluidStack getFluidInput(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).fluidInputs.get(0);
 		}
-
 		return null;
 	}
-	public int getAutoclaveSteamUsage(ItemStack input, FluidStack fluidInput) {
-		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
-				return steamPerTick.get(i);
-			}
+	public int getSteamPower(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).steamPower;
 		}
-
 		return 0;
 	}
-	public int getAutoclaveTicks(ItemStack input, FluidStack fluidInput) {
-		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
-				return ticks.get(i);
-			}
+	public int getTicks(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).ticks;
 		}
-
 		return 0;
 	}
-	public int getAutoclaveSteamRequired(ItemStack input, FluidStack fluidInput) {
-		for (int i = 0, ii = itemInputs.size(); i < ii; i++) {
-			if (compareItemStacks(input, itemInputs.get(i)) && compareFluids(fluidInput.getFluid(), fluidInputs.get(i).getFluid())) {
-				return ticks.get(i) * steamPerTick.get(i);
-			}
+	public int getTotalSteam(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).getTotalSteam();
 		}
-
 		return 0;
 	}
 
-	public List<ItemStack> getItemInputs() {
-		return itemInputs;
-	}
-	public List<ItemStack> getItemOutputs() {
-		return itemOutputs;
-	}
-	public List<FluidStack> getFluidInputs() {
-		return fluidInputs;
-	}
-
-	private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {
-		return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
-	}
-	private boolean compareFluidStacks(@Nonnull FluidStack stack1, @Nonnull FluidStack stack2) {
-		if (isNull(stack1.getFluid()) || isNull(stack2.getFluid()) || stack1.amount == 0 || stack2.amount == 0) {
-			return false;
-		}
-		return stack1.getFluid() == stack2.getFluid() && stack1.amount == stack2.amount;
-	}
-	private boolean compareFluids(@Nonnull Fluid fluid1, @Nonnull Fluid fluid2) {
-		if (isNull(fluid1) || isNull(fluid2)) {
-			return false;
-		}
-		return compareFluidStacks(new FluidStack(fluid1, 1000), new FluidStack(fluid2, 1000));
+	public static String searchRecipes(ItemStack input, FluidStack fluidInput) {
+		HashMap<String, RecipeAutoclave> recipes = instance().recipes;
+		AtomicReference<String> result = new AtomicReference<>("");
+		recipes.forEach((name, recipe) -> {
+			if (recipe.inputs.get(0).apply(input)
+					&& fluidInput != null && Objects.equals(recipe.fluidInputs.get(0).getFluid().getName(), fluidInput.getFluid().getName())) {
+				result.set(name);
+			}
+		});
+		return result.get();
 	}
 }

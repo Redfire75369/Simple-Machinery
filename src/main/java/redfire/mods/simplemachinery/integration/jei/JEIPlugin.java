@@ -8,12 +8,14 @@ import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.item.ItemStack;
 import redfire.mods.simplemachinery.ModBlocks;
-import redfire.mods.simplemachinery.integration.jei.categories.CategoryAutoclave;
-import redfire.mods.simplemachinery.integration.jei.categories.CategoryTurntable;
+import redfire.mods.simplemachinery.integration.jei.category.CategoryAutoclave;
+import redfire.mods.simplemachinery.integration.jei.category.CategoryTurntable;
 import redfire.mods.simplemachinery.integration.jei.recipemakers.RecipeMakerAutoclave;
 import redfire.mods.simplemachinery.integration.jei.recipemakers.RecipeMakerTurntable;
-import redfire.mods.simplemachinery.integration.jei.wrappers.RecipeAutoclave;
-import redfire.mods.simplemachinery.integration.jei.wrappers.RecipeTurntable;
+import redfire.mods.simplemachinery.integration.jei.wrapper.WrapperAutoclave;
+import redfire.mods.simplemachinery.integration.jei.wrapper.WrapperTurntable;
+import redfire.mods.simplemachinery.tileentities.autoclave.RecipeAutoclave;
+import redfire.mods.simplemachinery.tileentities.turntable.RecipeTurntable;
 
 import javax.annotation.Nonnull;
 
@@ -35,11 +37,11 @@ public class JEIPlugin implements IModPlugin {
 
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
-		registry.handleRecipes(RecipeAutoclave.class, recipe -> new RecipeAutoclave(registry.getJeiHelpers(), recipe), CategoryAutoclave.uid);
-		registry.handleRecipes(RecipeTurntable.class, recipe -> new RecipeTurntable(registry.getJeiHelpers(), recipe), CategoryTurntable.uid);
+		registry.handleRecipes(RecipeAutoclave.class, recipe -> new WrapperAutoclave(registry.getJeiHelpers(), recipe), CategoryAutoclave.uid);
+		registry.handleRecipes(RecipeTurntable.class, recipe -> new WrapperTurntable(registry.getJeiHelpers(), recipe), CategoryTurntable.uid);
 
-		registry.addRecipes(RecipeMakerAutoclave.getAutoclaveRecipes(registry.getJeiHelpers()), CategoryAutoclave.uid);
-		registry.addRecipes(RecipeMakerTurntable.getTurntableRecipes(registry.getJeiHelpers()), CategoryTurntable.uid);
+		registry.addRecipes(RecipeMakerAutoclave.getRecipes(registry.getJeiHelpers()), CategoryAutoclave.uid);
+		registry.addRecipes(RecipeMakerTurntable.getRecipes(registry.getJeiHelpers()), CategoryTurntable.uid);
 
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.autoclave), CategoryAutoclave.uid);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.turntable), CategoryTurntable.uid);

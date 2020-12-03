@@ -3,5 +3,4 @@ itemGroup.simplemachinery.stuff=Simple Machinery
 fluid.steam=Steam
 
 tile.simplemachinery.autoclave.name=Autoclave
-tile.simplemachinery.regolith.name=Asteroid Regolith
 tile.simplemachinery.turntable.name=Turntable
