@@ -17,13 +17,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CategoryAutoclave implements IRecipeCategory<WrapperAutoclave> {
-	private static final ResourceLocation guiLocation = new ResourceLocation(SimpleMachinery.modid, "textures/gui/jei/jei.png");
+	private static final ResourceLocation guiLocation = new ResourceLocation(SimpleMachinery.modid, "textures/gui/jei/autoclave.png");
 	public static final String uid = SimpleMachinery.modid + "_autoclave";
 	private static final String title = "Autoclave";
 
 	private static final int inputSlot = 0;
-	private static final int outputSlot = 1;
-	private static final int fluidInputSlot = 2;
+	private static final int fluidInputSlot = 1;
+	private static final int outputSlot = 2;
 
 	@Nonnull
 	private final IDrawable background;
@@ -31,6 +31,22 @@ public class CategoryAutoclave implements IRecipeCategory<WrapperAutoclave> {
 	public CategoryAutoclave(IGuiHelper guiHelper) {
 		background = guiHelper.createDrawable(guiLocation, 0, 0, 96, 36, 0, 8, 0, 0);
 	}
+
+	@Override
+	public void setRecipe(IRecipeLayout recipeLayout, WrapperAutoclave recipeWrapper, IIngredients ingredients) {
+		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
+
+		guiItemStacks.init(inputSlot, true, 3, 9);
+		guiFluidStacks.init(fluidInputSlot, true, 22, 10, 16, 16, Config.autoclave_tank_storage, false, null);
+		guiItemStacks.init(outputSlot, false, 75, 9);
+
+		guiItemStacks.set(ingredients);
+		guiFluidStacks.set(ingredients);
+	}
+
+	@Override
+	public void drawExtras(Minecraft minecraft) {}
 
 	@Nonnull
 	@Override
@@ -59,23 +75,5 @@ public class CategoryAutoclave implements IRecipeCategory<WrapperAutoclave> {
 	@Override
 	public IDrawable getIcon() {
 		return null;
-	}
-
-	@Override
-	public void drawExtras(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, WrapperAutoclave recipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-
-		guiItemStacks.init(inputSlot, true, 3, 9);
-		guiItemStacks.init(outputSlot, false, 75, 9);
-		guiFluidStacks.init(fluidInputSlot, true, 22, 10, 16, 16, Config.autoclave_tank_storage, false, null);
-
-		guiItemStacks.set(ingredients);
-		guiFluidStacks.set(ingredients);
 	}
 }

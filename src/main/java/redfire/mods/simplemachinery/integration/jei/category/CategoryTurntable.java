@@ -15,19 +15,32 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CategoryTurntable implements IRecipeCategory<WrapperTurntable> {
-	private static final ResourceLocation guiLocation = new ResourceLocation(SimpleMachinery.modid, "textures/gui/jei/jei.png");
+	private static final ResourceLocation guiLocation = new ResourceLocation(SimpleMachinery.modid, "textures/gui/jei/turntable.png");
 	public static final String uid = SimpleMachinery.modid + "_turntable";
-	private static String title = "Turntable";
+	private static final String title = "Turntable";
 
 	private static final int inputSlot = 0;
 	private static final int outputSlot = 1;
 
 	@Nonnull
-	private IDrawable background;
+	private final IDrawable background;
 
 	public CategoryTurntable(IGuiHelper guiHelper) {
-		background = guiHelper.createDrawable(guiLocation, 0, 36, 96, 36, 0, 8, 0, 0);
+		background = guiHelper.createDrawable(guiLocation, 0, 0, 96, 36, 0, 8, 0, 0);
 	}
+
+	@Override
+	public void setRecipe(IRecipeLayout recipeLayout, WrapperTurntable recipeWrapper, IIngredients ingredients) {
+		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+
+		guiItemStacks.init(inputSlot, true, 12, 9);
+		guiItemStacks.init(outputSlot, false, 66, 9);
+
+		guiItemStacks.set(ingredients);
+	}
+
+	@Override
+	public void drawExtras(Minecraft minecraft) { }
 
 	@Nonnull
 	@Override
@@ -56,20 +69,5 @@ public class CategoryTurntable implements IRecipeCategory<WrapperTurntable> {
 	@Override
 	public IDrawable getIcon() {
 		return null;
-	}
-
-	@Override
-	public void drawExtras(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, WrapperTurntable recipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-
-		guiItemStacks.init(inputSlot, true, 12, 9);
-		guiItemStacks.init(outputSlot, false, 66, 9);
-
-		guiItemStacks.set(ingredients);
 	}
 }

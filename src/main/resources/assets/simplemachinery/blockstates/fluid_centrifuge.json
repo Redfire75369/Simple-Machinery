@@ -8,7 +8,7 @@
       "east": "simplemachinery:blocks/fluid_centrifuge_side",
       "west": "simplemachinery:blocks/fluid_centrifuge_side",
       "up": "simplemachinery:blocks/fluid_centrifuge_top",
-      "down": "simplemachinery:blocks/fluid_centrifuge_top",
+      "down": "simplemachinery:blocks/fluid_centrifuge_bottom",
       "particle": "simplemachinery:blocks/fluid_centrifuge_front"
     }
   },

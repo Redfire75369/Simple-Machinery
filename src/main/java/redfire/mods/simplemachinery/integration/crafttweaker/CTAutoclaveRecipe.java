@@ -10,15 +10,15 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("mods.simplemachinery.autoclave")
+@ZenClass("mods.simplemachinery.Autoclave")
 public class CTAutoclaveRecipe {
-	@ZenMethod("addAutoclaveRecipe")
-	public static void addAutoclaveRecipe(String recipeName, IIngredient input, IItemStack output, ILiquidStack fluidInput, int ticks, int steamPower) {
-		RecipesAutoclave.instance().addAutoclaveRecipe(recipeName, CraftTweakerMC.getIngredient(input), CraftTweakerMC.getItemStack(output), CraftTweakerMC.getLiquidStack(fluidInput), ticks, steamPower);
+	@ZenMethod("addRecipe")
+	public static void addRecipe(String recipeName, IIngredient input, ILiquidStack fluidInput, IItemStack output, int ticks, int steamPower) {
+		RecipesAutoclave.instance().addAutoclaveRecipe("crafttweaker:" + recipeName, CraftTweakerMC.getIngredient(input), CraftTweakerMC.getItemStack(output), CraftTweakerMC.getLiquidStack(fluidInput), ticks, steamPower);
 	}
 
-	@ZenMethod("removeAutoclaveRecipe")
-	public static void removeAutoclaveRecipe(String recipeName) {
+	@ZenMethod("removeRecipe")
+	public static void removeRecipe(String recipeName) {
 		RecipesAutoclave.instance().recipes.remove(recipeName);
 	}
 }

@@ -39,7 +39,7 @@ public class TileTurntable extends TileMachine implements ITickable {
 	public void update() {
 		if (!(world.isRemote)) {
 			if (progress > 0) {
-				if (energy.getEnergyStored() > RecipesTurntable.instance().getPower(currentRecipe)) {
+				if (energy.getEnergyStored() >= RecipesTurntable.instance().getPower(currentRecipe)) {
 					progress--;
 					energy.subtractEnergy(RecipesTurntable.instance().getPower(currentRecipe));
 				}

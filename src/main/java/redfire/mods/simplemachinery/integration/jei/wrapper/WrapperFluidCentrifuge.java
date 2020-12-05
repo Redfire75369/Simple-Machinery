@@ -4,19 +4,18 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
-import redfire.mods.simplemachinery.tileentities.autoclave.RecipeAutoclave;
+import redfire.mods.simplemachinery.tileentities.fluidcentrifuge.RecipeFluidCentrifuge;
 
-public class WrapperAutoclave extends WrapperMachine<RecipeAutoclave> {
-    public WrapperAutoclave(IJeiHelpers jeiHelpers, RecipeAutoclave recipe) {
+public class WrapperFluidCentrifuge extends WrapperMachine<RecipeFluidCentrifuge> {
+    public WrapperFluidCentrifuge(IJeiHelpers jeiHelpers, RecipeFluidCentrifuge recipe) {
         super(jeiHelpers, recipe);
     }
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-
-        ingredients.setInputLists(VanillaTypes.ITEM, jeiHelpers.getStackHelper().expandRecipeItemStackInputs(recipe.inputs));
         ingredients.setInput(VanillaTypes.FLUID, recipe.fluidInputs.get(0));
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.outputs.get(0));
+        ingredients.setOutputs(VanillaTypes.ITEM, recipe.outputs);
+        ingredients.setOutputs(VanillaTypes.FLUID, recipe.fluidOutputs);
     }
 
     @Override

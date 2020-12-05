@@ -2,7 +2,6 @@ buildscript {
 	repositories {
 		jcenter()
 		maven {
-
 			url = "https://files.minecraftforge.net/maven"
 		}
 	}
@@ -14,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "0.1.0"
+version = "0.2.0"
 group = "redfire.mods.simplemachinery" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "simplemachinery"
 

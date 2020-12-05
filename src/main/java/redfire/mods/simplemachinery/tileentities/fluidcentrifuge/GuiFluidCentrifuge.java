@@ -1,7 +1,7 @@
 package redfire.mods.simplemachinery.tileentities.fluidcentrifuge;
 
-import net.minecraft.util.ResourceLocation;
 import redfire.mods.simplemachinery.tileentities.generic.GuiMachine;
+import redfire.mods.simplemachinery.util.gui.GuiFluidRenderer;
 
 public class GuiFluidCentrifuge extends GuiMachine<TileFluidCentrifuge, ContainerFluidCentrifuge> {
     public GuiFluidCentrifuge(TileFluidCentrifuge tileFluidCentrifuge, ContainerFluidCentrifuge container) {
@@ -15,26 +15,9 @@ public class GuiFluidCentrifuge extends GuiMachine<TileFluidCentrifuge, Containe
         drawTexturedModalRect(guiLeft + 64, guiTop + 24, 176, 0, getProgressScaled(24) + 1, 16);
         drawTexturedModalRect(guiLeft + 23, guiTop + 66, 0, 166, getEnergyStorageScaled(128), 10);
 
-        if (tileEntity.getTanks().get(0).getFluid() != null) {
-            ResourceLocation texture = tileEntity.getTanks().get(0).getFluid().getFluid().getFlowing();
-            mc.getTextureManager().bindTexture(new ResourceLocation(texture.getResourceDomain(), texture.getResourcePath()));
-            int fluidWidth = getFluidTankScaled(1, 48);
-            drawTexturedModalRect(guiLeft + 10, guiTop + 24, 0, 0, fluidWidth, 16);
-        }
-
-        if (tileEntity.getTanks().get(1).getFluid() != null) {
-            ResourceLocation texture = tileEntity.getTanks().get(1).getFluid().getFluid().getFlowing();
-            mc.getTextureManager().bindTexture(new ResourceLocation(texture.getResourceDomain(), texture.getResourcePath()));
-            int fluidWidth = getFluidTankScaled(1, 48);
-            drawTexturedModalRect(guiLeft + 117, guiTop + 11, 0, 0, fluidWidth, 16);
-        }
-
-        if (tileEntity.getTanks().get(2).getFluid() != null) {
-            ResourceLocation texture = tileEntity.getTanks().get(2).getFluid().getFluid().getFlowing();
-            mc.getTextureManager().bindTexture(new ResourceLocation(texture.getResourceDomain(), texture.getResourcePath()));
-            int fluidWidth = getFluidTankScaled(2, 48);
-            drawTexturedModalRect(guiLeft + 117, guiTop + 35, 0, 0, fluidWidth, 16);
-        }
+        GuiFluidRenderer.renderGuiTank(tileEntity.getTanks().get(0), guiLeft + 11, guiTop + 24, 0, getFluidTankScaled(0, 48), 16);
+        GuiFluidRenderer.renderGuiTank(tileEntity.getTanks().get(1), guiLeft + 117, guiTop + 11, 0, getFluidTankScaled(1, 48), 16);
+        GuiFluidRenderer.renderGuiTank(tileEntity.getTanks().get(2), guiLeft + 117, guiTop + 35, 0, getFluidTankScaled(2, 48), 16);
     }
 
     private int getProgressScaled(int pixels) {

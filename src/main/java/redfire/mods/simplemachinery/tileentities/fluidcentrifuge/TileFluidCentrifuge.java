@@ -26,7 +26,10 @@ public class TileFluidCentrifuge extends TileMachine implements ITickable {
     private String currentRecipe = "";
 
     public TileFluidCentrifuge() {
-        super(0, 2, 16000, 8000, 8000);
+        super(0, 2, Config.fluidcentrifuge_input_tank_storage, Config.fluidcentrifuge_output_tank1_storage, Config.fluidcentrifuge_output_tank2_storage);
+        tanks.get(0).setCanDrain(false);
+        tanks.get(1).setCanFill(false);
+        tanks.get(2).setCanFill(false);
     }
 
     public int getProgress() {
@@ -45,7 +48,7 @@ public class TileFluidCentrifuge extends TileMachine implements ITickable {
     public void update() {
         if (!(world.isRemote)) {
             if (progress > 0) {
-                if (energy.getEnergyStored() > RecipesTurntable.instance().getPower(currentRecipe)) {
+                if (energy.getEnergyStored() >= RecipesTurntable.instance().getPower(currentRecipe)) {
                     progress--;
                     energy.subtractEnergy(RecipesTurntable.instance().getPower(currentRecipe));
                 }
@@ -66,6 +69,18 @@ public class TileFluidCentrifuge extends TileMachine implements ITickable {
         } else {
             fluidInput = new FluidStack(tanks.get(0).getFluid(), tanks.get(0).getFluidAmount());
         }
+        FluidStack fluidTank1;
+        if (isNull(tanks.get(1).getFluid())) {
+            fluidTank1 = null;
+        } else {
+            fluidTank1 = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
+        }
+        FluidStack fluidTank2;
+        if (isNull(tanks.get(2).getFluid())) {
+            fluidTank2 = null;
+        } else {
+            fluidTank2 = new FluidStack(tanks.get(2).getFluid(), tanks.get(2).getFluidAmount());
+        }
 
         String recipe = RecipesFluidCentrifuge.searchRecipes(fluidInput);
 
@@ -76,7 +91,13 @@ public class TileFluidCentrifuge extends TileMachine implements ITickable {
         if ((!(outputs.get(0).isEmpty()) && (fluidOutputs.get(0) != null))) {
             FluidStack fluidUsed = instance.getFluidInput(recipe);
             if (insertOutputs(outputs, true)
-                    && tanks.get(1).canDrainFluidType(fluidUsed)
+                    && (fluidInput != null
+                    && fluidInput.getFluid().getName() == fluidUsed.getFluid().getName()
+                    && tanks.get(0).getFluidAmount() >= fluidUsed.amount)
+                    && (fluidTank1 == null || (fluidTank1.getFluid().getName() == fluidOutputs.get(0).getFluid().getName()
+                    && (tanks.get(1).getCapacity() - tanks.get(1).getFluidAmount() > fluidOutputs.get(0).amount)))
+                    && (fluidTank2 == null || (fluidTank2.getFluid().getName() == fluidOutputs.get(1).getFluid().getName()
+                    && (tanks.get(2).getCapacity() - tanks.get(2).getFluidAmount() > fluidOutputs.get(0).amount)))
                     && energy.getEnergyStored() >= instance.getTotalEnergy(recipe)) {
                 currentRecipe = recipe;
                 progress = instance.getTicks(recipe);
@@ -87,15 +108,45 @@ public class TileFluidCentrifuge extends TileMachine implements ITickable {
     }
 
     private void attemptFluidCentrifuge() {
+        FluidStack fluidInput;
+        if (isNull(tanks.get(0).getFluid())) {
+            fluidInput = null;
+        } else {
+            fluidInput = new FluidStack(tanks.get(0).getFluid(), tanks.get(0).getFluidAmount());
+        }
+        FluidStack fluidTank1;
+        if (isNull(tanks.get(1).getFluid())) {
+            fluidTank1 = null;
+        } else {
+            fluidTank1 = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
+        }
+        FluidStack fluidTank2;
+        if (isNull(tanks.get(2).getFluid())) {
+            fluidTank2 = null;
+        } else {
+            fluidTank2 = new FluidStack(tanks.get(2).getFluid(), tanks.get(2).getFluidAmount());
+        }
+
         RecipesFluidCentrifuge instance = RecipesFluidCentrifuge.instance();
         List<ItemStack> outputs = instance.getOutputs(currentRecipe);
         List<FluidStack> fluidOutputs = instance.getFluidOutputs(currentRecipe);
         if ((!(outputs.get(0).isEmpty()) && (fluidOutputs.get(0) != null))) {
             FluidStack fluidUsed = instance.getFluidInput(currentRecipe);
-            if (insertOutputs(outputs, false)
-                    && tanks.get(0).canDrainFluidType(fluidUsed)) {
-                tanks.get(0).drain(fluidUsed, true);
+            if ((fluidInput != null
+                    && fluidInput.getFluid().getName() == fluidUsed.getFluid().getName()
+                    && tanks.get(0).getFluidAmount() >= fluidUsed.amount)
+                    && (fluidTank1 == null || (fluidTank1.getFluid().getName() == fluidOutputs.get(0).getFluid().getName()
+                    && (tanks.get(1).getCapacity() - tanks.get(1).getFluidAmount() > fluidOutputs.get(0).amount)))
+                    && (fluidTank2 == null || (fluidTank2.getFluid().getName() == fluidOutputs.get(1).getFluid().getName()
+                    && (tanks.get(2).getCapacity() - tanks.get(2).getFluidAmount() > fluidOutputs.get(0).amount)))
+                    && insertOutputs(outputs, false)) {
+                tanks.get(1).fillInternal(fluidOutputs.get(0), true);
+                if (fluidOutputs.get(1) != null) {
+                    tanks.get(2).fillInternal(fluidOutputs.get(1), true);
+                }
+                tanks.get(0).drainInternal(fluidUsed, true);
             }
+            currentRecipe = "";
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RecipeMakerTurntable {
-	private RecipeMakerTurntable(){}
+	private RecipeMakerTurntable() {}
 
 	public static List<WrapperTurntable> getRecipes(IJeiHelpers helpers) {
 		IStackHelper stackHelper = helpers.getStackHelper();

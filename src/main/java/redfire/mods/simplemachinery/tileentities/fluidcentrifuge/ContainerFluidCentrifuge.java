@@ -1,7 +1,9 @@
 package redfire.mods.simplemachinery.tileentities.fluidcentrifuge;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -37,7 +39,35 @@ public class ContainerFluidCentrifuge extends ContainerMachine<TileFluidCentrifu
 
         int slotIndex = 0;
         addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex++, x, y));
-        x += 25;
+        y += 24;
         addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex, x, y));
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = inventorySlots.get(index);
+
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            TileFluidCentrifuge tileEntity = new TileFluidCentrifuge();
+
+            if (index < tileEntity.input_slots) {
+                if (!mergeItemStack(itemstack1, tileEntity.input_slots, inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!mergeItemStack(itemstack1, 0, tileEntity.input_slots, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+        }
+
+        return itemstack;
     }
 }

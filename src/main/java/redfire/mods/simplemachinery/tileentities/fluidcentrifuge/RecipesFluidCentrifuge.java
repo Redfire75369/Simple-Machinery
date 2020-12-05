@@ -21,7 +21,7 @@ public class RecipesFluidCentrifuge {
 
     public RecipesFluidCentrifuge() {}
 
-    public void addFluidCentrifugeRecipe(String recipeName, List<ItemStack> outputs, FluidStack fluidInput, List<FluidStack> fluidOutputs, int ticks, int power) {
+    public void addRecipe(String recipeName, List<ItemStack> outputs, FluidStack fluidInput, List<FluidStack> fluidOutputs, int ticks, int power) {
         if (recipes.containsKey(recipeName)) {
             FMLLog.log.warn("Ignored fluid centrifuge recipe with recipe name: {}", recipeName);
             return;

@@ -9,15 +9,15 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("mods.simplemachinery.turntable")
+@ZenClass("mods.simplemachinery.Turntable")
 public class CTTurntableRecipe {
-	@ZenMethod("addTurntableRecipe")
-	public static void addTurntableRecipe(String recipeName, IIngredient input, IItemStack output, int ticks, int power) {
-		RecipesTurntable.instance().addRecipe(recipeName, CraftTweakerMC.getIngredient(input), CraftTweakerMC.getItemStack(output), ticks, power);
+	@ZenMethod("addRecipe")
+	public static void addRecipe(String recipeName, IIngredient input, IItemStack output, int ticks, int power) {
+		RecipesTurntable.instance().addRecipe("crafttweaker:" + recipeName, CraftTweakerMC.getIngredient(input), CraftTweakerMC.getItemStack(output), ticks, power);
 	}
 
-	@ZenMethod("removeTurntableRecipe")
-	public static void removeTurntableRecipe(String recipeName) {
+	@ZenMethod("removeRecipe")
+	public static void removeRecipe(String recipeName) {
 		RecipesTurntable.instance().recipes.remove(recipeName);
 	}
 }

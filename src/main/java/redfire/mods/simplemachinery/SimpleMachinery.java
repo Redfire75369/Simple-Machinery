@@ -16,12 +16,12 @@ public class SimpleMachinery {
 
 	public static final String modid = "simplemachinery";
 	public static final String modname = "Simple Machinery";
-	public static final String version = "0.1.0";
+	public static final String version = "0.2.0";
 
 	@SidedProxy(clientSide = "redfire.mods.simplemachinery.proxy.ClientProxy", serverSide = "redfire.mods.simplemachinery.proxy.ServerProxy")
 	public static CommonProxy proxy;
 
-	public static final CreativeTabs creativeTab = new CreativeTabs("simplemachinery.stuff") {
+	public static final CreativeTabs creativeTab = new CreativeTabs("simplemachinery.machines") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(ModBlocks.autoclave);

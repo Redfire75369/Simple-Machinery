@@ -23,6 +23,8 @@ public class TileAutoclave extends TileMachine implements ITickable {
 
 	public TileAutoclave() {
 		super(2, 1, Config.autoclave_steam_storage, Config.autoclave_tank_storage);
+		tanks.get(0).setCanDrain(false);
+		tanks.get(1).setCanDrain(false);
 	}
 
 	public int getProgress() {
@@ -39,7 +41,7 @@ public class TileAutoclave extends TileMachine implements ITickable {
 			if (progress > 0) {
 				if (tanks.get(0).getFluidAmount() > RecipesAutoclave.instance().getSteamPower(currentRecipe)) {
 					progress--;
-					tanks.get(0).drain(RecipesAutoclave.instance().getSteamPower(currentRecipe),true);
+					tanks.get(0).drainInternal(RecipesAutoclave.instance().getSteamPower(currentRecipe),true);
 				}
 				int emptySlots = 0;
 				for (int i = 0; i < input_slots; i++) {
@@ -63,23 +65,25 @@ public class TileAutoclave extends TileMachine implements ITickable {
 	}
 
 	private void startAutoclave() {
+		FluidStack fluidInput;
+		if (isNull(tanks.get(1).getFluid())) {
+			fluidInput = null;
+		} else {
+			fluidInput = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
+		}
+		RecipesAutoclave instance = RecipesAutoclave.instance();
 		for (int i = 0; i < input_slots; i++) {
 			ItemStack input =  inputHandler.getStackInSlot(i);
-			FluidStack fluidInput;
-			if (isNull(tanks.get(1).getFluid())) {
-				fluidInput = null;
-			} else {
-				fluidInput = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
-			}
 			String recipe = RecipesAutoclave.searchRecipes(input, fluidInput);
 
-			RecipesAutoclave instance = RecipesAutoclave.instance();
 			ItemStack output = instance.getOutput(recipe);
 			if (!(output.isEmpty())) {
 				FluidStack fluidUsed = instance.getFluidInput(recipe);
 				if (insertOutput(output.copy(), true)
-						&& tanks.get(1).canDrainFluidType(fluidUsed)
-						&& instance.getTotalSteam(recipe) < tanks.get(0).getFluidAmount()) {
+						&& fluidInput != null
+						&& fluidInput.getFluid().getName() == fluidUsed.getFluid().getName()
+						&& tanks.get(1).getFluidAmount() >= fluidUsed.amount
+						&& tanks.get(0).getFluidAmount() >= instance.getTotalSteam(recipe)) {
 					currentRecipe = recipe;
 					progress = instance.getTicks(recipe);
 				} else {
@@ -91,15 +95,25 @@ public class TileAutoclave extends TileMachine implements ITickable {
 	}
 
 	private void attemptAutoclave() {
+		FluidStack fluidInput;
+		if (tanks.get(1).getFluid() == null) {
+			fluidInput = null;
+		} else {
+			fluidInput = new FluidStack(tanks.get(1).getFluid(), tanks.get(1).getFluidAmount());
+		}
+
+		RecipesAutoclave instance = RecipesAutoclave.instance();
+		ItemStack output = instance.getOutput(currentRecipe);
+
 		for (int i = 0; i < input_slots; i++) {
-			RecipesAutoclave instance = RecipesAutoclave.instance();
-			ItemStack output = instance.getOutput(currentRecipe);
 			if (!(output.isEmpty())) {
 				FluidStack fluidUsed = instance.getFluidInput(currentRecipe);
-				if (insertOutput(output.copy(), false)
-						&& tanks.get(1).canDrainFluidType(fluidUsed)) {
+				if (fluidInput != null
+						&& fluidInput.getFluid().getName() == fluidUsed.getFluid().getName()
+						&& tanks.get(1).getFluidAmount() >= fluidUsed.amount
+						&& insertOutput(output.copy(), false)) {
 					inputHandler.extractItem(i, 1, false);
-					tanks.get(1).drain(fluidUsed, true);
+					tanks.get(1).drainInternal(fluidUsed, true);
 				}
 				currentRecipe = "";
 				break;

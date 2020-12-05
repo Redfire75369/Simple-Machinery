@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RecipeMakerAutoclave {
-    private RecipeMakerAutoclave(){}
+    private RecipeMakerAutoclave() {}
 
     public static List<WrapperAutoclave> getRecipes(IJeiHelpers helpers) {
         IStackHelper stackHelper = helpers.getStackHelper();

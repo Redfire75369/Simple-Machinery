@@ -9,8 +9,8 @@ import redfire.mods.simplemachinery.tileentities.turntable.RecipeTurntable;
 import java.util.Arrays;
 
 public class WrapperTurntable extends WrapperMachine<RecipeTurntable> {
-	public WrapperTurntable(IJeiHelpers helpers, RecipeTurntable recipe) {
-		super(helpers, recipe);
+	public WrapperTurntable(IJeiHelpers jeiHelpers, RecipeTurntable recipe) {
+		super(jeiHelpers, recipe);
 	}
 
 	@Override

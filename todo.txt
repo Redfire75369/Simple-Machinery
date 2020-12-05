@@ -1,1 +1,1 @@
-Liquid Centrifuge that takes in liquid, and outputs 1 to 2 liquids and 1 to 2 itemstacks with a % chance
+Make outputs on Fluid Centrifuge chanced.
