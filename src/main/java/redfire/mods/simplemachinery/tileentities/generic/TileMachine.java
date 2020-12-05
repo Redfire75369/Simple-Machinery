@@ -62,11 +62,33 @@ public class TileMachine extends TileEntity {
 		combinedHandler = new CombinedInvWrapper(inputHandler, outputHandler);
 	}
 
+	public List<Tank> getTanks() {
+		return tanks;
+	}
+
 	protected boolean insertOutput(ItemStack output, boolean simulate) {
 		for (int i = 0; i < output_slots; i++) {
 			ItemStack remaining = outputHandler.insertItem(i, output, simulate);
 			if (remaining.isEmpty()) {
 				return true;
+			}
+		}
+		return false;
+	}
+
+	protected boolean insertOutputs(List<ItemStack> outputs, boolean simulate) {
+		int index = 0;
+		for (int i = 0; i < output_slots; i++) {
+			ItemStack output = outputs.get(index);
+			if (!simulate) {
+				output = output.copy();
+			}
+			ItemStack remaining = outputHandler.insertItem(i, output, simulate);
+			if (remaining.isEmpty()) {
+				index++;
+				if (index == outputs.size()) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -86,16 +108,20 @@ public class TileMachine extends TileEntity {
 	}
 
 	public void readInventory(NBTTagCompound compound) {
-		if (compound.hasKey("itemsIn")) {
+		if (compound.hasKey("itemsIn") && input_slots > 0) {
 			inputHandler.deserializeNBT((NBTTagCompound) compound.getTag("itemsIn"));
 		}
-		if (compound.hasKey("itemsOut")) {
+		if (compound.hasKey("itemsOut") && output_slots > 0) {
 			outputHandler.deserializeNBT((NBTTagCompound) compound.getTag("itemsOut"));
 		}
 	}
 	public NBTTagCompound writeInventory(NBTTagCompound compound) {
-		compound.setTag("itemsIn", inputHandler.serializeNBT());
-		compound.setTag("itemsOut", outputHandler.serializeNBT());
+		if (input_slots > 0) {
+			compound.setTag("itemsIn", inputHandler.serializeNBT());
+		}
+		if (output_slots > 0) {
+			compound.setTag("itemsOut", outputHandler.serializeNBT());
+		}
 		return compound;
 	}
 

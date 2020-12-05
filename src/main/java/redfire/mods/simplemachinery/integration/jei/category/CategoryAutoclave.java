@@ -9,6 +9,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import redfire.mods.simplemachinery.Config;
 import redfire.mods.simplemachinery.SimpleMachinery;
 import redfire.mods.simplemachinery.integration.jei.wrapper.WrapperAutoclave;
 
@@ -72,7 +73,7 @@ public class CategoryAutoclave implements IRecipeCategory<WrapperAutoclave> {
 
 		guiItemStacks.init(inputSlot, true, 3, 9);
 		guiItemStacks.init(outputSlot, false, 75, 9);
-		guiFluidStacks.init(fluidInputSlot, true, 22, 10);
+		guiFluidStacks.init(fluidInputSlot, true, 22, 10, 16, 16, Config.autoclave_tank_storage, false, null);
 
 		guiItemStacks.set(ingredients);
 		guiFluidStacks.set(ingredients);

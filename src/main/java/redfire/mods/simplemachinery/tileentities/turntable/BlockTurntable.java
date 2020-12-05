@@ -1,10 +1,7 @@
 package redfire.mods.simplemachinery.tileentities.turntable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,23 +17,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import redfire.mods.simplemachinery.SimpleMachinery;
+import redfire.mods.simplemachinery.tileentities.generic.BlockMachine;
 
 import javax.annotation.Nullable;
 
-public class BlockTurntable extends Block implements ITileEntityProvider {
-
-	public static final PropertyDirection faceDirection = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final int guiId = 2;
-
+public class BlockTurntable extends BlockMachine implements ITileEntityProvider {
 	public BlockTurntable() {
-		super(Material.IRON);
-		setRegistryName("turntable");
-		setUnlocalizedName(SimpleMachinery.modid + ".turntable");
-		setHardness(3.5F);
-		setHarvestLevel("pickaxe", 1);
-		setCreativeTab(SimpleMachinery.creativeTab);
-
-		setDefaultState(blockState.getBaseState().withProperty(faceDirection, EnumFacing.NORTH));
+		super("turntable", 3);
 	}
 
 	@Nullable
@@ -50,8 +37,8 @@ public class BlockTurntable extends Block implements ITileEntityProvider {
 		if (worldIn.isRemote) {
 			return true;
 		}
-		TileEntity te = worldIn.getTileEntity(pos);
-		if (!(te instanceof TileTurntable)) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if (!(tileEntity instanceof TileTurntable)) {
 			return false;
 		}
 		playerIn.openGui(SimpleMachinery.instance, guiId, worldIn, pos.getX(), pos.getY(), pos.getZ());

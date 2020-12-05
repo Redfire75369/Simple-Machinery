@@ -1,6 +1,3 @@
-itemGroup.simplemachinery.stuff=Simple Machinery
-
-fluid.steam=Steam
-
 tile.simplemachinery.autoclave.name=Autoclave
+tile.simplemachinery.fluid_centrifuge.name=Fluid Centrifuge
 tile.simplemachinery.turntable.name=Turntable

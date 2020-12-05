@@ -42,18 +42,15 @@ public class RecipesAutoclave {
 			return;
 		}
 
-		recipes.put(recipeName, new RecipeAutoclave(input,
-				output,
-				fluidInput,
-				ticks,
-				steamPower
-		));
+		recipes.put(recipeName, new RecipeAutoclave(input, output, fluidInput, ticks, steamPower));
 	}
 
-	public void removeAutoclaveRecipe(String recipeName) {
-
+	public Ingredient getInput(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).inputs.get(0);
+		}
+		return Ingredient.EMPTY;
 	}
-
 	public ItemStack getOutput(String recipeName) {
 		if (recipes.get(recipeName) != null) {
 			return recipes.get(recipeName).outputs.get(0);

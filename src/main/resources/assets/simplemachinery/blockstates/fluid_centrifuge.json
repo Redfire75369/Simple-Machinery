@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+      "north": "simplemachinery:blocks/fluid_centrifuge_front",
+      "south": "simplemachinery:blocks/fluid_centrifuge_side",
+      "east": "simplemachinery:blocks/fluid_centrifuge_side",
+      "west": "simplemachinery:blocks/fluid_centrifuge_side",
+      "up": "simplemachinery:blocks/fluid_centrifuge_top",
+      "down": "simplemachinery:blocks/fluid_centrifuge_top",
+      "particle": "simplemachinery:blocks/fluid_centrifuge_front"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y":	180},
+      "east": {"y": 90},
+      "west": {"y":	270}
+    }
+  }
+}

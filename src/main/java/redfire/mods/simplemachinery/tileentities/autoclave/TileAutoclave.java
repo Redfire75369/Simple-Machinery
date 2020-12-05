@@ -1,6 +1,5 @@
 package redfire.mods.simplemachinery.tileentities.autoclave;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -19,14 +18,11 @@ import static java.util.Objects.isNull;
 
 
 public class TileAutoclave extends TileMachine implements ITickable {
-	public static int size;
-
 	private int progress = 0;
 	private String currentRecipe = "";
 
 	public TileAutoclave() {
 		super(2, 1, Config.autoclave_steam_storage, Config.autoclave_tank_storage);
-		size = input_slots + output_slots;
 	}
 
 	public int getProgress() {
@@ -41,12 +37,19 @@ public class TileAutoclave extends TileMachine implements ITickable {
 	public void update() {
 		if (!(world.isRemote)) {
 			if (progress > 0) {
-				progress--;
+				if (tanks.get(0).getFluidAmount() > RecipesAutoclave.instance().getSteamPower(currentRecipe)) {
+					progress--;
+					tanks.get(0).drain(RecipesAutoclave.instance().getSteamPower(currentRecipe),true);
+				}
+				int emptySlots = 0;
 				for (int i = 0; i < input_slots; i++) {
-					if (!inputHandler.getStackInSlot(i).isEmpty()) {
-						tanks.get(0).drain(RecipesAutoclave.instance().getSteamPower(currentRecipe),true);
-						break;
+					if (!RecipesAutoclave.instance().getInput(currentRecipe).apply(inputHandler.getStackInSlot(i))) {
+						emptySlots++;
 					}
+				}
+				if (emptySlots == input_slots) {
+					currentRecipe = "";
+					progress = 0;
 				}
 
 				if (progress <= 0) {
@@ -74,7 +77,8 @@ public class TileAutoclave extends TileMachine implements ITickable {
 			ItemStack output = instance.getOutput(recipe);
 			if (!(output.isEmpty())) {
 				FluidStack fluidUsed = instance.getFluidInput(recipe);
-				if (insertOutput(output.copy(), true) && tanks.get(1).canDrainFluidType(fluidUsed)
+				if (insertOutput(output.copy(), true)
+						&& tanks.get(1).canDrainFluidType(fluidUsed)
 						&& instance.getTotalSteam(recipe) < tanks.get(0).getFluidAmount()) {
 					currentRecipe = recipe;
 					progress = instance.getTicks(recipe);
@@ -97,6 +101,7 @@ public class TileAutoclave extends TileMachine implements ITickable {
 					inputHandler.extractItem(i, 1, false);
 					tanks.get(1).drain(fluidUsed, true);
 				}
+				currentRecipe = "";
 				break;
 			}
 		}

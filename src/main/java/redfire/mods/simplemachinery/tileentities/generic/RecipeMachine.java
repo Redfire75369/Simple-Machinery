@@ -24,4 +24,8 @@ public class RecipeMachine extends IForgeRegistryEntry.Impl<IRecipe> {
         this.ticks = ticks;
         this.power = power;
     }
+
+    public int getTotalEnergy() {
+        return ticks * power;
+    }
 }

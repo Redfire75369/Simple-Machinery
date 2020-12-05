@@ -1,24 +1,25 @@
 {
-  "forge_marker": 1,
-  "defaults": {
+	"forge_marker": 1,
+	"defaults": {
 	"model": "cube",
 	"textures": {
-	  "north": "simplemachinery:blocks/autoclave_front",
-	  "south": "simplemachinery:blocks/autoclave_side",
-	  "east": "simplemachinery:blocks/autoclave_side",
-	  "west": "simplemachinery:blocks/autoclave_side",
-	  "up": "simplemachinery:blocks/autoclave_top",
-	  "down": "simplemachinery:blocks/autoclave_top"
+		"north": "simplemachinery:blocks/autoclave_front",
+		"south": "simplemachinery:blocks/autoclave_side",
+		"east": "simplemachinery:blocks/autoclave_side",
+		"west": "simplemachinery:blocks/autoclave_side",
+		"up": "simplemachinery:blocks/autoclave_top",
+		"down": "simplemachinery:blocks/autoclave_top",
+			"particle": "simplemachinery:blocks/autoclave_front"
 	}
-  },
-  "variants": {
+	},
+	"variants": {
 	"normal": [{}],
 	"inventory": [{}],
 	"facing": {
-	  "north": {},
-	  "south": {"y":  180},
-	  "east": {"y": 90},
-	  "west": {"y":  270}
+		"north": {},
+		"south": {"y":	180},
+		"east": {"y": 90},
+		"west": {"y":	270}
 	}
-  }
+	}
 }

@@ -8,7 +8,8 @@
 			"east": "simplemachinery:blocks/turntable_side",
 			"west": "simplemachinery:blocks/turntable_side",
 			"up": "simplemachinery:blocks/turntable_top",
-			"down": "simplemachinery:blocks/turntable_top"
+			"down": "simplemachinery:blocks/turntable_top",
+			"particle": "simplemachinery:blocks/turntable_front"
 		}
 	},
 	"variants": {

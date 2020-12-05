@@ -1,7 +1,6 @@
 package redfire.mods.simplemachinery.proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.config.Configuration;
@@ -18,9 +17,10 @@ import redfire.mods.simplemachinery.ModBlocks;
 import redfire.mods.simplemachinery.SimpleMachinery;
 import redfire.mods.simplemachinery.tileentities.autoclave.BlockAutoclave;
 import redfire.mods.simplemachinery.tileentities.autoclave.TileAutoclave;
+import redfire.mods.simplemachinery.tileentities.fluidcentrifuge.BlockFluidCentrifuge;
+import redfire.mods.simplemachinery.tileentities.fluidcentrifuge.TileFluidCentrifuge;
 import redfire.mods.simplemachinery.tileentities.turntable.BlockTurntable;
 import redfire.mods.simplemachinery.tileentities.turntable.TileTurntable;
-import redfire.mods.simplemachinery.util.GenericBlock;
 
 import java.io.File;
 
@@ -46,16 +46,18 @@ public class CommonProxy {
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		event.getRegistry().register(new GenericBlock("regolith", Material.SAND));
 		event.getRegistry().register(new BlockAutoclave());
+		event.getRegistry().register(new BlockFluidCentrifuge());
 		event.getRegistry().register(new BlockTurntable());
 		GameRegistry.registerTileEntity(TileAutoclave.class, SimpleMachinery.modid + "_autoclave");
+		GameRegistry.registerTileEntity(TileFluidCentrifuge.class, SimpleMachinery.modid + "_fluid_centrifuge");
 		GameRegistry.registerTileEntity(TileTurntable.class, SimpleMachinery.modid + "_turntable");
 	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().register(new ItemBlock(ModBlocks.autoclave).setRegistryName(ModBlocks.autoclave.getRegistryName()));
+		event.getRegistry().register(new ItemBlock(ModBlocks.fluid_centrifuge).setRegistryName(ModBlocks.fluid_centrifuge.getRegistryName()));
 		event.getRegistry().register(new ItemBlock(ModBlocks.turntable).setRegistryName(ModBlocks.turntable.getRegistryName()));
 	}
 }

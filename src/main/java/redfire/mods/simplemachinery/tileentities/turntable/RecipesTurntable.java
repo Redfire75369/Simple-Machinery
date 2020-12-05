@@ -27,13 +27,15 @@ public class RecipesTurntable {
 			return;
 		}
 
-		recipes.put(recipeName, new RecipeTurntable(input,
-				output,
-				ticks,
-				power
-		));
+		recipes.put(recipeName, new RecipeTurntable(input, output, ticks, power));
 	}
 
+	public Ingredient getInput(String recipeName) {
+		if (recipes.get(recipeName) != null) {
+			return recipes.get(recipeName).inputs.get(0);
+		}
+		return Ingredient.EMPTY;
+	}
 	public ItemStack getOutput(String recipeName) {
 		if (recipes.get(recipeName) != null) {
 			return recipes.get(recipeName).outputs.get(0);

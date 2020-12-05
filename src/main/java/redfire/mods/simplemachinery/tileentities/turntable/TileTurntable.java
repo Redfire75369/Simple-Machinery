@@ -6,17 +6,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import redfire.mods.simplemachinery.Config;
-import redfire.mods.simplemachinery.tileentities.autoclave.RecipesAutoclave;
 import redfire.mods.simplemachinery.tileentities.generic.TileMachine;
+import redfire.mods.simplemachinery.util.energy.EnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class TileTurntable extends TileMachine implements ITickable {
-	public static EnergyStorage energy = new EnergyStorage(Config.turntable_fe_storage, Config.turntable_fe_io, Config.turntable_fe_io,0);
+	public EnergyStorage energy = new EnergyStorage(Config.turntable_fe_storage, Config.turntable_fe_io, 0,0);
 	private int progress = 0;
 	private String currentRecipe = "";
 
@@ -32,13 +31,21 @@ public class TileTurntable extends TileMachine implements ITickable {
 		return currentRecipe;
 	}
 
+	public EnergyStorage getEnergyStorage() {
+		return energy;
+	}
+
 	@Override
 	public void update() {
 		if (!(world.isRemote)) {
 			if (progress > 0) {
-				if (energy.getEnergyStored() > Config.turntable_fe_io) {
+				if (energy.getEnergyStored() > RecipesTurntable.instance().getPower(currentRecipe)) {
 					progress--;
-					energy.extractEnergy(Config.turntable_fe_io, false);
+					energy.subtractEnergy(RecipesTurntable.instance().getPower(currentRecipe));
+				}
+				if (!RecipesTurntable.instance().getInput(currentRecipe).apply(inputHandler.getStackInSlot(0))) {
+					currentRecipe = "";
+					progress = 0;
 				}
 				if (progress <= 0) {
 					attemptTurntable();
@@ -75,11 +82,12 @@ public class TileTurntable extends TileMachine implements ITickable {
 	private void attemptTurntable() {
 		for (int i = 0; i < input_slots; i++) {
 			RecipesTurntable instance = RecipesTurntable.instance();
-			ItemStack result = instance.getOutput(currentRecipe);
-			if (!(result.isEmpty())) {
-				if (insertOutput(result.copy(), false)) {
+			ItemStack output = instance.getOutput(currentRecipe);
+			if (!(output.isEmpty())) {
+				if (insertOutput(output.copy(), false)) {
 					inputHandler.extractItem(i, 1, false);
 				}
+				currentRecipe = "";
 				break;
 			}
 		}
@@ -115,7 +123,7 @@ public class TileTurntable extends TileMachine implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		energy = new EnergyStorage(Config.turntable_fe_storage, Config.turntable_fe_io, Config.turntable_fe_io, compound.getInteger("energyStored"));
+		energy.setEnergy(compound.getInteger("energyStored"));
 		progress = compound.getInteger("progress");
 		currentRecipe = compound.getString("recipe");
 	}
@@ -131,7 +139,7 @@ public class TileTurntable extends TileMachine implements ITickable {
 	@Override
 	public void handleUpdateTag(NBTTagCompound compound) {
 		super.handleUpdateTag(compound);
-		energy = new EnergyStorage(Config.turntable_fe_storage, Config.turntable_fe_io, Config.turntable_fe_io, compound.getInteger("energyStored"));
+		energy.setEnergy(compound.getInteger("energyStored"));
 		progress = compound.getInteger("progress");
 		currentRecipe = compound.getString("recipe");
 	}

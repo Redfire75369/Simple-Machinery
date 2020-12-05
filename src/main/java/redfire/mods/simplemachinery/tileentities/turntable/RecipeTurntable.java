@@ -10,8 +10,4 @@ public class RecipeTurntable extends RecipeMachine {
     public RecipeTurntable(Ingredient input, ItemStack output, int ticks, int power) {
         super(Collections.singletonList(input), Collections.singletonList(output), Collections.singletonList(null), Collections.singletonList(null), ticks, power);
     }
-
-    public int getTotalEnergy() {
-        return ticks * power;
-    }
 }
