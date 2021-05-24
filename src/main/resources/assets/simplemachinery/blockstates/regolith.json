@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "simplemachinery:block/regolith"
+    }
+  }
+}

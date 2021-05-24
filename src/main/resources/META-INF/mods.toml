@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+issueTrackerURL="https://github.com/Redfire75369/Simple-Machinery/issues"
+license="MPL-2.0"
+showAsResourcePack=false
+
+[[mods]]
+modId="simplemachinery"
+version="${file.jarVersion}"
+displayName="Simple Machinery"
+updateJSONURL=""
+displayURL="https://github.com/Redfire75369/Simple-Machinery"
+authors="Redfire"
+logoFile=""
+description='''
+Simple Machines
+'''
+
+[[dependencies.simplemachinery]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.simplemachinery]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,)"
+    ordering="NONE"
+    side="BOTH"

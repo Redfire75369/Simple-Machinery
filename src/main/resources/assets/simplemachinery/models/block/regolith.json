@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "simplemachinery:block/regolith",
+    "all": "simplemachinery:block/regolith"
+  }
+}

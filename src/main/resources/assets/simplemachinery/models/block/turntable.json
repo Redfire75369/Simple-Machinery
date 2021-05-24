@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "simplemachinery:block/turntable_top",
+    "front": "simplemachinery:block/turntable_front",
+    "side": "simplemachinery:block/turntable_side"
+  }
+}

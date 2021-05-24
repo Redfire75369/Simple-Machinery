@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplemachinery:block/turntable"
+    },
+    "facing=east": {
+      "model": "simplemachinery:block/turntable",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplemachinery:block/turntable",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplemachinery:block/turntable",
+      "y": 270
+    }
+  }
+}

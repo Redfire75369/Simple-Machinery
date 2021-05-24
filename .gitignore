@@ -1,0 +1,14 @@
+### Minecraft Forge ###
+# Gradle
+.gradle/**/*
+build/**/*
+
+# Minecraft
+run/**/*
+
+# Generated
+src/generated/**/*
+
+### Editors/IDEs ###
+## IntelliJ IDEA ##
+.idea/**/*
