@@ -1,7 +1,6 @@
 package mods.redfire.simplemachinery.util.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;

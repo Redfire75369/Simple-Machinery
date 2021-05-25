@@ -12,10 +12,19 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class TurntableTile extends MachineTile<TurntableRecipe> implements INamedContainerProvider {
+    public static final int ITEM_INPUTS = 1;
+    public static final int ITEM_OUTPUTS = 1;
+
     public TurntableTile() {
-        super(TileEntities.TILE_TURNTABLE.get(), 1, 1, new EnergyCoil(10000));
+        super(TileEntities.TILE_TURNTABLE.get(), ITEM_INPUTS, ITEM_OUTPUTS, new EnergyCoil(10000, 100));
+    }
+
+    @Override
+    protected Optional<TurntableRecipe> getRecipe() {
+        return TurntableRecipe.getRecipe(level, inventory);
     }
 
     @Nonnull

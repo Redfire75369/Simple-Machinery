@@ -1,16 +1,16 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import mods.redfire.simplemachinery.registry.Blocks;
+import mods.redfire.simplemachinery.util.IntArrayWrapper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -18,31 +18,75 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nullable;
+
 public class MachineContainer<T extends MachineTile<?>> extends Container {
+    @Nullable
+    protected final T tile;
+
     protected final World world;
     protected final BlockPos pos;
-    protected final IIntArray guiData;
+    protected final IntArrayWrapper data;
 
-    public MachineContainer(ContainerType<?> type, int id, World world, BlockPos pos, PlayerInventory playerInv) {
-        this(type, id, world, pos, playerInv, new IntArray(6));
+    public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv) {
+        this(type, inventorySize, id, world, pos, playerInv, null, new IntArrayWrapper(2));
     }
 
-    public MachineContainer(ContainerType<?> type, int id, World world, BlockPos pos, PlayerInventory playerInv, final MachineTile<?> tile) {
-        this(type, id, world, pos, playerInv, tile.getGuiData());
+    public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, final T tile) {
+        this(type, inventorySize, id, world, pos, playerInv, tile, tile.getData());
     }
 
-    public MachineContainer(ContainerType<?> type, int id, World world, BlockPos pos, PlayerInventory playerInv, final IIntArray guiData) {
+    public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, @Nullable T tile, final IntArrayWrapper data) {
         super(type, id);
 
+        this.tile = tile;
         this.world = world;
         this.pos = pos;
-        this.guiData = guiData;
-        TileEntity tile = world.getBlockEntity(pos);
+        this.data = data;
 
-        addDataSlots(guiData);
+        addDataSlots(data);
+        trackEnergy();
 
         layoutPlayerInventorySlots(new InvWrapper(playerInv), 8, 84);
-        layoutMachineInventorySlots(tile != null && tile instanceof MachineTile ? ((MachineTile<?>) tile).inventory : new ItemStackHandler(1 + 1));
+        layoutMachineInventorySlots(tile != null ? ((MachineTile<?>) tile).inventory : new ItemStackHandler(inventorySize));
+    }
+
+    protected void trackEnergy() {
+        if (tile != null) {
+            addDataSlots(new IIntArray() {
+                @Override
+                public int get(int index) {
+                    switch (index) {
+                        case 0:
+                            return getEnergy() & 0xffff;
+                        case 1:
+                            return (getEnergy() >> 16) & 0xffff;
+                        default:
+                            return 0;
+                    }
+                }
+
+                @Override
+                public void set(int index, int value) {
+                    int energyStored = getEnergy();
+                    switch (index) {
+                        case 0:
+                            tile.getEnergy().setEnergyStored((energyStored & 0xffff0000) | (value & 0xffff));
+                            break;
+                        case 1:
+                            tile.getEnergy().setEnergyStored((value << 16) | (energyStored & 0xffff));
+                            break;
+                    }
+                }
+
+                @Override
+                public int getCount() {
+                    return 2;
+                }
+            });
+        } else {
+            addDataSlots(new IntArrayWrapper(1));
+        }
     }
 
     protected int addSlotRow(IItemHandler handler, int index, int x, int y, int amount, int dx) {
@@ -70,8 +114,12 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 
     protected void layoutMachineInventorySlots(IItemHandler inventory) {}
 
-    public IIntArray getGuiData() {
-        return guiData;
+    public int getEnergy() {
+        return tile.getEnergy().getEnergyStored();
+    }
+
+    public IntArrayWrapper getData() {
+        return data;
     }
 
     @Override

@@ -3,6 +3,7 @@ package mods.redfire.simplemachinery.tileentities.turntable;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mods.redfire.simplemachinery.SimpleMachinery;
+import mods.redfire.simplemachinery.util.IntArrayWrapper;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -44,13 +45,15 @@ public class TurntableScreen extends ContainerScreen<TurntableContainer> {
     }
 
     private int getTimeScaled(int pixels) {
-        int i = (menu.getGuiData().get(3) << 16) | (menu.getGuiData().get(2) & 0xffff);
-        int j = (menu.getGuiData().get(5) << 16) | (menu.getGuiData().get(4) & 0xffff);
-        return i != 0 && j != 0 ? i * pixels / j : 0;
+        IntArrayWrapper data = menu.getData();
+
+        int i = data.getInternal(0);
+        int j = data.getInternal(1);
+        return j != 0 && i != j ? (j - i) * pixels / j : 0;
     }
 
     private int getEnergyStorageScaled(int pixels) {
-        int i = (menu.getGuiData().get(1) << 16) | (menu.getGuiData().get(0) & 0xffff);
+        int i = menu.getEnergy();
         return i * pixels / 10000;
     }
 }

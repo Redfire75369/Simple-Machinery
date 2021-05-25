@@ -6,6 +6,7 @@ import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -14,13 +15,19 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public class TurntableRecipe extends MachineRecipe {
     protected static final String RECIPE_NAME = "turntable";
@@ -58,7 +65,7 @@ public class TurntableRecipe extends MachineRecipe {
     }
 
     public static Optional<TurntableRecipe> getRecipe(World world, MachineInventory ctx) {
-        return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx, world);
+        return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx.getInputInventory(), world);
     }
 
     public static Collection<TurntableRecipe> getAllRecipes(World world) {

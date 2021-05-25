@@ -1,5 +1,6 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
+import com.google.common.primitives.Ints;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
 import net.minecraft.item.ItemStack;
@@ -12,7 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MachineRecipe implements IRecipe<MachineInventory> {
     protected final ResourceLocation id;
@@ -48,8 +50,8 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 
     public List<Integer> getInputItemCounts(List<MachineItemSlot> inputSlots) {
         List<Ingredient> inputs = getInputItems();
-        List<Integer> counts = new ArrayList<>(inputSlots.size());
 
+        int[] counts = new int[inputSlots.size()];
         boolean[] used = new boolean[inputSlots.size()];
         for (Ingredient input : inputs) {
             boolean matched = false;
@@ -59,7 +61,7 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
                     ItemStack item = slot.getItemStack();
 
                     if (input.test(item)) {
-                        counts.set(i, input.getItems()[0].getCount());
+                        counts[i] = input.getItems()[0].getCount();
                         used[i] = true;
                         matched = true;
                     }
@@ -67,7 +69,7 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
             }
         }
 
-        return counts;
+        return Ints.asList(counts);
     }
 
     public List<ItemStack> getOutputItems() {

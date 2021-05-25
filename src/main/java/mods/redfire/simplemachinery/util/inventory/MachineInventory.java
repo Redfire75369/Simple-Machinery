@@ -1,14 +1,11 @@
 package mods.redfire.simplemachinery.util.inventory;
 
-import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 
@@ -109,6 +106,14 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 
     public List<MachineItemSlot> getInputSlots() {
         return inputSlots;
+    }
+
+    public MachineInventory getInputInventory() {
+        return new MachineInventory(tile, this.getInputSlots());
+    }
+
+    public MachineInventory getOutputInventory() {
+        return new MachineInventory(tile, this.getOutputSlots());
     }
 
     public List<MachineItemSlot> getOutputSlots() {

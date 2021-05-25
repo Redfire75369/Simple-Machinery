@@ -1,5 +1,6 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
+import mods.redfire.simplemachinery.util.IntArrayWrapper;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.inventory.IMachineInventoryCallback;
 import mods.redfire.simplemachinery.util.inventory.InventoryGroup;
@@ -13,7 +14,6 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -40,6 +40,8 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
     protected int progressTotal;
     protected Optional<T> currentRecipe = Optional.empty();
 
+    protected IntArrayWrapper data = new IntArrayWrapper(2);
+
     public MachineTile(TileEntityType<?> type, int itemInputs, int itemOutputs, EnergyCoil energy) {
         super(type);
         inventory.addSlots(InventoryGroup.INPUT, itemInputs);
@@ -47,10 +49,6 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
         this.energy = energy;
 
         updateHandlers();
-    }
-
-    public boolean playerWithinDistance(PlayerEntity player, double distanceSq) {
-        return worldPosition.distSqr(player.position(), true) <= distanceSq;
     }
 
     public MachineTile<T> worldContext(BlockState state, IBlockReader world) {
@@ -66,89 +64,87 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
         if (currentRecipe.isPresent()) {
             T recipe = currentRecipe.get();
             energy.modify(-recipe.getEnergyRate());
-            progress--;
+            data.setInternal(0, data.getInternal(0) - 1);
 
             if (canComplete()) {
                 complete();
-                if (canBegin(recipe)) {
-                    begin();
-                } else {
-                    clear();
-                }
+                clear();
             } else if (energy.getEnergyStored() < recipe.getEnergyRate()) {
                 clear();
+            }
+        } else {
+            Optional<T> recipe = getRecipe();
+            if (recipe.isPresent() && canBegin(recipe.get())) {
+                begin(recipe.get());
             }
         }
     }
 
-    public void begin() {
-        Optional<T> recipe = getRecipe();
-        if (recipe.isPresent()) {
-            if (energy.getEnergyStored() > recipe.get().getEnergy()) {
-                currentRecipe = recipe;
-                progress = progressTotal = recipe.get().getTime();
-                itemInputCounts = recipe.get().getInputItemCounts(inventory.getInputSlots());
-            }
+    public void begin(T recipe) {
+        if (energy.getEnergyStored() > recipe.getEnergy()) {
+            currentRecipe = Optional.of(recipe);
+            data.setInternal(0, recipe.getTime());
+            data.setInternal(1, recipe.getTime());
+            itemInputCounts = recipe.getInputItemCounts(inventory.getInputSlots());
         }
     }
 
     public void complete() {
-        if (!validateInputs()) {
+        if (!validateInputs(itemInputCounts)) {
             clear();
             return;
         }
-        resolveOutputs();
         resolveInputs();
+        resolveOutputs();
         setChanged();
     }
 
     public void clear() {
-        progress = 0;
+        data.setInternal(0, 0);
+        data.setInternal(1, 0);
         currentRecipe = Optional.empty();
         itemInputCounts = new ArrayList<>();
     }
 
     public boolean canBegin(T recipe) {
-        if (energy.getEnergyStored() > recipe.getEnergy()) {
-            return false;
-        }
-        return !validateInputs() && validateOutputs();
+        List<Integer> itemInputCounts = recipe.getInputItemCounts(inventory.getInputSlots());
+
+        return energy.getEnergyStored() >= recipe.getEnergy()
+               && validateInputs(itemInputCounts) && validateOutputs(recipe);
     }
 
     public boolean canComplete() {
-        return progress <= 0;
+        return data.getInternal(0) <= 0;
     }
 
-    protected boolean validateInputs() {
+    protected boolean validateInputs(List<Integer> itemInputCounts) {
         List<MachineItemSlot> inputSlots = inputSlots();
-        for (int i = 0; i < inputSlots.size() && i < itemInputCounts.size(); ++i) {
+
+        for (int i = 0; i < inputSlots.size() && i < itemInputCounts.size(); i++) {
             int inputCount = itemInputCounts.get(i);
-            if (inputCount > 0 && inputSlots.get(i).getItemStack().getCount() < inputCount) {
+            if (inputCount == 0 || (inputCount > 0 && inputSlots.get(i).getItemStack().getCount() < inputCount)) {
                 return false;
             }
         }
         return true;
     }
 
-    protected boolean validateOutputs() {
-        if (!currentRecipe.isPresent()) {
-            return false;
-        }
+    protected boolean validateOutputs(T recipe) {
         List<MachineItemSlot> outputSlots = outputSlots();
-        List<ItemStack> recipeOutputItems = currentRecipe.get().getOutputItems();
+        List<ItemStack> recipeOutputItems = recipe.getOutputItems();
 
         boolean[] used = new boolean[outputSlots().size()];
         for (ItemStack recipeOutput : recipeOutputItems) {
             boolean matched = false;
-            for (int i = 0; i < outputSlots.size(); ++i) {
+            for (int i = 0; i < outputSlots.size(); i++) {
                 if (used[i]) {
                     continue;
                 }
                 ItemStack output = outputSlots.get(i).getItemStack();
-                if (output.getCount() >= output.getMaxStackSize()) {
+                if (output.getCount() + Math.max(0, recipeOutput.getCount()) > output.getMaxStackSize()) {
                     continue;
                 }
-                if (ItemStack.matches(output, recipeOutput) && ItemStack.tagMatches(output, recipeOutput)) {
+                if (ItemStack.isSame(output, recipeOutput) && ItemStack.tagMatches(output, recipeOutput)) {
                     used[i] = true;
                     matched = true;
                     break;
@@ -176,19 +172,24 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
         return true;
     }
 
+    protected void resolveInputs() {
+        for (int i = 0; i < itemInputCounts.size(); ++i) {
+            inputSlots().get(i).consume(itemInputCounts.get(i));
+        }
+    }
+
     protected void resolveOutputs() {
         if (!currentRecipe.isPresent()) {
             return;
         }
 
         List<ItemStack> recipeOutputItems = currentRecipe.get().getOutputItems();
-        for (int i = 0; i < recipeOutputItems.size(); ++i) {
-            ItemStack recipeOutput = recipeOutputItems.get(i);
+        for (ItemStack recipeOutput : recipeOutputItems) {
             int outputCount = recipeOutput.getCount();
             boolean matched = false;
             for (MachineItemSlot slot : outputSlots()) {
                 ItemStack output = slot.getItemStack();
-                if (ItemStack.matches(output, recipeOutput) && ItemStack.tagMatches(output, recipeOutput) && output.getCount() < output.getMaxStackSize()) {
+                if (ItemStack.isSame(output, recipeOutput) && ItemStack.tagMatches(output, recipeOutput) && output.getCount() + outputCount <= output.getMaxStackSize()) {
                     output.grow(outputCount);
                     matched = true;
                     break;
@@ -202,12 +203,6 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
                     }
                 }
             }
-        }
-    }
-
-    protected void resolveInputs() {
-        for (int i = 0; i < itemInputCounts.size(); ++i) {
-            inputSlots().get(i).consume(itemInputCounts.get(i));
         }
     }
 
@@ -243,59 +238,8 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
         return energy;
     }
 
-    public IIntArray getGuiData() {
-        int energyStored = energy.getEnergyStored();
-        return new IIntArray() {
-            @Override
-            public int get(int index) {
-                switch (index) {
-                    case 0:
-                        return energyStored & 0xffff;
-                    case 1:
-                        return (energyStored >> 16) & 0xffff;
-                    case 2:
-                        return progress & 0xffff;
-                    case 3:
-                        return (progress >> 16) & 0xffff;
-                    case 4:
-                        return progressTotal & 0xffff;
-                    case 5:
-                        return (progressTotal >> 16) & 0xffff;
-                    default:
-                        return 0;
-                }
-            }
-
-            @Override
-            public void set(int index, int value) {
-                switch (index) {
-                    case 0:
-                        energy.setEnergyStored((this.get(1) << 16) | (value & 0xffff));
-                        break;
-                    case 1:
-                        energy.setEnergyStored((value << 16) | (this.get(0) & 0xffff));
-                        break;
-                    case 2:
-                        progress = (this.get(3) << 16) | (value & 0xffff);
-                        break;
-                    case 3:
-                        progress = (value << 16) | (this.get(2) & 0xffff);
-                        break;
-                    case 4:
-                        progressTotal = (this.get(5) << 16) | (value & 0xffff);
-                        break;
-                    case 5:
-                        progressTotal = (value << 16) | (this.get(4) & 0xffff);
-                        break;
-                    default:
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return 6;
-            }
-        };
+    public IntArrayWrapper getData() {
+        return data;
     }
 
     @Override

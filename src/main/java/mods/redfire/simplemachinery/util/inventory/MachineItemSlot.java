@@ -1,15 +1,16 @@
 package mods.redfire.simplemachinery.util.inventory;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
-public class MachineItemSlot implements IItemHandler {
+public class MachineItemSlot implements IItemHandlerModifiable {
     protected Predicate<ItemStack> validator;
 
     @Nonnull
@@ -78,8 +79,8 @@ public class MachineItemSlot implements IItemHandler {
         return item.isEmpty();
     }
 
-    public int getSlots() {
 
+    public int getSlots() {
         return 1;
     }
 
@@ -88,6 +89,12 @@ public class MachineItemSlot implements IItemHandler {
     public ItemStack getStackInSlot(int slot) {
         return item;
     }
+
+    @Override
+    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+        setItemStack(stack);
+    }
+
 
     @Nonnull
     @Override
