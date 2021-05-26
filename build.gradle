@@ -13,6 +13,11 @@ apply plugin: "net.minecraftforge.gradle"
 
 repositories {
     maven {
+        name = "Progwml6"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name = "ModMaven"
         url = "https://modmaven.dev/"
     }
 }
@@ -79,16 +84,12 @@ sourceSets.main.resources {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    // Real examples
-    // compile "com.mod-buildcraft:buildcraft:6.0.8:dev"
-    // The "provided" configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided "com.mod-buildcraft:buildcraft:6.0.8:dev"
-    // These dependencies get remapped to your current MCP mappings
-    // deobf "com.mod-buildcraft:buildcraft:6.0.8:dev"
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:additions")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:generators")
 }
 
 jar {

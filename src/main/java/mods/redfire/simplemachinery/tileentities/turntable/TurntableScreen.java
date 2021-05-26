@@ -9,6 +9,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
+
 public class TurntableScreen extends ContainerScreen<TurntableContainer> {
     private final ResourceLocation GUI = new ResourceLocation(SimpleMachinery.MODID, "textures/screen/container/turntable.png");
 
@@ -20,18 +22,18 @@ public class TurntableScreen extends ContainerScreen<TurntableContainer> {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {}
+    protected void renderLabels(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY) {}
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.getTextureManager().bind(GUI);
 
