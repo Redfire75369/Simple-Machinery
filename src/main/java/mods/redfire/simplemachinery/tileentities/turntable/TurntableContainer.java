@@ -8,7 +8,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-import static mods.redfire.simplemachinery.tileentities.turntable.TurntableTile.*;
+import static mods.redfire.simplemachinery.tileentities.turntable.TurntableTile.ITEM_INPUTS;
+import static mods.redfire.simplemachinery.tileentities.turntable.TurntableTile.ITEM_OUTPUTS;
 
 public class TurntableContainer extends MachineContainer<TurntableTile> {
     public static final int INVENTORY_SIZE = ITEM_INPUTS + ITEM_OUTPUTS;

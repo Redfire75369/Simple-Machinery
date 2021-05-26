@@ -6,7 +6,6 @@ import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -15,15 +14,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -51,11 +46,11 @@ public class TurntableRecipe extends MachineRecipe {
     }
 
     public static int getEnergyFor(World world, MachineInventory ctx) {
-        return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx, world).map(TurntableRecipe::getEnergy).orElse(1);
+        return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx, world).map(TurntableRecipe::getEnergy).orElse(0);
     }
 
     public static int getEnergyRateFor(World world, MachineInventory ctx) {
-        return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx, world).map(TurntableRecipe::getEnergyRate).orElse(1);
+        return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx, world).map(TurntableRecipe::getEnergyRate).orElse(0);
     }
 
     public static List<ItemStack> getOutputFor(World world, MachineInventory ctx) {
@@ -86,9 +81,9 @@ public class TurntableRecipe extends MachineRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>>
             implements IRecipeSerializer<TurntableRecipe> {
-        @Nullable
+        @Nonnull
         @Override
-        public TurntableRecipe fromJson(@Nonnull ResourceLocation recipeId, JsonObject json) {
+        public TurntableRecipe fromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json) {
             JsonElement jsonelement = JSONUtils.isArrayNode(json, "input")
                     ? JSONUtils.getAsJsonArray(json, "input")
                     : JSONUtils.getAsJsonObject(json, "input");
@@ -106,8 +101,7 @@ public class TurntableRecipe extends MachineRecipe {
         }
 
         @Override
-        public TurntableRecipe fromNetwork(@Nonnull ResourceLocation recipeId, PacketBuffer buffer) {
-            String group = buffer.readUtf(32767);
+        public TurntableRecipe fromNetwork(@Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer) {
             Ingredient input = Ingredient.fromNetwork(buffer);
             ItemStack output = buffer.readItem();
             int energy = buffer.readInt();

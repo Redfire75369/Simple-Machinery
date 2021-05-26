@@ -13,6 +13,10 @@ apply plugin: "net.minecraftforge.gradle"
 
 repositories {
     maven {
+        name = "BlameJared"
+        url = "https://maven.blamejared.com"
+    }
+    maven {
         name = "Progwml6"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
@@ -39,7 +43,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file("run")
-            property "forge.logging.markers", "REGISTRIES"
+            property "forge.logging.markers", ""
             property "forge.logging.console.level", "debug"
 
             mods {
@@ -51,7 +55,7 @@ minecraft {
 
         server {
             workingDirectory project.file("run")
-            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', ''
             property "forge.logging.console.level", "debug"
 
             mods {
@@ -63,7 +67,7 @@ minecraft {
 
         data {
             workingDirectory project.file("run")
-            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', ''
             property "forge.logging.console.level", "debug"
 
             args "--mod", "simplemachinery", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
@@ -84,6 +88,9 @@ sourceSets.main.resources {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
+    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
+    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
+    
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 

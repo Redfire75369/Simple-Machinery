@@ -49,11 +49,9 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
     }
 
     public List<Integer> getInputItemCounts(List<MachineItemSlot> inputSlots) {
-        List<Ingredient> inputs = getInputItems();
-
         int[] counts = new int[inputSlots.size()];
         boolean[] used = new boolean[inputSlots.size()];
-        for (Ingredient input : inputs) {
+        for (Ingredient input : inputItems) {
             boolean matched = false;
             for (int i = 0; i < inputSlots.size(); i++) {
                 if (!used[i] && !matched) {
@@ -96,6 +94,20 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 
     @Override
     public boolean matches(@Nonnull MachineInventory inv, @Nonnull World worldIn) {
+        boolean[] used = new boolean[inv.getContainerSize()];
+        for (Ingredient input : inputItems) {
+            boolean matched = false;
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                if (!used[i] && !matched) {
+                    if (!input.test(inv.get(i))) {
+                        return false;
+                    }
+                    used[i] = true;
+                    matched = true;
+                }
+            }
+        }
+
         return true;
     }
 

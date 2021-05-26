@@ -10,7 +10,6 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -18,6 +17,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class MachineContainer<T extends MachineTile<?>> extends Container {
@@ -123,12 +123,14 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return stillValid(IWorldPosCallable.create(world, pos), playerIn, Blocks.TURNTABLE.get());
+    public boolean stillValid(@Nonnull PlayerEntity player) {
+        return stillValid(IWorldPosCallable.create(world, pos), player, Blocks.TURNTABLE.get());
     }
 
+    //TODO: Fix shift-click for items
+    @Nonnull
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity player, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 

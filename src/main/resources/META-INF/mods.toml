@@ -5,16 +5,14 @@ license="MPL-2.0"
 showAsResourcePack=false
 
 [[mods]]
-modId="simplemachinery"
-version="${file.jarVersion}"
-displayName="Simple Machinery"
-updateJSONURL=""
-displayURL="https://github.com/Redfire75369/Simple-Machinery"
-authors="Redfire"
-logoFile=""
-description='''
-Simple Machines
-'''
+    modId="simplemachinery"
+    version="${file.jarVersion}"
+    displayName="Simple Machinery"
+    updateJSONURL=""
+    displayURL="https://github.com/Redfire75369/Simple-Machinery"
+    authors="Redfire"
+    logoFile=""
+    description='''Simple Machinery is a mod that adds simple machines to Mineraft.'''
 
 [[dependencies.simplemachinery]]
     modId="forge"
@@ -28,4 +26,18 @@ Simple Machines
     mandatory=true
     versionRange="[1.16.5,)"
     ordering="NONE"
+    side="BOTH"
+
+[[dependencies.simplemachinery]]
+    modId="crafttweaker"
+    mandatory=false
+    versionRange="[7.1.0.297,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.simplemachinery]]
+    modId="jei"
+    mandatory=false
+    versionRange="[7.7.0.99,)"
+    ordering="AFTER"
     side="BOTH"

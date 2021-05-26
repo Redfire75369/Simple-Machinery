@@ -5,6 +5,8 @@ build/**/*
 
 # Minecraft
 run/**/*
+!run/scripts
+!run/scripts/**/*.zs
 
 # Generated
 src/generated/**/*

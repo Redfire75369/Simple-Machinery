@@ -7,7 +7,6 @@ import mods.redfire.simplemachinery.util.inventory.InventoryGroup;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -72,6 +71,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
             } else if (energy.getEnergyStored() < recipe.getEnergyRate()) {
                 clear();
             }
+            // TODO: Clear Recipe if input is removed
         } else {
             Optional<T> recipe = getRecipe();
             if (recipe.isPresent() && canBegin(recipe.get())) {
@@ -266,8 +266,9 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
         energy.read(tag);
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundNBT save(@Nonnull CompoundNBT tag) {
         super.save(tag);
         inventory.write(tag);
         energy.write(tag);
