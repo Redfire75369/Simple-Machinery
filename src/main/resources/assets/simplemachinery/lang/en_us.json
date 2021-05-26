@@ -2,8 +2,10 @@
   "block.simplemachinery.regolith": "Asteroid Regolith",
   "block.simplemachinery.turntable": "Turntable",
 
-  "screen.simplemachinery.turntable": "Turntable",
+  "itemGroup.simplemachinery_blocks": "Simple Machinery Blocks",
+  "itemGroup.simplemachinery_machines": "Simple Machinery Machines",
 
+  "screen.simplemachinery.turntable": "Turntable",
   "screen.simplemachinery.jei.turntable": "Turntable",
 
   "screen.simplemachinery.jei.ticks": "%s Ticks",

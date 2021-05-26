@@ -34,6 +34,9 @@ public class TurntableCategory implements IRecipeCategory<TurntableRecipe> {
     private final IDrawable icon;
     private final IDrawable background;
 
+    private IDrawableAnimated progress;
+    private IDrawableAnimated energy;
+
     private final int xSize = 96;
     private final int ySize = 52;
 
@@ -99,14 +102,17 @@ public class TurntableCategory implements IRecipeCategory<TurntableRecipe> {
 
     @Override
     public void draw(@Nonnull TurntableRecipe recipe, @Nonnull MatrixStack matrixStack, double mouseX, double mouseY) {
-        IDrawableAnimated progress = guiHelper.drawableBuilder(GUI, xSize + 1, 0, 24, 18)
-                .buildAnimated(recipe.getTime() / 10, IDrawableAnimated.StartDirection.LEFT, false);
-        progress.draw(matrixStack, 36 + 1, 8);
+        if (progress == null) {
+            progress = guiHelper.drawableBuilder(GUI, xSize + 1, 0, 24, 18)
+                    .buildAnimated(recipe.getTime() / 5, IDrawableAnimated.StartDirection.LEFT, false);
+        }
+        if (energy == null) {
+            energy = guiHelper.drawableBuilder(GUI, 1, ySize, recipe.getEnergy() * 64 / 10000, 10)
+                    .buildAnimated(recipe.getTime() / 5, IDrawableAnimated.StartDirection.RIGHT, true);
+        }
 
-        int energyWidth = recipe.getEnergy() * 64 / 10000;
-        guiHelper.drawableBuilder(GUI, 1, ySize, energyWidth, 10)
-                .buildAnimated(recipe.getTime() / 10, IDrawableAnimated.StartDirection.LEFT, true)
-                .draw(matrixStack, 15 + 1, 34);
+        progress.draw(matrixStack, 36 + 1, 8);
+        energy.draw(matrixStack, 15 + 1, 34);
     }
 
     @Nonnull
