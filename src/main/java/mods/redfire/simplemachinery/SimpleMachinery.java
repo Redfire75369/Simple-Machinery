@@ -14,41 +14,43 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
+
 @Mod(SimpleMachinery.MODID)
 public class SimpleMachinery {
-    public static final String MODID = "simplemachinery";
-    public static final Logger LOGGER = LogManager.getLogger();
+	public static final String MODID = "simplemachinery";
+	public static final Logger LOGGER = LogManager.getLogger();
 
-
-    public static final ItemGroup TAB_BLOCKS = new ItemGroup("simplemachinery_blocks") {
-        @Override
+    public static final ItemGroup TAB_BLOCKS = new ItemGroup("simplemachinery.blocks") {
+        @Nonnull
+		@Override
         public ItemStack makeIcon() {
-            return new ItemStack(Items.ITEM_REGOLITH.get());
+            return new ItemStack(Items.REGOLITH_ITEM.get());
+        }
+    };
+    public static final ItemGroup TAB_MACHINES = new ItemGroup("simplemachinery.machines") {
+        @Nonnull
+		@Override
+        public ItemStack makeIcon() {
+            return new ItemStack(Items.TURNTABLE_ITEM.get());
         }
     };
 
-    public static final ItemGroup TAB_MACHINES = new ItemGroup("simplemachinery_machines") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.ITEM_TURNTABLE.get());
-        }
-    };
 
+	public SimpleMachinery() {
+		ModLoadingContext ctxLoading = ModLoadingContext.get();
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    public SimpleMachinery() {
-        ModLoadingContext ctxLoading = ModLoadingContext.get();
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		ctxLoading.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
+		ctxLoading.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 
-        ctxLoading.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
-        ctxLoading.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+		Blocks.register(bus);
+		Items.register(bus);
+		TileEntities.register(bus);
+		Containers.register(bus);
 
-        Blocks.register(bus);
-        Items.register(bus);
-        TileEntities.register(bus);
-        Containers.register(bus);
+		bus.addGenericListener(IRecipeSerializer.class, RecipeSerializers::register);
 
-        bus.addGenericListener(IRecipeSerializer.class, RecipeSerializers::register);
-
-        bus.addListener(ClientSetup::init);
-    }
+		bus.addListener(ClientSetup::init);
+	}
 }

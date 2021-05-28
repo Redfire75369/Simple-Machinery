@@ -1,4 +1,4 @@
-package mods.redfire.simplemachinery.tileentities.turntable;
+package mods.redfire.simplemachinery.tileentities.sieve;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -10,15 +10,12 @@ import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 
-public class TurntableScreen extends MachineScreen<TurntableContainer> {
-	private static final ResourceLocation GUI = new ResourceLocation(SimpleMachinery.MODID, "textures/screen/container/turntable.png");
+public class SieveScreen extends MachineScreen<SieveContainer> {
+	private final ResourceLocation GUI = new ResourceLocation(SimpleMachinery.MODID, "textures/screen/container/sieve.png");
 
-	public TurntableScreen(TurntableContainer container, PlayerInventory inv, ITextComponent name) {
+	public SieveScreen(SieveContainer container, PlayerInventory inv, ITextComponent name) {
 		super(175, 165, container, inv, name);
 	}
-
-	@Override
-	protected void renderLabels(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY) {}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -31,7 +28,7 @@ public class TurntableScreen extends MachineScreen<TurntableContainer> {
 
 		this.blit(matrixStack, x, y, 0, 0, xSize, ySize);
 
-		this.blit(matrixStack, x + 76, y + 25, xSize + 1, 0, getTimeScaled(24), 18);
+		this.blit(matrixStack, x + 59, y + 25, xSize + 1, 0, getTimeScaled(24), 18);
 		this.blit(matrixStack, x + 24, y + 65, 1, ySize + 1, getEnergyStorageScaled(128), 10);
 	}
 }

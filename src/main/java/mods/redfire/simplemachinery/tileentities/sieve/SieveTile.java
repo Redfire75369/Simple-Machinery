@@ -1,4 +1,4 @@
-package mods.redfire.simplemachinery.tileentities.turntable;
+package mods.redfire.simplemachinery.tileentities.sieve;
 
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
@@ -14,28 +14,28 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class TurntableTile extends MachineTile<TurntableRecipe> implements INamedContainerProvider {
+public class SieveTile extends MachineTile<SieveRecipe> implements INamedContainerProvider {
 	public static final int ITEM_INPUTS = 1;
-	public static final int ITEM_OUTPUTS = 1;
+	public static final int ITEM_OUTPUTS = 6;
 
-	public TurntableTile() {
-		super(TileEntities.TURNTABLE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, new EnergyCoil(10000, 100));
+	public SieveTile() {
+		super(TileEntities.SIEVE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, new EnergyCoil(10000, 100));
 	}
 
 	@Override
-	protected Optional<TurntableRecipe> getRecipe() {
-		return TurntableRecipe.getRecipe(level, inventory);
+	protected Optional<SieveRecipe> getRecipe() {
+		return SieveRecipe.getRecipe(level, inventory);
 	}
 
 	@Nonnull
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("screen.simplemachinery.turntable");
+		return new TranslationTextComponent("screen.simplemachinery.sieve");
 	}
 
 	@Nullable
 	@Override
 	public Container createMenu(int windowId, @Nonnull PlayerInventory playerInv, @Nonnull PlayerEntity player) {
-		return new TurntableContainer(windowId, level, worldPosition, playerInv, this);
+		return new SieveContainer(windowId, level, worldPosition, playerInv, this);
 	}
 }

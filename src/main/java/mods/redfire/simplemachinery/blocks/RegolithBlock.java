@@ -1,12 +1,12 @@
 package mods.redfire.simplemachinery.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.FallingBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
 
-public class BlockRegolith extends Block {
-    public BlockRegolith() {
+public class RegolithBlock extends FallingBlock {
+    public RegolithBlock() {
         super(Properties.of(Material.SAND)
                 .sound(SoundType.GRAVEL)
                 .harvestTool(ToolType.SHOVEL)

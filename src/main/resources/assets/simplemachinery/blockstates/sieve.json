@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplemachinery:block/sieve"
+    },
+    "facing=east": {
+      "model": "simplemachinery:block/sieve",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplemachinery:block/sieve",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplemachinery:block/sieve",
+      "y": 270
+    }
+  }
+}

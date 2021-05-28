@@ -1,10 +1,13 @@
 {
   "block.simplemachinery.regolith": "Asteroid Regolith",
+  "block.simplemachinery.sieve": "Sieve",
   "block.simplemachinery.turntable": "Turntable",
 
-  "itemGroup.simplemachinery_blocks": "Simple Machinery Blocks",
-  "itemGroup.simplemachinery_machines": "Simple Machinery Machines",
+  "itemGroup.simplemachinery.blocks": "Simple Machinery Blocks",
+  "itemGroup.simplemachinery.machines": "Simple Machinery Machines",
 
+  "screen.simplemachinery.sieve": "Sieve",
+  "screen.simplemachinery.jei.sieve": "Sieve",
   "screen.simplemachinery.turntable": "Turntable",
   "screen.simplemachinery.jei.turntable": "Turntable",
 

@@ -2,6 +2,7 @@ package mods.redfire.simplemachinery.setup;
 
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Containers;
+import mods.redfire.simplemachinery.tileentities.sieve.SieveScreen;
 import mods.redfire.simplemachinery.tileentities.turntable.TurntableScreen;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.Item;
@@ -13,15 +14,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = SimpleMachinery.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
-    public static void init(final FMLClientSetupEvent event) {
-        ScreenManager.register(Containers.CONTAINER_TURNTABLE.get(), TurntableScreen::new);
-    }
+	public static void init(final FMLClientSetupEvent event) {
+		ScreenManager.register(Containers.SIEVE_CONTAINER.get(), SieveScreen::new);
+		ScreenManager.register(Containers.TURNTABLE_CONTAINER.get(), TurntableScreen::new);
+	}
 
-    @SubscribeEvent
-    public void onTooltipPre(RenderTooltipEvent.Pre event) {
-        Item item = event.getStack().getItem();
-        if (item.getRegistryName().getNamespace().equals(SimpleMachinery.MODID)) {
-            event.setMaxWidth(200);
-        }
-    }
+	@SubscribeEvent
+	public void onTooltipPre(RenderTooltipEvent.Pre event) {
+		Item item = event.getStack().getItem();
+		if (item.getRegistryName().getNamespace().equals(SimpleMachinery.MODID)) {
+			event.setMaxWidth(200);
+		}
+	}
 }
