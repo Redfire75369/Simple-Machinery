@@ -1,0 +1,80 @@
+<p style="text-align: center;"><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img.shields.io/discord/579354150639370348?color=7389D8&label=Discord&labelColor=6A7EC2&logo=discord&logoColor=FFFFFF&style=flat-square" alt="Discord Server"/></p>
+<h1 style="text-align: center"><b>Simple Machinery</b></h1>
+
+<p style="color: red">A port to 1.16.5 is currently being worked on.</p>
+
+<p>
+	It adds simple machines, that are highly configurable, to Minecraft.
+	All machines, except the Autoclave, have no default recipes, as they are primarily meant for pack developers to customise to their own needs.
+</p>
+<br/>
+
+<h3>Machines</h3>
+<ul>
+	<li>Autoclave</li>
+	<li>Fluid Centrifuge</li>
+	<li>Sieve</li>
+</ul>
+<br/>
+
+<h4>Autoclave</h4>
+<ul>
+	<li>Fuel: Steam (Input via top face)</li>
+	<li>Input: Item + Liquid</li>
+	<li>Output: Item</li>
+</ul>
+<br/>
+
+<h4>Fluid Centrifuge</h4>
+<ul>
+	<li>Fuel: Forge Energy</li>
+	<li>Input: Liquid</li>
+	<li>Output: Items + Liquids</li>
+</ul>
+<br/>
+
+<h4>Turntable</h4>
+<ul>
+	<li>Fuel: Forge Energy</li>
+	<li>Input: Item</li>
+	<li>Output: Item</li>
+</ul>
+<br/>
+
+<h3>Default Recipes</h3>
+<ul>
+	<li>Concrete Power + 125 mB Water -&gt; Concrete (25 ticks, 5 mB/t Steam)</li>
+</ul>
+<br/>
+
+<h3>CraftTweaker Support</h3>
+<p>Detailed documentation can be found <a href="">here</a>.</p>
+
+<div class="spoiler">
+	<h4>Autoclave</h4>
+	<code>
+		mods.simplemachinery.Autoclave.addRecipe(string recipeName, IIngredient input, ILiquidStack fluidInput, IItemStack output, int ticks, int steamPower);<br/>
+		mods.simplemachinery,Autoclave.removeRecipe(string recipeName);
+	</code>
+	<br/>
+
+	<h4>Fluid Centrifuge</h4>
+	<code>
+		mods.simplemachinery.FluidCentrifuge.addRecipe(string recipeName, ILiquidStack fluidInput, IItemStack[] outputs, ILiquidStack [] outputs, int ticks, int power);<br/>
+		mods.simplemachinery,FluidCentrifuge.removeRecipe(string recipeName);
+	</code>
+	<br/>
+
+	<h4>Fluid Centrifuge</h4>
+	<code>
+		mods.simplemachinery.Turntable.addRecipe(string recipeName, IIngredient input, IItemStack output, int ticks, int power);<br/>
+		mods.simplemachinery,Turntable.removeRecipe(string recipeName);
+	</code>
+</div>
+<br/>
+
+<h3>Planned Additions</h3>
+<ul>
+	<li>Improved JEI Support</li>
+	<li>Fluid Centrifuge Chanced Item Outputs</li>
+</ul>

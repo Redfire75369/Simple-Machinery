@@ -30,7 +30,7 @@ public class SieveRecipe extends MachineRecipe {
 	public static IRecipeType<SieveRecipe> RECIPE_TYPE = IRecipeType.register(new ResourceLocation(SimpleMachinery.MODID, RECIPE_NAME).toString());
 
 	public SieveRecipe(ResourceLocation id, Ingredient input, List<ItemStack> outputs, List<Float> outputChances, int energy, int time) {
-		super(id, energy, time, Collections.singletonList(input), outputs, outputChances);
+		super(id, energy, time, Collections.singletonList(input), null, outputs, outputChances, null);
 	}
 
 	public static Optional<SieveRecipe> getRecipe(World world, MachineInventory ctx) {

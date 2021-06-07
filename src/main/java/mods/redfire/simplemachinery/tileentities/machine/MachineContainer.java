@@ -1,6 +1,7 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import mods.redfire.simplemachinery.util.IntArrayWrapper;
+import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -43,10 +45,38 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 		this.data = data;
 
 		addDataSlots(data);
+		trackFluids();
 		trackEnergy();
 
 		layoutPlayerInventorySlots(new InvWrapper(playerInv), 8, 84);
 		layoutMachineInventorySlots(tile != null ? tile.inventory : new ItemStackHandler(inventorySize));
+	}
+
+	protected void trackFluids() {
+		addDataSlots(new IIntArray() {
+			@Override
+			public int get(int index) {
+				if (index % 2 == 0) {
+					return getFluidStored(index / 2) & 0xffff;
+				} else {
+					return (getFluidStored((index - 1) / 2) >> 16) & 0xffff;
+				}
+			}
+
+			@Override
+			public void set(int index, int value) {
+				if (index % 2 == 0) {
+					tile.getFluidInv().get(index / 2).setAmount(get(index + 1) | (value & 0xffff));
+				} else {
+					tile.getFluidInv().get((index - 1) / 2).setAmount((value & 0xffff) | get(index - 1));
+				}
+			}
+
+			@Override
+			public int getCount() {
+				return tile.getFluidInv().getTanks();
+			}
+		});
 	}
 
 	protected void trackEnergy() {
@@ -56,9 +86,9 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 				public int get(int index) {
 					switch (index) {
 						case 0:
-							return getEnergy() & 0xffff;
+							return getEnergyStored() & 0xffff;
 						case 1:
-							return (getEnergy() >> 16) & 0xffff;
+							return (getEnergyStored() >> 16) & 0xffff;
 						default:
 							return 0;
 					}
@@ -66,7 +96,7 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 
 				@Override
 				public void set(int index, int value) {
-					int energyStored = getEnergy();
+					int energyStored = getEnergyStored();
 					switch (index) {
 						case 0:
 							tile.getEnergy().setEnergyStored((energyStored & 0xffff0000) | (value & 0xffff));
@@ -113,7 +143,15 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 	protected void layoutMachineInventorySlots(IItemHandler inventory) {
 	}
 
-	public int getEnergy() {
+	public FluidStack getFluid(int tank) {
+		return tile.getFluidInv().get(tank);
+	}
+
+	public int getFluidStored(int tank) {
+		return tile.getFluidInv().get(tank).getAmount();
+	}
+
+	public int getEnergyStored() {
 		return tile.getEnergy().getEnergyStored();
 	}
 

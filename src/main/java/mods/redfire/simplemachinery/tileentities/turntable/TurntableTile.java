@@ -19,7 +19,7 @@ public class TurntableTile extends MachineTile<TurntableRecipe> implements IName
 	public static final int ITEM_OUTPUTS = 1;
 
 	public TurntableTile() {
-		super(TileEntities.TURNTABLE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, new EnergyCoil(10000, 100));
+		super(TileEntities.TURNTABLE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, 0, 0, 0, 0, new EnergyCoil(10000, 100));
 	}
 
 	@Override

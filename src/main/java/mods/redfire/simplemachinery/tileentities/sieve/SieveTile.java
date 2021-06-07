@@ -19,7 +19,7 @@ public class SieveTile extends MachineTile<SieveRecipe> implements INamedContain
 	public static final int ITEM_OUTPUTS = 6;
 
 	public SieveTile() {
-		super(TileEntities.SIEVE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, new EnergyCoil(10000, 100));
+		super(TileEntities.SIEVE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, 0, 0, 0, 0, new EnergyCoil(10000, 100));
 	}
 
 	@Override

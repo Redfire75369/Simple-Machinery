@@ -17,9 +17,6 @@ public class TurntableScreen extends MachineScreen<TurntableContainer> {
 		super(175, 165, container, inv, name);
 	}
 
-	@Override
-	protected void renderLabels(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY) {}
-
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {

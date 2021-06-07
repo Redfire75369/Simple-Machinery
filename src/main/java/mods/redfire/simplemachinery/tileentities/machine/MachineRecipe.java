@@ -1,8 +1,11 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.google.common.primitives.Ints;
+import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
+import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -11,21 +14,26 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 	protected final ResourceLocation id;
 	protected final List<Ingredient> inputItems = new ArrayList<>();
+	protected final List<FluidStack> inputFluids = new ArrayList<>();
+
 	protected final List<ItemStack> outputItems = new ArrayList<>();
 	protected final List<Float> outputItemChances = new ArrayList<>();
+	protected final List<FluidStack> outputFluids = new ArrayList<>();
 
 	protected int energy;
 	protected int time;
 
-	protected MachineRecipe(ResourceLocation id, int energy, int time, List<Ingredient> inputItems, List<ItemStack> outputItems, List<Float> outputItemChances) {
+	protected MachineRecipe(ResourceLocation id, int energy, int time, List<Ingredient> inputItems, List<FluidStack> inputFluids, List<ItemStack> outputItems, List<Float> outputItemChances, List<FluidStack> outputFluids) {
 		this.id = id;
 
 		this.energy = energy;
@@ -34,6 +42,10 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 		if (inputItems != null) {
 			this.inputItems.addAll(inputItems);
 		}
+		if (inputFluids != null) {
+			this.inputFluids.addAll(inputFluids);
+		}
+
 		if (outputItems != null) {
 			this.outputItems.addAll(outputItems);
 
@@ -46,41 +58,62 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 				}
 			}
 		}
+		if (outputFluids != null) {
+			this.outputFluids.addAll(outputFluids);
+		}
 
 		trim();
 	}
 
 	private void trim() {
 		((ArrayList<Ingredient>) this.inputItems).trimToSize();
+		((ArrayList<FluidStack>) this.inputFluids).trimToSize();
+
 		((ArrayList<ItemStack>) this.outputItems).trimToSize();
 		((ArrayList<Float>) this.outputItemChances).trimToSize();
+		((ArrayList<FluidStack>) this.outputFluids).trimToSize();
 	}
 
 	public List<Ingredient> getInputItems() {
 		return inputItems;
 	}
 
-	public List<Integer> getInputItemCounts(List<MachineItemSlot> inputSlots) {
-		int[] counts = new int[inputSlots.size()];
-		boolean[] used = new boolean[inputSlots.size()];
+	public List<Integer> getInputItemCounts(MachineInventory inventory) {
+		if (inputItems.isEmpty()) {
+			return Collections.emptyList();
+		}
+		int[] counts = new int[inventory.getInputSlots().size()];
 		for (Ingredient input : inputItems) {
-			boolean matched = false;
-			for (int i = 0; i < inputSlots.size(); i++) {
-				if (!used[i] && !matched) {
-					MachineItemSlot slot = inputSlots.get(i);
-					ItemStack item = slot.getItemStack();
-
-					if (input.test(item)) {
-						counts[i] = input.getItems()[0].getCount();
-						used[i] = true;
-						matched = true;
-					}
+			for (int j = 0; j < counts.length; ++j) {
+				if (input.test(inventory.getInputSlots().get(j).getItemStack())) {
+					counts[j] = input.getItems()[0].getCount();
+					break;
 				}
 			}
 		}
-
 		return Ints.asList(counts);
 	}
+
+	public List<FluidStack> getInputFluids() {
+		return inputFluids;
+	}
+
+	public List<Integer> getInputFluidCounts(MachineFluidInventory tankInventory) {
+		if (inputFluids.isEmpty()) {
+			return Collections.emptyList();
+		}
+		int[] counts = new int[tankInventory.getInputTanks().size()];
+		for (FluidStack input : inputFluids) {
+			for (int j = 0; j < counts.length; ++j) {
+				if (FluidStack.areFluidStackTagsEqual(input, tankInventory.getInputTanks().get(j).getFluidStack())) {
+					counts[j] = input.getAmount();
+					break;
+				}
+			}
+		}
+		return Ints.asList(counts);
+	}
+
 
 	public List<ItemStack> getOutputItems() {
 		return outputItems;
@@ -88,6 +121,10 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 
 	public List<Float> getOutputItemChances() {
 		return outputItemChances;
+	}
+
+	public List<FluidStack> getOutputFluids() {
+		return outputFluids;
 	}
 
 	public int getEnergy() {

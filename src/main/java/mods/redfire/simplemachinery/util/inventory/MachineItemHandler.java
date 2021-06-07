@@ -1,5 +1,6 @@
 package mods.redfire.simplemachinery.util.inventory;
 
+import mods.redfire.simplemachinery.util.IMachineInventoryCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 

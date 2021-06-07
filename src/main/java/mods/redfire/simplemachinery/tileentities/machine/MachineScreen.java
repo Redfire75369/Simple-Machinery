@@ -37,7 +37,7 @@ public abstract class MachineScreen<T extends MachineContainer<?>> extends Conta
 	}
 
 	protected int getEnergyStorageScaled(int pixels) {
-		int i = menu.getEnergy();
+		int i = menu.getEnergyStored();
 		return i * pixels / 10000;
 	}
 }

@@ -1,5 +1,6 @@
 package mods.redfire.simplemachinery.util.inventory;
 
+import mods.redfire.simplemachinery.util.IMachineInventoryCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,7 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		super(tile, slots);
 	}
 
-	public void addSlot(MachineItemSlot slot, InventoryGroup group) {
+	public void addSlot(InventoryGroup group, MachineItemSlot slot) {
 		if (combinedHandler != null) {
 			return;
 		}
@@ -51,13 +52,13 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 
 	public void addSlots(InventoryGroup group, int amount) {
 		for (int i = 0; i < amount; ++i) {
-			addSlot(new MachineItemSlot(), group);
+			addSlot(group, new MachineItemSlot());
 		}
 	}
 
-	public void addSlots(InventoryGroup group, int amount, Predicate<ItemStack> validator) {
-		for (int i = 0; i < amount; ++i) {
-			addSlot(new MachineItemSlot(validator), group);
+	public void addSlots(InventoryGroup group, List<MachineItemSlot> slots) {
+		for (MachineItemSlot slot : slots) {
+			addSlot(group, slot);
 		}
 	}
 
@@ -74,11 +75,12 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		combinedHandler = new MachineItemHandler(tile, slots);
 	}
 
+	@Nonnull
 	public ItemStack get(int slot) {
 		return slots.get(slot).getItemStack();
 	}
 
-	public void set(int slot, ItemStack stack) {
+	public void set(int slot, @Nonnull ItemStack stack) {
 		slots.get(slot).setItemStack(stack);
 	}
 
@@ -108,16 +110,16 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		return inputSlots;
 	}
 
+	public List<MachineItemSlot> getOutputSlots() {
+		return outputSlots;
+	}
+
 	public MachineInventory getInputInventory() {
-		return new MachineInventory(tile, this.getInputSlots());
+		return new MachineInventory(tile, getInputSlots());
 	}
 
 	public MachineInventory getOutputInventory() {
-		return new MachineInventory(tile, this.getOutputSlots());
-	}
-
-	public List<MachineItemSlot> getOutputSlots() {
-		return outputSlots;
+		return new MachineInventory(tile, getOutputSlots());
 	}
 
 	public IItemHandler getHandler(InventoryGroup group) {
@@ -151,9 +153,9 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		return this;
 	}
 
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundNBT write(CompoundNBT tag) {
 		if (slots.size() <= 0) {
-			return nbt;
+			return tag;
 		}
 		ListNBT list = new ListNBT();
 		for (int i = 0; i < slots.size(); ++i) {
@@ -165,9 +167,9 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 			}
 		}
 		if (!list.isEmpty()) {
-			nbt.put("Inventory", list);
+			tag.put("Inventory", list);
 		}
-		return nbt;
+		return tag;
 	}
 
 	@Override
@@ -195,7 +197,7 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 	}
 
 	@Override
-	public void setItem(int slot, ItemStack stack) {
+	public void setItem(int slot, @Nonnull ItemStack stack) {
 		slots.get(slot).setItemStack(stack);
 	}
 

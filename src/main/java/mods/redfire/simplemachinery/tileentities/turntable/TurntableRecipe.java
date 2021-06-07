@@ -31,7 +31,7 @@ public class TurntableRecipe extends MachineRecipe {
 	public static IRecipeType<TurntableRecipe> RECIPE_TYPE = IRecipeType.register(new ResourceLocation(SimpleMachinery.MODID, RECIPE_NAME).toString());
 
 	public TurntableRecipe(ResourceLocation id, Ingredient input, ItemStack output, int energy, int time) {
-		super(id, energy, time, Collections.singletonList(input), Collections.singletonList(output), null);
+		super(id, energy, time, Collections.singletonList(input), null, Collections.singletonList(output), null, null);
 	}
 
 	public static Optional<TurntableRecipe> getRecipe(World world, MachineInventory ctx) {

@@ -1,4 +1,4 @@
-package mods.redfire.simplemachinery.util.inventory;
+package mods.redfire.simplemachinery.util;
 
 public interface IMachineInventoryCallback {
 	default void onInventoryChange(int slot) {}
