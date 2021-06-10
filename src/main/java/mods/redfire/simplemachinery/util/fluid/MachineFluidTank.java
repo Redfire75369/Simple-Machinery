@@ -41,10 +41,7 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 	}
 
 	public void setFluidStack(@Nonnull FluidStack stack) {
-		this.fluid = stack;
-		if (!fluid.isEmpty()) {
-			stack.setAmount(capacity);
-		}
+		fluid = stack;
 	}
 
 	public MachineFluidTank read(CompoundNBT nbt) {
@@ -59,6 +56,7 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 		return nbt;
 	}
 
+	@Nonnull
 	public FluidStack getFluidStack() {
 		return fluid;
 	}

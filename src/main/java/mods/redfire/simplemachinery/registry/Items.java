@@ -15,6 +15,9 @@ public class Items {
 			() -> new BlockItem(Blocks.REGOLITH_BLOCK.get(), new Item.Properties().tab(SimpleMachinery.TAB_BLOCKS))
 	);
 
+	public static final RegistryObject<Item> AUTOCLAVE_ITEM = ITEMS.register(Names.AUTOCLAVE,
+			() -> new BlockItem(Blocks.AUTOCLAVE_BLOCK.get(), new Item.Properties().tab(SimpleMachinery.TAB_MACHINES))
+	);
 	public static final RegistryObject<Item> SIEVE_ITEM = ITEMS.register(Names.SIEVE,
 			() -> new BlockItem(Blocks.SIEVE_BLOCK.get(), new Item.Properties().tab(SimpleMachinery.TAB_MACHINES))
 	);

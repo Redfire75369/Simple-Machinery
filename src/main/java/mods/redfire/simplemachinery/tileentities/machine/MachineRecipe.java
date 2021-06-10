@@ -1,11 +1,9 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.google.common.primitives.Ints;
+import mods.redfire.simplemachinery.util.MachineCombinedInventory;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
-import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class MachineRecipe implements IRecipe<MachineInventory> {
+public abstract class MachineRecipe implements IRecipe<MachineCombinedInventory> {
 	protected final ResourceLocation id;
 	protected final List<Ingredient> inputItems = new ArrayList<>();
 	protected final List<FluidStack> inputFluids = new ArrayList<>();
@@ -30,13 +28,13 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 	protected final List<Float> outputItemChances = new ArrayList<>();
 	protected final List<FluidStack> outputFluids = new ArrayList<>();
 
-	protected int energy;
+	protected int resource;
 	protected int time;
 
-	protected MachineRecipe(ResourceLocation id, int energy, int time, List<Ingredient> inputItems, List<FluidStack> inputFluids, List<ItemStack> outputItems, List<Float> outputItemChances, List<FluidStack> outputFluids) {
+	protected MachineRecipe(ResourceLocation id, int resource, int time, List<Ingredient> inputItems, List<FluidStack> inputFluids, List<ItemStack> outputItems, List<Float> outputItemChances, List<FluidStack> outputFluids) {
 		this.id = id;
 
-		this.energy = energy;
+		this.resource = resource;
 		this.time = time;
 
 		if (inputItems != null) {
@@ -114,7 +112,6 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 		return Ints.asList(counts);
 	}
 
-
 	public List<ItemStack> getOutputItems() {
 		return outputItems;
 	}
@@ -127,16 +124,16 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 		return outputFluids;
 	}
 
-	public int getEnergy() {
-		return energy;
+	public int getResource() {
+		return resource;
 	}
 
 	public int getTime() {
 		return time;
 	}
 
-	public int getEnergyRate() {
-		return getEnergy() / getTime();
+	public int getResourceRate() {
+		return getResource() / getTime();
 	}
 
 	@Nonnull
@@ -146,13 +143,29 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 	}
 
 	@Override
-	public boolean matches(@Nonnull MachineInventory inv, @Nonnull World worldIn) {
-		boolean[] used = new boolean[inv.getContainerSize()];
+	public boolean matches(@Nonnull MachineCombinedInventory inv, @Nonnull World worldIn) {
+		MachineInventory inventory = inv.inventory;
+		boolean[] used = new boolean[inventory.getContainerSize()];
 		for (Ingredient input : inputItems) {
 			boolean matched = false;
-			for (int i = 0; i < inv.getContainerSize(); i++) {
+			for (int i = 0; i < inventory.getContainerSize(); i++) {
 				if (!used[i] && !matched) {
-					if (!input.test(inv.get(i))) {
+					if (!input.test(inventory.get(i))) {
+						return false;
+					}
+					used[i] = true;
+					matched = true;
+				}
+			}
+		}
+
+		MachineFluidInventory tankInventory = inv.tankInventory;
+		used = new boolean[tankInventory.getContainerSize()];
+		for (FluidStack fluid : inputFluids) {
+			boolean matched = false;
+			for (int i = 0; i < tankInventory.getContainerSize(); i++) {
+				if (!used[i] && !matched) {
+					if (fluid.isFluidEqual(tankInventory.get(i))) {
 						return false;
 					}
 					used[i] = true;
@@ -190,7 +203,7 @@ public abstract class MachineRecipe implements IRecipe<MachineInventory> {
 
 	@Nonnull
 	@Override
-	public ItemStack assemble(@Nonnull MachineInventory inv) {
+	public ItemStack assemble(@Nonnull MachineCombinedInventory inv) {
 		return getResultItem();
 	}
 

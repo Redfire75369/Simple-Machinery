@@ -1,5 +1,6 @@
 package mods.redfire.simplemachinery;
 
+import mods.redfire.simplemachinery.network.Networking;
 import mods.redfire.simplemachinery.registry.*;
 import mods.redfire.simplemachinery.setup.ClientSetup;
 import mods.redfire.simplemachinery.setup.Config;
@@ -50,7 +51,8 @@ public class SimpleMachinery {
 		Containers.register(bus);
 
 		bus.addGenericListener(IRecipeSerializer.class, RecipeSerializers::register);
-
 		bus.addListener(ClientSetup::init);
+
+		Networking.registerMessages();
 	}
 }

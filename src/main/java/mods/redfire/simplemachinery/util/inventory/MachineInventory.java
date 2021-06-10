@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class MachineInventory extends MachineItemHandler implements IInventory {
 	protected List<MachineItemSlot> inputSlots = new ArrayList<>();

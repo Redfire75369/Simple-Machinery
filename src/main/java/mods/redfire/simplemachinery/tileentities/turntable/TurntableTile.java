@@ -2,6 +2,7 @@ package mods.redfire.simplemachinery.tileentities.turntable;
 
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
+import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class TurntableTile extends MachineTile<TurntableRecipe> implements INamedContainerProvider {
+public class TurntableTile extends EnergyMachineTile<TurntableRecipe> implements INamedContainerProvider {
 	public static final int ITEM_INPUTS = 1;
 	public static final int ITEM_OUTPUTS = 1;
 
@@ -24,7 +25,7 @@ public class TurntableTile extends MachineTile<TurntableRecipe> implements IName
 
 	@Override
 	protected Optional<TurntableRecipe> getRecipe() {
-		return TurntableRecipe.getRecipe(level, inventory);
+		return TurntableRecipe.getRecipe(level, getCombinedInputInv());
 	}
 
 	@Nonnull

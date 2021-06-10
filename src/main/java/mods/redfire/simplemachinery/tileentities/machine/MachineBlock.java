@@ -53,8 +53,8 @@ public class MachineBlock extends Block {
 		);
 	}
 
-	@Nonnull
 	@SuppressWarnings("deprecation")
+	@Nonnull
 	@Override
 	public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult trace) {
 		if (world.isClientSide) {
@@ -66,7 +66,7 @@ public class MachineBlock extends Block {
 			return ActionResultType.PASS;
 		}
 
-		NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tile, tile.getBlockPos());
+		NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tile, pos);
 		return ActionResultType.SUCCESS;
 	}
 }

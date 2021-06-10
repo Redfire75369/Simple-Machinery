@@ -1,6 +1,8 @@
 package mods.redfire.simplemachinery.registry;
 
 import mods.redfire.simplemachinery.SimpleMachinery;
+import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveContainer;
+import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveTile;
 import mods.redfire.simplemachinery.tileentities.sieve.SieveContainer;
 import mods.redfire.simplemachinery.tileentities.sieve.SieveTile;
 import mods.redfire.simplemachinery.tileentities.turntable.TurntableContainer;
@@ -18,6 +20,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class Containers {
 	private static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, SimpleMachinery.MODID);
 
+	public static final RegistryObject<ContainerType<AutoclaveContainer>> AUTOCLAVE_CONTAINER = CONTAINERS.register(Names.AUTOCLAVE, () -> IForgeContainerType.create(
+			(id, inv, data) -> {
+				World world = inv.player.level;
+				BlockPos pos = data.readBlockPos();
+
+				TileEntity tile = world.getBlockEntity(pos);
+				return tile instanceof AutoclaveTile ? new AutoclaveContainer(id, world, pos, inv, (AutoclaveTile) tile) : new AutoclaveContainer(id, world, pos, inv);
+			}
+	));
 	public static final RegistryObject<ContainerType<SieveContainer>> SIEVE_CONTAINER = CONTAINERS.register(Names.SIEVE, () -> IForgeContainerType.create(
 			(id, inv, data) -> {
 				World world = inv.player.level;

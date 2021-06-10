@@ -1,8 +1,11 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
-import mods.redfire.simplemachinery.util.IntArrayWrapper;
-import mods.redfire.simplemachinery.util.energy.EnergyCoil;
+import mods.redfire.simplemachinery.network.Networking;
+import mods.redfire.simplemachinery.network.PacketScreen;
 import mods.redfire.simplemachinery.util.IMachineInventoryCallback;
+import mods.redfire.simplemachinery.util.IntArrayWrapper;
+import mods.redfire.simplemachinery.util.MachineCombinedInventory;
+import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import mods.redfire.simplemachinery.util.fluid.TankGroup;
@@ -10,6 +13,8 @@ import mods.redfire.simplemachinery.util.inventory.InventoryGroup;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -18,12 +23,12 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -32,9 +37,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
-public class MachineTile<T extends MachineRecipe> extends TileEntity implements ITickableTileEntity, IMachineInventoryCallback {
+public abstract class MachineTile<T extends MachineRecipe> extends TileEntity implements ITickableTileEntity, IMachineInventoryCallback {
 	protected MachineInventory inventory = new MachineInventory(this);
 	protected MachineFluidInventory tankInventory = new MachineFluidInventory(this);
 
@@ -51,7 +55,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 
 	protected IntArrayWrapper data;
 
-	public MachineTile(TileEntityType<?> type, int itemInputs, int itemOutputs, int fluidInputs, int fluidInputsCapacity, int fluidOutputs, int fluidOutputsCapacity, EnergyCoil energy) {
+	protected MachineTile(TileEntityType<?> type, int itemInputs, int itemOutputs, int fluidInputs, int fluidInputsCapacity, int fluidOutputs, int fluidOutputsCapacity, EnergyCoil energy) {
 		super(type);
 		inventory.addSlots(InventoryGroup.INPUT, itemInputs);
 		tankInventory.addTanks(TankGroup.INPUT, fluidInputs, fluidInputsCapacity);
@@ -64,13 +68,14 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 		updateHandlers();
 	}
 
-	public MachineTile(TileEntityType<?> type, List<MachineItemSlot> inputSlots, List<MachineItemSlot> outputSlots, List<MachineFluidTank> inputTanks, List<MachineFluidTank> outputTanks, List<MachineFluidTank> fuelTanks, EnergyCoil energy) {
+	protected MachineTile(TileEntityType<?> type, List<MachineItemSlot> inputSlots, List<MachineItemSlot> outputSlots, List<MachineFluidTank> inputTanks, List<MachineFluidTank> outputTanks, List<MachineFluidTank> fuelTanks, EnergyCoil energy) {
 		super(type);
 		inventory.addSlots(InventoryGroup.INPUT, inputSlots);
 		inventory.addSlots(InventoryGroup.OUTPUT, outputSlots);
+
+		tankInventory.addTanks(TankGroup.FUEL, fuelTanks);
 		tankInventory.addTanks(TankGroup.INPUT, inputTanks);
 		tankInventory.addTanks(TankGroup.OUTPUT, outputTanks);
-		tankInventory.addTanks(TankGroup.FUEL, fuelTanks);
 		this.energy = energy;
 
 		data = new IntArrayWrapper(2 + tankInventory.getTanks());
@@ -83,40 +88,9 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 	}
 
 	@Override
-	public void tick() {
-		if (level == null || level.isClientSide) {
-			return;
-		}
+	public void tick() {}
 
-		if (currentRecipe.isPresent()) {
-			T recipe = currentRecipe.get();
-			energy.modify(-recipe.getEnergyRate());
-			data.setInternal(0, data.getInternal(0) - 1);
-
-			if (canComplete()) {
-				complete();
-				clear();
-			} else if (energy.getEnergyStored() < recipe.getEnergyRate()) {
-				clear();
-			}
-			// TODO: [FIX] Recipe is not cleared when inputs are removed.
-		} else {
-			Optional<T> recipe = getRecipe();
-			if (recipe.isPresent() && canBegin(recipe.get())) {
-				begin(recipe.get());
-			}
-		}
-	}
-
-	public void begin(T recipe) {
-		if (energy.getEnergyStored() > recipe.getEnergy()) {
-			currentRecipe = Optional.of(recipe);
-			data.setInternal(0, recipe.getTime());
-			data.setInternal(1, recipe.getTime());
-			itemInputCounts = recipe.getInputItemCounts(inventory);
-			fluidInputCounts = recipe.getInputFluidCounts(tankInventory);
-		}
-	}
+	public abstract void begin(T recipe);
 
 	public void complete() {
 		if (!validateInputs(itemInputCounts, fluidInputCounts)) {
@@ -139,8 +113,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 		List<Integer> itemInputCounts = recipe.getInputItemCounts(inventory);
 		List<Integer> fluidInputCounts = recipe.getInputFluidCounts(tankInventory);
 
-		return energy.getEnergyStored() >= recipe.getEnergy()
-				&& validateInputs(itemInputCounts, fluidInputCounts) && validateOutputs(recipe);
+		return validateInputs(itemInputCounts, fluidInputCounts) && validateOutputs(recipe);
 	}
 
 	public boolean canComplete() {
@@ -320,16 +293,20 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 		return Optional.empty();
 	}
 
-	public int invSize() {
-		return inventory.getSlots();
-	}
-
 	public MachineInventory getItemInv() {
 		return inventory;
 	}
 
 	public MachineFluidInventory getFluidInv() {
 		return tankInventory;
+	}
+
+	public MachineCombinedInventory getCombinedInv() {
+		return new MachineCombinedInventory(inventory, tankInventory);
+	}
+
+	public MachineCombinedInventory getCombinedInputInv() {
+		return new MachineCombinedInventory(inventory.getInputInventory(), tankInventory.getInputInventory());
 	}
 
 	protected void initHandlers() {
@@ -435,6 +412,23 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 		LazyOptional<?> prevEnergyCap = energyCap;
 		energyCap = energy.getCapacity() > 0 ? LazyOptional.of(() -> energy) : LazyOptional.empty();
 		prevEnergyCap.invalidate();
+	}
+
+	public PacketScreen getGuiPacket() {
+		return new PacketScreen(getBlockPos(), energy.getEnergyStored(), tankInventory);
+	}
+
+	public void handleGuiPacket(PacketScreen buffer) {
+		energy.setEnergyStored(buffer.energy);
+		for (int i = 0; i < buffer.fluids.size(); i++) {
+			tankInventory.set(i, buffer.fluids.get(i));
+		}
+	}
+
+	public void sendGuiNetworkData(MachineContainer<?> container, IContainerListener player) {
+		if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
+			Networking.sendToClient(getGuiPacket(), (ServerPlayerEntity) player);
+		}
 	}
 
 	@Nonnull

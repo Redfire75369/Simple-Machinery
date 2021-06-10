@@ -2,6 +2,7 @@ package mods.redfire.simplemachinery.tileentities.sieve;
 
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
+import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SieveTile extends MachineTile<SieveRecipe> implements INamedContainerProvider {
+public class SieveTile extends EnergyMachineTile<SieveRecipe> implements INamedContainerProvider {
 	public static final int ITEM_INPUTS = 1;
 	public static final int ITEM_OUTPUTS = 6;
 
@@ -24,7 +25,7 @@ public class SieveTile extends MachineTile<SieveRecipe> implements INamedContain
 
 	@Override
 	protected Optional<SieveRecipe> getRecipe() {
-		return SieveRecipe.getRecipe(level, inventory);
+		return SieveRecipe.getRecipe(level, getCombinedInputInv());
 	}
 
 	@Nonnull

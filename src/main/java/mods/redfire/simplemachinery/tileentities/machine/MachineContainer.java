@@ -1,11 +1,11 @@
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import mods.redfire.simplemachinery.util.IntArrayWrapper;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class MachineContainer<T extends MachineTile<?>> extends Container {
 	@Nullable
-	protected final T tile;
+	public final T tile;
 
 	protected final World world;
 	protected final BlockPos pos;
@@ -32,7 +32,7 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 		this(type, inventorySize, id, world, pos, playerInv, null, new IntArrayWrapper(2));
 	}
 
-	public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, final T tile) {
+	public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, T tile) {
 		this(type, inventorySize, id, world, pos, playerInv, tile, tile.getData());
 	}
 
@@ -45,38 +45,10 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 		this.data = data;
 
 		addDataSlots(data);
-		trackFluids();
 		trackEnergy();
 
 		layoutPlayerInventorySlots(new InvWrapper(playerInv), 8, 84);
 		layoutMachineInventorySlots(tile != null ? tile.inventory : new ItemStackHandler(inventorySize));
-	}
-
-	protected void trackFluids() {
-		addDataSlots(new IIntArray() {
-			@Override
-			public int get(int index) {
-				if (index % 2 == 0) {
-					return getFluidStored(index / 2) & 0xffff;
-				} else {
-					return (getFluidStored((index - 1) / 2) >> 16) & 0xffff;
-				}
-			}
-
-			@Override
-			public void set(int index, int value) {
-				if (index % 2 == 0) {
-					tile.getFluidInv().get(index / 2).setAmount(get(index + 1) | (value & 0xffff));
-				} else {
-					tile.getFluidInv().get((index - 1) / 2).setAmount((value & 0xffff) | get(index - 1));
-				}
-			}
-
-			@Override
-			public int getCount() {
-				return tile.getFluidInv().getTanks();
-			}
-		});
 	}
 
 	protected void trackEnergy() {
@@ -152,7 +124,11 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 	}
 
 	public int getEnergyStored() {
-		return tile.getEnergy().getEnergyStored();
+		if (tile != null) {
+			return tile.getEnergy().getEnergyStored();
+		} else {
+			return 0;
+		}
 	}
 
 	public IntArrayWrapper getData() {
@@ -162,6 +138,16 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 	@Override
 	public boolean stillValid(@Nonnull PlayerEntity player) {
 		return false;
+	}
+
+	@Override
+	public void broadcastChanges() {
+		super.broadcastChanges();
+		if (tile != null) {
+			for (IContainerListener listener : containerListeners) {
+				tile.sendGuiNetworkData(this, listener);
+			}
+		}
 	}
 
 	//TODO: [FIX] Shift+Click sends item stacks to wrong slots/does not send item stacks

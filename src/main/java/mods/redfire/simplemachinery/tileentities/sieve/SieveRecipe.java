@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
+import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineRecipe;
+import mods.redfire.simplemachinery.util.MachineCombinedInventory;
 import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -22,7 +24,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class SieveRecipe extends MachineRecipe {
+public class SieveRecipe extends EnergyMachineRecipe {
 	protected static final String RECIPE_NAME = "sieve";
 
 	@ObjectHolder("simplemachinery:" + RECIPE_NAME)
@@ -33,8 +35,8 @@ public class SieveRecipe extends MachineRecipe {
 		super(id, energy, time, Collections.singletonList(input), null, outputs, outputChances, null);
 	}
 
-	public static Optional<SieveRecipe> getRecipe(World world, MachineInventory ctx) {
-		return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, ctx.getInputInventory(), world);
+	public static Optional<SieveRecipe> getRecipe(World world, MachineCombinedInventory inv) {
+		return world.getRecipeManager().getRecipeFor(RECIPE_TYPE, inv, world);
 	}
 
 	public static Collection<SieveRecipe> getAllRecipes(World world) {
@@ -121,7 +123,7 @@ public class SieveRecipe extends MachineRecipe {
 				buffer.writeItem(recipe.outputItems.get(i));
 				buffer.writeFloat(recipe.outputItemChances.get(i));
 			}
-			buffer.writeInt(recipe.energy);
+			buffer.writeInt(recipe.resource);
 			buffer.writeInt(recipe.time);
 		}
 	}

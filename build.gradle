@@ -20,6 +20,10 @@ repositories {
         name = "Progwml6"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+	maven {
+		name = "Tehnut"
+		url = "https://maven.tehnut.info"
+	}
     maven {
         name = "ModMaven"
         url = "https://modmaven.dev/"
@@ -34,11 +38,8 @@ version = "${mc_version}-${mod_version}"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
 minecraft {
-    // Channel:   Version:
-    // snapshot   YYYYMMDD   Snapshot are built nightly.
-    // stable     #          Stables are built at the discretion of the MCP team.
-    // official   MCVersion  Official field/method names from Mojang mapping files
     mappings channel: "official", version: "1.16.5"
+	accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
     runs {
         client {
@@ -55,7 +56,7 @@ minecraft {
 
         server {
             workingDirectory project.file("run")
-            property 'forge.logging.markers', ''
+            property "forge.logging.markers", ""
             property "forge.logging.console.level", "debug"
 
             mods {
@@ -67,7 +68,7 @@ minecraft {
 
         data {
             workingDirectory project.file("run")
-            property 'forge.logging.markers', ''
+            property "forge.logging.markers", ""
             property "forge.logging.console.level", "debug"
 
             args "--mod", "simplemachinery", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
@@ -90,9 +91,11 @@ dependencies {
 
     compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
     runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
-    
+
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+
+	runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
 
     runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
     runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:additions")

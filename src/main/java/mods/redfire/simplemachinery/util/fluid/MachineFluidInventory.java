@@ -1,8 +1,6 @@
 package mods.redfire.simplemachinery.util.fluid;
 
 import mods.redfire.simplemachinery.util.IMachineInventoryCallback;
-import mods.redfire.simplemachinery.util.inventory.InventoryGroup;
-import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
