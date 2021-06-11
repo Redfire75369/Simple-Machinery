@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery;
 
 import mods.redfire.simplemachinery.network.Networking;
@@ -22,20 +28,20 @@ public class SimpleMachinery {
 	public static final String MODID = "simplemachinery";
 	public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final ItemGroup TAB_BLOCKS = new ItemGroup("simplemachinery.blocks") {
-        @Nonnull
+	public static final ItemGroup TAB_BLOCKS = new ItemGroup("simplemachinery.blocks") {
+		@Nonnull
 		@Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.REGOLITH_ITEM.get());
-        }
-    };
-    public static final ItemGroup TAB_MACHINES = new ItemGroup("simplemachinery.machines") {
-        @Nonnull
+		public ItemStack makeIcon() {
+			return new ItemStack(Items.REGOLITH_ITEM.get());
+		}
+	};
+	public static final ItemGroup TAB_MACHINES = new ItemGroup("simplemachinery.machines") {
+		@Nonnull
 		@Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.TURNTABLE_ITEM.get());
-        }
-    };
+		public ItemStack makeIcon() {
+			return new ItemStack(Items.TURNTABLE_ITEM.get());
+		}
+	};
 
 
 	public SimpleMachinery() {

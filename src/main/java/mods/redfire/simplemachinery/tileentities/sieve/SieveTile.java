@@ -1,7 +1,12 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.sieve;
 
 import mods.redfire.simplemachinery.registry.TileEntities;
-import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
 import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import net.minecraft.entity.player.PlayerEntity;

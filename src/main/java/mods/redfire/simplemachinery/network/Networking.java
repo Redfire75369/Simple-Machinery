@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.network;
 
 import mods.redfire.simplemachinery.SimpleMachinery;
@@ -21,18 +27,18 @@ public class Networking {
 				s -> true,
 				s -> true);
 
-		INSTANCE.messageBuilder(PacketScreen.class, nextID())
-				.encoder(PacketScreen::encode)
-				.decoder(PacketScreen::decode)
-				.consumer(PacketScreen::consume)
+		INSTANCE.messageBuilder(MachineTilePacket.class, nextID())
+				.encoder(MachineTilePacket::encode)
+				.decoder(MachineTilePacket::decode)
+				.consumer(MachineTilePacket::consume)
 				.add();
 	}
 
-	public static void sendToClient(PacketScreen packet, ServerPlayerEntity player) {
+	public static void sendToClient(MachineTilePacket packet, ServerPlayerEntity player) {
 		INSTANCE.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToServer(PacketScreen packet) {
+	public static void sendToServer(MachineTilePacket packet) {
 		INSTANCE.sendToServer(packet);
 	}
 }

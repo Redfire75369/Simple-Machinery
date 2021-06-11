@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.sieve;
 
 import com.google.gson.JsonArray;
@@ -5,10 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Blocks;
-import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
 import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineRecipe;
 import mods.redfire.simplemachinery.util.MachineCombinedInventory;
-import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;

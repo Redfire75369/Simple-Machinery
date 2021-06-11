@@ -1,13 +1,17 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.autoclave;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Blocks;
-import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
 import mods.redfire.simplemachinery.tileentities.machine.fluid.FluidMachineRecipe;
 import mods.redfire.simplemachinery.util.MachineCombinedInventory;
-import mods.redfire.simplemachinery.util.inventory.MachineInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -33,7 +37,7 @@ public class AutoclaveRecipe extends FluidMachineRecipe {
 	public static IRecipeSerializer<?> SERIALIZER = null;
 	public static IRecipeType<AutoclaveRecipe> RECIPE_TYPE = IRecipeType.register(new ResourceLocation(SimpleMachinery.MODID, RECIPE_NAME).toString());
 
-	public AutoclaveRecipe(ResourceLocation id, Ingredient input, FluidStack fluidInput, ItemStack output,  int steam, int time) {
+	public AutoclaveRecipe(ResourceLocation id, Ingredient input, FluidStack fluidInput, ItemStack output, int steam, int time) {
 		super(id, steam, time, Collections.singletonList(input), Collections.singletonList(fluidInput), Collections.singletonList(output), null, null);
 	}
 

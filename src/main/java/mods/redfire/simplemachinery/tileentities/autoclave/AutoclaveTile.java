@@ -1,9 +1,13 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.autoclave;
 
 import mods.redfire.simplemachinery.registry.TileEntities;
-import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
 import mods.redfire.simplemachinery.tileentities.machine.fluid.FluidMachineTile;
-import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +16,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,7 +29,7 @@ public class AutoclaveTile extends FluidMachineTile<AutoclaveRecipe> implements 
 	public static final int FLUID_FUELS = 1;
 
 	public AutoclaveTile() {
-		super(TileEntities.AUTOCLAVE_TILE.get(), Collections.singletonList(new MachineItemSlot()), Collections.singletonList(new MachineItemSlot()), Collections.singletonList(new MachineFluidTank(8000)), Collections.emptyList(), Collections.singletonList(new MachineFluidTank(8000, e -> e.getFluid().getRegistryName().getPath().equals("steam"))));
+		super(TileEntities.AUTOCLAVE_TILE.get(), Collections.singletonList(new MachineItemSlot()), Collections.singletonList(new MachineItemSlot()), Collections.singletonList(new MachineFluidTank(8000)), Collections.emptyList(), new MachineFluidTank(8000, e -> e.getFluid().getRegistryName().getPath().equals("steam")));
 	}
 
 	@Override

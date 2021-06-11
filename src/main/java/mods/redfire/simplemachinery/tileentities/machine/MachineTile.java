@@ -1,9 +1,14 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.machine;
 
+import mods.redfire.simplemachinery.network.MachineTilePacket;
 import mods.redfire.simplemachinery.network.Networking;
-import mods.redfire.simplemachinery.network.PacketScreen;
 import mods.redfire.simplemachinery.util.IMachineInventoryCallback;
-import mods.redfire.simplemachinery.util.IntArrayWrapper;
 import mods.redfire.simplemachinery.util.MachineCombinedInventory;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
@@ -38,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class MachineTile<T extends MachineRecipe> extends TileEntity implements ITickableTileEntity, IMachineInventoryCallback {
+public class MachineTile<T extends MachineRecipe> extends TileEntity implements ITickableTileEntity, IMachineInventoryCallback {
 	protected MachineInventory inventory = new MachineInventory(this);
 	protected MachineFluidInventory tankInventory = new MachineFluidInventory(this);
 
@@ -52,8 +57,8 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 	protected List<Integer> fluidInputCounts = new ArrayList<>();
 
 	protected Optional<T> currentRecipe = Optional.empty();
-
-	protected IntArrayWrapper data;
+	protected int progress = 0;
+	protected int totalProgress = 0;
 
 	protected MachineTile(TileEntityType<?> type, int itemInputs, int itemOutputs, int fluidInputs, int fluidInputsCapacity, int fluidOutputs, int fluidOutputsCapacity, EnergyCoil energy) {
 		super(type);
@@ -62,8 +67,6 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 		inventory.addSlots(InventoryGroup.OUTPUT, itemOutputs);
 		tankInventory.addTanks(TankGroup.INPUT, fluidOutputs, fluidOutputsCapacity);
 		this.energy = energy;
-
-		data = new IntArrayWrapper(2 + tankInventory.getTanks());
 
 		updateHandlers();
 	}
@@ -78,8 +81,6 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 		tankInventory.addTanks(TankGroup.OUTPUT, outputTanks);
 		this.energy = energy;
 
-		data = new IntArrayWrapper(2 + tankInventory.getTanks());
-
 		updateHandlers();
 	}
 
@@ -90,7 +91,7 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 	@Override
 	public void tick() {}
 
-	public abstract void begin(T recipe);
+	public void begin(T recipe) {}
 
 	public void complete() {
 		if (!validateInputs(itemInputCounts, fluidInputCounts)) {
@@ -103,8 +104,8 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 	}
 
 	public void clear() {
-		data.setInternal(0, 0);
-		data.setInternal(1, 0);
+		progress = 0;
+		totalProgress = 0;
 		currentRecipe = Optional.empty();
 		itemInputCounts = new ArrayList<>();
 	}
@@ -117,7 +118,7 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 	}
 
 	public boolean canComplete() {
-		return data.getInternal(0) <= 0;
+		return progress <= 0;
 	}
 
 	protected boolean validateInputs(List<Integer> itemInputCounts, List<Integer> fluidInputCounts) {
@@ -309,6 +310,14 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 		return new MachineCombinedInventory(inventory.getInputInventory(), tankInventory.getInputInventory());
 	}
 
+	public int getProgress() {
+		return progress;
+	}
+
+	public int getTotalProgress() {
+		return totalProgress;
+	}
+
 	protected void initHandlers() {
 		inventory.initHandlers();
 		tankInventory.initHandlers();
@@ -342,12 +351,8 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 		return tankInventory.getTank(tank);
 	}
 
-	public EnergyCoil getEnergy() {
+	public EnergyCoil getCoil() {
 		return energy;
-	}
-
-	public IntArrayWrapper getData() {
-		return data;
 	}
 
 	@Override
@@ -414,15 +419,18 @@ public abstract class MachineTile<T extends MachineRecipe> extends TileEntity im
 		prevEnergyCap.invalidate();
 	}
 
-	public PacketScreen getGuiPacket() {
-		return new PacketScreen(getBlockPos(), energy.getEnergyStored(), tankInventory);
+	public MachineTilePacket getGuiPacket() {
+		return new MachineTilePacket(getBlockPos(), tankInventory, energy.getEnergyStored(), progress, totalProgress);
 	}
 
-	public void handleGuiPacket(PacketScreen buffer) {
-		energy.setEnergyStored(buffer.energy);
+	public void handleGuiPacket(MachineTilePacket buffer) {
 		for (int i = 0; i < buffer.fluids.size(); i++) {
 			tankInventory.set(i, buffer.fluids.get(i));
 		}
+
+		energy.setEnergyStored(buffer.energy);
+		progress = buffer.progress;
+		totalProgress = buffer.totalProgress;
 	}
 
 	public void sendGuiNetworkData(MachineContainer<?> container, IContainerListener player) {

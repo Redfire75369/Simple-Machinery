@@ -1,12 +1,16 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mods.redfire.simplemachinery.util.Corner;
-import mods.redfire.simplemachinery.util.IntArrayWrapper;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
+import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.render.FluidDirection;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.PlayerContainer;
@@ -72,7 +76,7 @@ public abstract class MachineScreen<T extends MachineContainer<?>> extends Conta
 		FluidStack fluid = menu.tile.getTank(tankIndex).getFluidStack();
 		FluidAttributes attributes = fluid.getFluid().getAttributes();
 
-		if (fluid.isEmpty() || fluid.getFluid() == null ) {
+		if (fluid.isEmpty() || fluid.getFluid() == null) {
 			return;
 		}
 
@@ -168,21 +172,21 @@ public abstract class MachineScreen<T extends MachineContainer<?>> extends Conta
 	}
 
 	protected int getProgressScaled(int pixels) {
-		IntArrayWrapper data = menu.getData();
-
-		int i = data.getInternal(0);
-		int j = data.getInternal(1);
-		return j != 0 && i != j ? (j - i) * pixels / j : 0;
+		int i = menu.tile.getProgress();
+		int j = menu.tile.getTotalProgress();
+		return j != 0 ? (j - i) * pixels / j : 0;
 	}
 
 	protected int getTankScaled(int tank, int pixels) {
-		int i = tank >= 0 && tank < menu.tile.tankInventory.getTanks() ? menu.tile.tankInventory.get(tank).getAmount() : 0;
-		int j = tank >= 0 && tank < menu.tile.tankInventory.getTanks() ? menu.tile.tankInventory.getTank(tank).getCapacity() : 0;
-		return j != 0 ? i *  pixels / j : 0;
+		MachineFluidInventory tankInventory = menu.tile.getFluidInv();
+
+		int i = tank >= 0 && tank < tankInventory.getTanks() ? tankInventory.get(tank).getAmount() : 0;
+		int j = tank >= 0 && tank < tankInventory.getTanks() ? tankInventory.getTank(tank).getCapacity() : 0;
+		return j != 0 ? i * pixels / j : 0;
 	}
 
 	protected int getEnergyScaled(int pixels) {
-		int i = menu.getEnergyStored();
+		int i = menu.tile.getCoil().getEnergyStored();
 		return i * pixels / 10000;
 	}
 }

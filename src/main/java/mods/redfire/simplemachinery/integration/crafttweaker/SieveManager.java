@@ -1,4 +1,10 @@
-package mods.redfire.simplemachinery.compat.crafttweaker;
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package mods.redfire.simplemachinery.integration.crafttweaker;
 
 import com.blamejared.crafttweaker.CraftTweaker;
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
@@ -45,7 +51,8 @@ public class SieveManager implements IRecipeManager {
 	}
 
 	@Override
-	public void removeRecipe(IItemStack output) {}
+	public void removeRecipe(IItemStack output) {
+	}
 
 	@Override
 	public IRecipeType<SieveRecipe> getRecipeType() {

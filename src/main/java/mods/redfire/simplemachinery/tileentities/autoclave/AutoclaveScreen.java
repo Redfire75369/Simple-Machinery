@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.autoclave;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -13,7 +19,6 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 
 public class AutoclaveScreen extends MachineScreen<AutoclaveContainer> {
-
 	public AutoclaveScreen(AutoclaveContainer container, PlayerInventory inv, ITextComponent name) {
 		super(175, 165, "textures/screen/container/autoclave.png", container, inv, name);
 	}
@@ -21,7 +26,7 @@ public class AutoclaveScreen extends MachineScreen<AutoclaveContainer> {
 	@Override
 	protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 		drawGui(matrixStack);
-		drawProgress(matrixStack, 76, 25, 24, 18);
+		drawProgress(matrixStack, 76, 26, 24, 18);
 
 		drawTank(matrixStack, 24, 66, 128, 8, 0, FluidDirection.RIGHT);
 		drawTank(matrixStack, 9, 10, 8, 64, 1, FluidDirection.UP_GAS);
@@ -32,14 +37,18 @@ public class AutoclaveScreen extends MachineScreen<AutoclaveContainer> {
 		int x = getGuiLeft();
 		int y = getGuiTop();
 
-		if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 7, y + 9, x + 18, y + 74)) {
-			GuiUtils.drawHoveringText(matrixStack, Collections.singletonList(new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.getFluidStored(0), 8000)), mouseX, mouseY, width, height, -1, font);
-		}
-		super.renderTooltip(matrixStack, mouseX, mouseY);
-	}
+		ITextComponent tooltip = null;
 
-	public int getFluidScaled(int tank, int pixels) {
-		int i = menu.getFluidStored(tank);
-		return i * pixels / 8000;
+		if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 24 - 2, y + 66 - 2, x + 24 + 128 + 1, y + 66 + 8 + 1)) {
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(0).getAmount(), 8000);
+		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 9 - 2, y + 10 - 2, x + 9 + 8 + 1, y + 10 + 64 + 1)) {
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(1).getAmount(), 8000);
+		}
+
+		if (tooltip != null) {
+			GuiUtils.drawHoveringText(matrixStack, Collections.singletonList(tooltip), mouseX, mouseY, width, height, -1, font);
+		}
+
+		super.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 }

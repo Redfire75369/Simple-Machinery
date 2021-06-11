@@ -1,16 +1,22 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.util.render;
 
 import net.minecraftforge.fluids.FluidAttributes;
 
 public enum FluidDirection {
-	UP (false),
-	DOWN (false),
-	RIGHT (false),
-	LEFT (false),
-	UP_GAS (true),
-	DOWN_GAS (true),
-	RIGHT_GAS (true),
-	LEFT_GAS (true);
+	UP(false),
+	DOWN(false),
+	RIGHT(false),
+	LEFT(false),
+	UP_GAS(true),
+	DOWN_GAS(true),
+	RIGHT_GAS(true),
+	LEFT_GAS(true);
 
 	private final boolean reversedGases;
 

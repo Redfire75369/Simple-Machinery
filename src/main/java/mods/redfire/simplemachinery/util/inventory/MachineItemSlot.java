@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.util.inventory;
 
 import net.minecraft.item.ItemStack;
@@ -33,11 +39,6 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 		this.validator = validator;
 	}
 
-	public MachineItemSlot setCapacity(int capacity) {
-		this.capacity = capacity;
-		return this;
-	}
-
 	public MachineItemSlot setValidator(Predicate<ItemStack> validator) {
 		if (validator != null) {
 			this.validator = validator;
@@ -47,10 +48,6 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 
 	public boolean isItemValid(@Nonnull ItemStack stack) {
 		return validator.test(stack);
-	}
-
-	public void setItemStack(@Nonnull ItemStack item) {
-		this.item = item;
 	}
 
 	public void consume(int amount) {
@@ -69,6 +66,10 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 
 	public ItemStack getItemStack() {
 		return item;
+	}
+
+	public void setItemStack(@Nonnull ItemStack item) {
+		this.item = item;
 	}
 
 	public int getCount() {
@@ -170,6 +171,11 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 
 	public int getCapacity() {
 		return getSlotLimit(0);
+	}
+
+	public MachineItemSlot setCapacity(int capacity) {
+		this.capacity = capacity;
+		return this;
 	}
 
 	public int getStored() {

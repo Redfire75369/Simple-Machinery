@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.turntable;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -14,9 +20,6 @@ public class TurntableScreen extends MachineScreen<TurntableContainer> {
 
 	@Override
 	protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-		int x = getGuiLeft();
-		int y = getGuiTop();
-
 		drawGui(matrixStack);
 		drawProgress(matrixStack, 76, 26, 24, 18);
 		drawEnergy(matrixStack, 24, 66, 128, 8);

@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.util.fluid;
 
 import net.minecraft.nbt.CompoundNBT;
@@ -24,11 +30,6 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 		this.validator = validator;
 	}
 
-	public MachineFluidTank setCapacity(int capacity) {
-		this.capacity = capacity;
-		return this;
-	}
-
 	public MachineFluidTank setValidator(Predicate<FluidStack> validator) {
 		if (validator != null) {
 			this.validator = validator;
@@ -38,10 +39,6 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 
 	public boolean isFluidValid(@Nonnull FluidStack stack) {
 		return validator.test(stack);
-	}
-
-	public void setFluidStack(@Nonnull FluidStack stack) {
-		fluid = stack;
 	}
 
 	public MachineFluidTank read(CompoundNBT nbt) {
@@ -59,6 +56,10 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 	@Nonnull
 	public FluidStack getFluidStack() {
 		return fluid;
+	}
+
+	public void setFluidStack(@Nonnull FluidStack stack) {
+		fluid = stack;
 	}
 
 	public int getAmount() {
@@ -173,6 +174,11 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 
 	public int getCapacity() {
 		return getTankCapacity(0);
+	}
+
+	public MachineFluidTank setCapacity(int capacity) {
+		this.capacity = capacity;
+		return this;
 	}
 
 	public int getStored() {

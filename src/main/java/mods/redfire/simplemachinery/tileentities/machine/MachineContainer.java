@@ -1,6 +1,11 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.machine;
 
-import mods.redfire.simplemachinery.util.IntArrayWrapper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -8,10 +13,8 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -26,67 +29,20 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 
 	protected final World world;
 	protected final BlockPos pos;
-	protected final IntArrayWrapper data;
 
 	public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv) {
-		this(type, inventorySize, id, world, pos, playerInv, null, new IntArrayWrapper(2));
+		this(type, inventorySize, id, world, pos, playerInv, null);
 	}
 
-	public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, T tile) {
-		this(type, inventorySize, id, world, pos, playerInv, tile, tile.getData());
-	}
-
-	public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, @Nullable T tile, final IntArrayWrapper data) {
+	public MachineContainer(ContainerType<?> type, int inventorySize, int id, World world, BlockPos pos, PlayerInventory playerInv, @Nullable T tile) {
 		super(type, id);
 
 		this.tile = tile;
 		this.world = world;
 		this.pos = pos;
-		this.data = data;
-
-		addDataSlots(data);
-		trackEnergy();
 
 		layoutPlayerInventorySlots(new InvWrapper(playerInv), 8, 84);
 		layoutMachineInventorySlots(tile != null ? tile.inventory : new ItemStackHandler(inventorySize));
-	}
-
-	protected void trackEnergy() {
-		if (tile != null) {
-			addDataSlots(new IIntArray() {
-				@Override
-				public int get(int index) {
-					switch (index) {
-						case 0:
-							return getEnergyStored() & 0xffff;
-						case 1:
-							return (getEnergyStored() >> 16) & 0xffff;
-						default:
-							return 0;
-					}
-				}
-
-				@Override
-				public void set(int index, int value) {
-					int energyStored = getEnergyStored();
-					switch (index) {
-						case 0:
-							tile.getEnergy().setEnergyStored((energyStored & 0xffff0000) | (value & 0xffff));
-							break;
-						case 1:
-							tile.getEnergy().setEnergyStored((value << 16) | (energyStored & 0xffff));
-							break;
-					}
-				}
-
-				@Override
-				public int getCount() {
-					return 2;
-				}
-			});
-		} else {
-			addDataSlots(new IntArrayWrapper(1));
-		}
 	}
 
 	protected int addSlotRow(IItemHandler handler, int index, int x, int y, int amount, int dx) {
@@ -112,28 +68,7 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 		addSlotRow(playerInv, 0, leftCol, topRow, 9, 18);
 	}
 
-	protected void layoutMachineInventorySlots(IItemHandler inventory) {
-	}
-
-	public FluidStack getFluid(int tank) {
-		return tile.getFluidInv().get(tank);
-	}
-
-	public int getFluidStored(int tank) {
-		return tile.getFluidInv().get(tank).getAmount();
-	}
-
-	public int getEnergyStored() {
-		if (tile != null) {
-			return tile.getEnergy().getEnergyStored();
-		} else {
-			return 0;
-		}
-	}
-
-	public IntArrayWrapper getData() {
-		return data;
-	}
+	protected void layoutMachineInventorySlots(IItemHandler inventory) {}
 
 	@Override
 	public boolean stillValid(@Nonnull PlayerEntity player) {

@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.google.common.primitives.Ints;
@@ -165,7 +171,7 @@ public abstract class MachineRecipe implements IRecipe<MachineCombinedInventory>
 			boolean matched = false;
 			for (int i = 0; i < tankInventory.getContainerSize(); i++) {
 				if (!used[i] && !matched) {
-					if (fluid.isFluidEqual(tankInventory.get(i))) {
+					if (!(fluid.getFluid().isSame(tankInventory.get(i).getFluid()) && fluid.getAmount() <= tankInventory.get(i).getAmount())) {
 						return false;
 					}
 					used[i] = true;

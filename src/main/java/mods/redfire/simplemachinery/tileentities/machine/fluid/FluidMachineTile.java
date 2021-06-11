@@ -1,7 +1,11 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.machine.fluid;
 
-import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveTile;
-import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
 import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
@@ -13,8 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class FluidMachineTile<T extends FluidMachineRecipe> extends MachineTile<T> {
-	public FluidMachineTile(TileEntityType<?> type, List<MachineItemSlot> inputSlots, List<MachineItemSlot> outputSlots, List<MachineFluidTank> inputTanks, List<MachineFluidTank> outputTanks, List<MachineFluidTank> fuelTanks) {
-		super(type, inputSlots, outputSlots, inputTanks, outputTanks, fuelTanks, new EnergyCoil(0));
+	public FluidMachineTile(TileEntityType<?> type, List<MachineItemSlot> inputSlots, List<MachineItemSlot> outputSlots, List<MachineFluidTank> inputTanks, List<MachineFluidTank> outputTanks, MachineFluidTank fuelTank) {
+		super(type, inputSlots, outputSlots, inputTanks, outputTanks, Collections.singletonList(fuelTank), new EnergyCoil(0));
 	}
 
 	@Override
@@ -28,7 +32,7 @@ public class FluidMachineTile<T extends FluidMachineRecipe> extends MachineTile<
 		if (currentRecipe.isPresent()) {
 			T recipe = currentRecipe.get();
 			fuelTank.modify(-recipe.getFuelRate());
-			data.setInternal(0, data.getInternal(0) - 1);
+			progress--;
 
 			if (canComplete()) {
 				complete();
@@ -48,8 +52,8 @@ public class FluidMachineTile<T extends FluidMachineRecipe> extends MachineTile<
 	@Override
 	public void begin(T recipe) {
 		currentRecipe = Optional.of(recipe);
-		data.setInternal(0, recipe.getTime());
-		data.setInternal(1, recipe.getTime());
+		progress = totalProgress = recipe.getTime();
+
 		itemInputCounts = recipe.getInputItemCounts(inventory);
 		fluidInputCounts = recipe.getInputFluidCounts(tankInventory);
 	}

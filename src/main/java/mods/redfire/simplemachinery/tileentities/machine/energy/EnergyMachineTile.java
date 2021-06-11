@@ -1,15 +1,17 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package mods.redfire.simplemachinery.tileentities.machine.energy;
 
-import com.blamejared.crafttweaker.api.item.IItemStack;
-import mods.redfire.simplemachinery.tileentities.machine.MachineRecipe;
 import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
 import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntityType;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +34,7 @@ public class EnergyMachineTile<T extends EnergyMachineRecipe> extends MachineTil
 		if (currentRecipe.isPresent()) {
 			T recipe = currentRecipe.get();
 			energy.modify(-recipe.getResourceRate());
-			data.setInternal(0, data.getInternal(0) - 1);
+			progress--;
 
 			if (canComplete()) {
 				complete();
@@ -52,8 +54,7 @@ public class EnergyMachineTile<T extends EnergyMachineRecipe> extends MachineTil
 	@Override
 	public void begin(T recipe) {
 		currentRecipe = Optional.of(recipe);
-		data.setInternal(0, recipe.getTime());
-		data.setInternal(1, recipe.getTime());
+		progress = totalProgress = recipe.getTime();
 		itemInputCounts = recipe.getInputItemCounts(inventory);
 		fluidInputCounts = recipe.getInputFluidCounts(tankInventory);
 	}
