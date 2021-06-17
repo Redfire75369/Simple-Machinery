@@ -65,7 +65,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 		inventory.addSlots(InventoryGroup.INPUT, itemInputs);
 		tankInventory.addTanks(TankGroup.INPUT, fluidInputs, fluidInputsCapacity);
 		inventory.addSlots(InventoryGroup.OUTPUT, itemOutputs);
-		tankInventory.addTanks(TankGroup.INPUT, fluidOutputs, fluidOutputsCapacity);
+		tankInventory.addTanks(TankGroup.OUTPUT, fluidOutputs, fluidOutputsCapacity);
 		this.energy = energy;
 
 		updateHandlers();
@@ -273,7 +273,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 			boolean matched = false;
 			for (MachineFluidTank tank : outputTanks()) {
 				FluidStack output = tank.getFluidStack();
-				if (tank.getCapacity() - tank.getStored() >= recipeOutput.getAmount() && FluidStack.areFluidStackTagsEqual(output, recipeOutput)) {
+				if (tank.getCapacity() - tank.getStored() >= recipeOutput.getAmount() && output.getFluid().equals(recipeOutput.getFluid())) {
 					output.setAmount(output.getAmount() + recipeOutput.getAmount());
 					matched = true;
 					break;

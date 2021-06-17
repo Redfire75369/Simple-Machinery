@@ -10,6 +10,7 @@ public class Names {
 	public static final String REGOLITH = "regolith";
 
 	public static final String AUTOCLAVE = "autoclave";
+	public static final String FLUID_CENTRIFUGE = "fluid_centrifuge";
 	public static final String SIEVE = "sieve";
 	public static final String TURNTABLE = "turntable";
 }

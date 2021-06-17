@@ -6,12 +6,12 @@
 
 package mods.redfire.simplemachinery.tileentities.turntable;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineRecipe;
 import mods.redfire.simplemachinery.util.MachineCombinedInventory;
+import mods.redfire.simplemachinery.util.recipe.ItemParser;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -20,7 +20,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -71,18 +70,11 @@ public class TurntableRecipe extends EnergyMachineRecipe {
 		@Nonnull
 		@Override
 		public TurntableRecipe fromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json) {
-			JsonElement jsonelement = JSONUtils.isArrayNode(json, "input")
-					? JSONUtils.getAsJsonArray(json, "input")
-					: JSONUtils.getAsJsonObject(json, "input");
-			Ingredient input = Ingredient.fromJson(jsonelement);
+			Ingredient input = ItemParser.parseIngredient(json, "input");
+			ItemStack output = ItemParser.parseItem(json, "output");
 
-			String outputString = JSONUtils.getAsString(json, "output");
-			ResourceLocation outputLocation = new ResourceLocation(outputString);
-			ItemStack output = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(outputLocation))
-					.orElseThrow(() -> new IllegalStateException("Item: " + outputString + " does not exist.")));
-
-			int time = JSONUtils.getAsInt(json, "time", 200);
 			int energy = JSONUtils.getAsInt(json, "energy", 4000);
+			int time = JSONUtils.getAsInt(json, "time", 200);
 
 			return new TurntableRecipe(recipeId, input, output, energy, time);
 		}
@@ -96,7 +88,6 @@ public class TurntableRecipe extends EnergyMachineRecipe {
 
 			return new TurntableRecipe(recipeId, input, output, energy, time);
 		}
-
 
 		@Override
 		public void toNetwork(@Nonnull PacketBuffer buffer, TurntableRecipe recipe) {

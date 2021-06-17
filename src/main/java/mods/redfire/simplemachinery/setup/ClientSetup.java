@@ -9,6 +9,7 @@ package mods.redfire.simplemachinery.setup;
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Containers;
 import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveScreen;
+import mods.redfire.simplemachinery.tileentities.fluidcentrifuge.FluidCentrifugeScreen;
 import mods.redfire.simplemachinery.tileentities.sieve.SieveScreen;
 import mods.redfire.simplemachinery.tileentities.turntable.TurntableScreen;
 import net.minecraft.client.gui.ScreenManager;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetup {
 	public static void init(final FMLClientSetupEvent event) {
 		ScreenManager.register(Containers.AUTOCLAVE_CONTAINER.get(), AutoclaveScreen::new);
+		ScreenManager.register(Containers.FLUID_CENTRIFUGE_CONTAINER.get(), FluidCentrifugeScreen::new);
 		ScreenManager.register(Containers.SIEVE_CONTAINER.get(), SieveScreen::new);
 		ScreenManager.register(Containers.TURNTABLE_CONTAINER.get(), TurntableScreen::new);
 	}

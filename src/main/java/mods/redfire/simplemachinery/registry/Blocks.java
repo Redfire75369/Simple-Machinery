@@ -9,6 +9,7 @@ package mods.redfire.simplemachinery.registry;
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.blocks.RegolithBlock;
 import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveTile;
+import mods.redfire.simplemachinery.tileentities.fluidcentrifuge.FluidCentrifugeTile;
 import mods.redfire.simplemachinery.tileentities.machine.MachineBlock;
 import mods.redfire.simplemachinery.tileentities.sieve.SieveTile;
 import mods.redfire.simplemachinery.tileentities.turntable.TurntableTile;
@@ -31,6 +32,10 @@ public class Blocks {
 	public static final RegistryObject<MachineBlock> AUTOCLAVE_BLOCK = BLOCKS.register(Names.AUTOCLAVE, () -> new MachineBlock(
 			Properties.of(Material.METAL).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(2).strength(2.0f),
 			AutoclaveTile::new
+	));
+	public static final RegistryObject<MachineBlock> FLUID_CENTRIFUGE_BLOCK = BLOCKS.register(Names.FLUID_CENTRIFUGE, () -> new MachineBlock(
+			Properties.of(Material.METAL).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(2).strength(2.0f),
+			FluidCentrifugeTile::new
 	));
 	public static final RegistryObject<MachineBlock> SIEVE_BLOCK = BLOCKS.register(Names.SIEVE, () -> new MachineBlock(
 			Properties.of(Material.METAL).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(2).strength(2.0f),

@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -124,6 +125,14 @@ public abstract class MachineRecipe implements IRecipe<MachineCombinedInventory>
 
 	public List<Float> getOutputItemChances() {
 		return outputItemChances;
+	}
+
+	public List<Tuple<ItemStack, Float>> getWeightedOutputItems() {
+		List<Tuple<ItemStack, Float>> weightedOutputItems = new ArrayList<>();
+		for (int i = 0; i < outputItems.size(); i++) {
+			weightedOutputItems.add(new Tuple<>(outputItems.get(i), outputItemChances.get(i)));
+		}
+		return weightedOutputItems;
 	}
 
 	public List<FluidStack> getOutputFluids() {

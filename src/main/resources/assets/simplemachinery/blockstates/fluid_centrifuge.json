@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplemachinery:block/fluid_centrifuge"
+    },
+    "facing=east": {
+      "model": "simplemachinery:block/fluid_centrifuge",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplemachinery:block/fluid_centrifuge",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplemachinery:block/fluid_centrifuge",
+      "y": 270
+    }
+  }
+}

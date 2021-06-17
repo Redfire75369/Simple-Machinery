@@ -1,6 +1,7 @@
 {
   "block.simplemachinery.regolith": "Asteroid Regolith",
   "block.simplemachinery.autoclave": "Autoclave",
+  "block.simplemachinery.fluid_centrifuge": "Fluid Centrifuge",
   "block.simplemachinery.sieve": "Sieve",
   "block.simplemachinery.turntable": "Turntable",
 
@@ -9,6 +10,8 @@
 
   "screen.simplemachinery.autoclave": "Autoclave",
   "screen.simplemachinery.jei.autoclave": "Autoclave",
+  "screen.simplemachinery.fluid_centrifuge": "Fluid Centrifuge",
+  "screen.simplemachinery.jei.fluid_centrifuge": "Fluid Centrifuge",
   "screen.simplemachinery.sieve": "Sieve",
   "screen.simplemachinery.jei.sieve": "Sieve",
   "screen.simplemachinery.turntable": "Turntable",

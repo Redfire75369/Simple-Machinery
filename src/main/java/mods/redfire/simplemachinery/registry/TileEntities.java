@@ -8,6 +8,7 @@ package mods.redfire.simplemachinery.registry;
 
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveTile;
+import mods.redfire.simplemachinery.tileentities.fluidcentrifuge.FluidCentrifugeTile;
 import mods.redfire.simplemachinery.tileentities.sieve.SieveTile;
 import mods.redfire.simplemachinery.tileentities.turntable.TurntableTile;
 import net.minecraft.tileentity.TileEntityType;
@@ -21,6 +22,9 @@ public class TileEntities {
 
 	public static final RegistryObject<TileEntityType<AutoclaveTile>> AUTOCLAVE_TILE = TILES.register(Names.AUTOCLAVE,
 			() -> TileEntityType.Builder.of(AutoclaveTile::new, Blocks.AUTOCLAVE_BLOCK.get()).build(null)
+	);
+	public static final RegistryObject<TileEntityType<FluidCentrifugeTile>> FLUID_CENTRIFUGE_TILE = TILES.register(Names.FLUID_CENTRIFUGE,
+			() -> TileEntityType.Builder.of(FluidCentrifugeTile::new, Blocks.FLUID_CENTRIFUGE_BLOCK.get()).build(null)
 	);
 	public static final RegistryObject<TileEntityType<SieveTile>> SIEVE_TILE = TILES.register(Names.SIEVE,
 			() -> TileEntityType.Builder.of(SieveTile::new, Blocks.SIEVE_BLOCK.get()).build(null)

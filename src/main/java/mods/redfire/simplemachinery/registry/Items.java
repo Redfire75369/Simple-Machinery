@@ -24,6 +24,9 @@ public class Items {
 	public static final RegistryObject<Item> AUTOCLAVE_ITEM = ITEMS.register(Names.AUTOCLAVE,
 			() -> new BlockItem(Blocks.AUTOCLAVE_BLOCK.get(), new Item.Properties().tab(SimpleMachinery.TAB_MACHINES))
 	);
+	public static final RegistryObject<Item> FLUID_CENTRIFUGE_ITEM = ITEMS.register(Names.FLUID_CENTRIFUGE,
+			() -> new BlockItem(Blocks.FLUID_CENTRIFUGE_BLOCK.get(), new Item.Properties().tab(SimpleMachinery.TAB_MACHINES))
+	);
 	public static final RegistryObject<Item> SIEVE_ITEM = ITEMS.register(Names.SIEVE,
 			() -> new BlockItem(Blocks.SIEVE_BLOCK.get(), new Item.Properties().tab(SimpleMachinery.TAB_MACHINES))
 	);
