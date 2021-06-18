@@ -8,8 +8,8 @@ package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.google.common.primitives.Ints;
 import mods.redfire.simplemachinery.util.MachineCombinedInventory;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
-import mods.redfire.simplemachinery.util.inventory.MachineInventory;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
+import mods.redfire.simplemachinery.util.inventory.item.MachineInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;

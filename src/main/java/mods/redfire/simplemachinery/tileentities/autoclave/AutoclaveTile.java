@@ -8,8 +8,8 @@ package mods.redfire.simplemachinery.tileentities.autoclave;
 
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.fluid.FluidMachineTile;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
-import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidTank;
+import mods.redfire.simplemachinery.util.inventory.item.MachineItemSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

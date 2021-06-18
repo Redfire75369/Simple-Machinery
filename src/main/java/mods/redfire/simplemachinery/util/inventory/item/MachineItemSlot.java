@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.util.inventory;
+package mods.redfire.simplemachinery.util.inventory.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -55,12 +55,12 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 	}
 
 	public MachineItemSlot read(CompoundNBT tag) {
-		item.setTag(tag);
+		item = ItemStack.of(tag);
 		return this;
 	}
 
 	public CompoundNBT write(CompoundNBT tag) {
-		tag.merge(item.getOrCreateTag());
+		tag.merge(item.serializeNBT());
 		return tag;
 	}
 

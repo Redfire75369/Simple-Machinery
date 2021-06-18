@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.util.fluid;
+package mods.redfire.simplemachinery.util.inventory.fluid;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
@@ -49,7 +49,6 @@ public class MachineFluidTank implements IFluidHandlerModifiable {
 
 	public CompoundNBT write(CompoundNBT nbt) {
 		fluid.writeToNBT(nbt);
-		nbt.putInt("Capacity", capacity);
 		return nbt;
 	}
 

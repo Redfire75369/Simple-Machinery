@@ -8,7 +8,7 @@ package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mods.redfire.simplemachinery.util.Corner;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.render.FluidDirection;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

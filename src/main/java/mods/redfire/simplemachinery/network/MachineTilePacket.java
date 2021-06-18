@@ -7,7 +7,7 @@
 package mods.redfire.simplemachinery.network;
 
 import mods.redfire.simplemachinery.tileentities.machine.MachineContainer;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;

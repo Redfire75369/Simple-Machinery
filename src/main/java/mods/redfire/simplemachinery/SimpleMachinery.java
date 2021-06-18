@@ -8,8 +8,6 @@ package mods.redfire.simplemachinery;
 
 import mods.redfire.simplemachinery.network.Networking;
 import mods.redfire.simplemachinery.registry.*;
-import mods.redfire.simplemachinery.setup.ClientSetup;
-import mods.redfire.simplemachinery.setup.Config;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;

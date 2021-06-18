@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.setup;
+package mods.redfire.simplemachinery;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,6 +18,7 @@ public class Config {
 	public static ForgeConfigSpec SERVER_CONFIG;
 	public static ForgeConfigSpec CLIENT_CONFIG;
 
+	// TODO: Add Configuration Options for the various machines
 	static {
 		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 		ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();

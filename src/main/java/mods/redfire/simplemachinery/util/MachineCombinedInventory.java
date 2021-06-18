@@ -6,8 +6,8 @@
 
 package mods.redfire.simplemachinery.util;
 
-import mods.redfire.simplemachinery.util.fluid.MachineFluidInventory;
-import mods.redfire.simplemachinery.util.inventory.MachineInventory;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
+import mods.redfire.simplemachinery.util.inventory.item.MachineInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

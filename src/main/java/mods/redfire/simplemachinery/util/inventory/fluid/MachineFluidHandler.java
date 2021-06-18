@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.util.fluid;
+package mods.redfire.simplemachinery.util.inventory.fluid;
 
 import mods.redfire.simplemachinery.util.IMachineInventoryCallback;
 import net.minecraftforge.fluids.FluidStack;

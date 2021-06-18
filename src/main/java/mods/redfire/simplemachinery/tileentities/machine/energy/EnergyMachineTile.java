@@ -8,8 +8,8 @@ package mods.redfire.simplemachinery.tileentities.machine.energy;
 
 import mods.redfire.simplemachinery.tileentities.machine.MachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
-import mods.redfire.simplemachinery.util.fluid.MachineFluidTank;
-import mods.redfire.simplemachinery.util.inventory.MachineItemSlot;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidTank;
+import mods.redfire.simplemachinery.util.inventory.item.MachineItemSlot;
 import net.minecraft.tileentity.TileEntityType;
 
 import java.util.Collections;

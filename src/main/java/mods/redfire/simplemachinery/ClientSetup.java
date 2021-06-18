@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.setup;
+package mods.redfire.simplemachinery;
 
 import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Containers;

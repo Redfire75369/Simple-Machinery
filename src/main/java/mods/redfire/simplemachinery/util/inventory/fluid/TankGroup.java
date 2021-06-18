@@ -4,10 +4,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.util.inventory;
+package mods.redfire.simplemachinery.util.inventory.fluid;
 
-public enum InventoryGroup {
+public enum TankGroup {
 	INPUT,
 	OUTPUT,
+	FUEL,
 	ALL
 }
