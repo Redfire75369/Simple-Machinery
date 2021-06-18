@@ -51,10 +51,6 @@ public class SieveManager implements IRecipeManager {
 	}
 
 	@Override
-	public void removeRecipe(IItemStack output) {
-	}
-
-	@Override
 	public IRecipeType<SieveRecipe> getRecipeType() {
 		return SieveRecipe.RECIPE_TYPE;
 	}

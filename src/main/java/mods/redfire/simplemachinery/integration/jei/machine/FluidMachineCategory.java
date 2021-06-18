@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package mods.redfire.simplemachinery.integration.jei;
+package mods.redfire.simplemachinery.integration.jei.machine;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;

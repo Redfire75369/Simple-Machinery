@@ -8,11 +8,11 @@ package mods.redfire.simplemachinery.integration.jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mods.redfire.simplemachinery.integration.jei.machine.FluidMachineCategory;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.registry.Names;
 import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveRecipe;
@@ -83,12 +83,9 @@ public class AutoclaveCategory extends FluidMachineCategory<AutoclaveRecipe> {
 
 	@Override
 	public void draw(@Nonnull AutoclaveRecipe recipe, @Nonnull MatrixStack matrixStack, double mouseX, double mouseY) {
-		if (progress == null) {
-			progress = guiHelper.drawableBuilder(GUI, xSize + 1, 1, 24, 16)
-					.buildAnimated(recipe.getTime() / 5, IDrawableAnimated.StartDirection.LEFT, false);
-		}
+		super.draw(recipe, matrixStack, mouseX, mouseY);
 
-		progress.draw(matrixStack, 53 + 1, 9);
+		progress.draw(matrixStack, 54, 9);
 	}
 
 	@Nonnull
@@ -97,7 +94,7 @@ public class AutoclaveCategory extends FluidMachineCategory<AutoclaveRecipe> {
 		int x = (int) mouseX;
 		int y = (int) mouseY;
 
-		if (withinRectangle(x, y, 53 + 1, 8, 53 + 1 + 26, 8 + 10)) {
+		if (withinRectangle(x, y, 52, 7, 53 + 26, 8 + 18)) {
 			return Collections.singletonList(new TranslationTextComponent("screen.simplemachinery.jei.ticks", recipe.getTime()));
 		}
 

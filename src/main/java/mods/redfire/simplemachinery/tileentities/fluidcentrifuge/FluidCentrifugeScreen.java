@@ -48,8 +48,8 @@ public class FluidCentrifugeScreen extends MachineScreen<FluidCentrifugeContaine
 			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(1).getAmount(), 8000);
 		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 89 + 18 - 2, y + 35 - 2, x + 89 + 18 + 16 + 1, y + 35 + 16 + 1)) {
 			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(2).getAmount(), 8000);
-		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 89 + 18 * 2 - 2, y + 35 - 2, x + 89 + 18 * 2 + 18 * 2 + 16 + 1, y + 35 + 16 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(2).getAmount(), 8000);
+		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 89 + 18 * 2 - 2, y + 35 - 2, x + 89 + 18 * 2 + 16 + 1, y + 35 + 16 + 1)) {
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(3).getAmount(), 8000);
 		}
 
 		if (tooltip != null) {
