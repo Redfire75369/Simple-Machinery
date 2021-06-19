@@ -189,7 +189,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 			boolean matched = false;
 			for (int i = 0; i < outputTanks.size(); ++i) {
 				FluidStack output = outputTanks.get(i).getFluidStack();
-				if (used[i] || outputTanks.get(i).getCapacity() - outputTanks.get(i).getStored() < output.getAmount()) {
+				if (used[i] || outputTanks.get(i).getCapacity() - output.getAmount() < recipeOutput.getAmount()) {
 					continue;
 				}
 				if (output.getFluid() == recipeOutput.getFluid()) {

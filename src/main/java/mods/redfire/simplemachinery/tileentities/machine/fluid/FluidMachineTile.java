@@ -37,10 +37,9 @@ public class FluidMachineTile<T extends FluidMachineRecipe> extends MachineTile<
 			if (canComplete()) {
 				complete();
 				clear();
-			} else if (fuelTank.getStored() < recipe.getFuelRate()) {
+			} else if (fuelTank.getStored() < recipe.getFuelRate() || !recipe.matches(getCombinedInputInv(), level)) {
 				clear();
 			}
-			// TODO: [FIX] Recipe is not cleared when inputs are removed.
 		} else {
 			Optional<T> recipe = getRecipe();
 			if (recipe.isPresent() && canBegin(recipe.get())) {

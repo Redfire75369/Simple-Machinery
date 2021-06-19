@@ -39,10 +39,9 @@ public class EnergyMachineTile<T extends EnergyMachineRecipe> extends MachineTil
 			if (canComplete()) {
 				complete();
 				clear();
-			} else if (energy.getEnergyStored() < recipe.getResourceRate()) {
+			} else if (energy.getEnergyStored() < recipe.getResourceRate() || !recipe.matches(getCombinedInputInv(), level)) {
 				clear();
 			}
-			// TODO: [FIX] Recipe is not cleared when inputs are removed.
 		} else {
 			Optional<T> recipe = getRecipe();
 			if (recipe.isPresent() && canBegin(recipe.get())) {

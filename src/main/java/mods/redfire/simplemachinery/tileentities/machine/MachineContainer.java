@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 public class MachineContainer<T extends MachineTile<?>> extends Container {
 	@Nullable
 	public final T tile;
+	protected final int inventorySize;
 
 	protected final World world;
 	protected final BlockPos pos;
@@ -38,6 +39,7 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 		super(type, id);
 
 		this.tile = tile;
+		this.inventorySize = inventorySize;
 		this.world = world;
 		this.pos = pos;
 
@@ -85,7 +87,6 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 		}
 	}
 
-	//TODO: [FIX] Shift+Click sends item stacks to wrong slots/does not send item stacks
 	@Nonnull
 	@Override
 	public ItemStack quickMoveStack(@Nonnull PlayerEntity player, int index) {
@@ -96,17 +97,12 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 			ItemStack item = slot.getItem();
 			stack = item.copy();
 
-			if (index == 0) {
-				if (!this.moveItemStackTo(item, 1, 37, true)) {
+			if (index < 36) {
+				if (!moveItemStackTo(item, 36, 36 + inventorySize - 1, false)) {
 					return ItemStack.EMPTY;
 				}
-				slot.onQuickCraft(item, stack);
-			} else {
-				if (index < 28) {
-					if (!this.moveItemStackTo(item, 28, 37, false)) {
-						return ItemStack.EMPTY;
-					}
-				} else if (index < 37 && !this.moveItemStackTo(item, 1, 28, false)) {
+			} else  {
+				if (!this.moveItemStackTo(item, 0, 35, false)) {
 					return ItemStack.EMPTY;
 				}
 			}

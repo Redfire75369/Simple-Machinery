@@ -8,10 +8,12 @@ package mods.redfire.simplemachinery.tileentities.machine;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +23,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -28,7 +31,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-// TODO: Drop Inventory Items on Destruction
 public class MachineBlock extends Block {
 	protected final Supplier<? extends MachineTile<?>> supplier;
 
@@ -60,6 +62,8 @@ public class MachineBlock extends Block {
 		);
 	}
 
+
+
 	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
@@ -75,5 +79,21 @@ public class MachineBlock extends Block {
 
 		NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tile, pos);
 		return ActionResultType.SUCCESS;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onRemove(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull BlockState state1, boolean p_196243_5_) {
+		TileEntity tile = world.getBlockEntity(pos);
+
+		if (tile instanceof MachineTile<?>) {
+			for (int i = 0; i < ((MachineTile<?>) tile).inventory.getContainerSize(); i++) {
+				ItemStack item = ((MachineTile<?>) tile).inventory.get(i);
+				ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
+				world.addFreshEntity(itemEntity);
+			}
+		}
+
+		super.onRemove(state, world, pos, state1, p_196243_5_);
 	}
 }
