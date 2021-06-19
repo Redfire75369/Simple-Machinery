@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 @ZenCodeType.Name("mods.simplemachinery.sieve")
 public class SieveManager implements IRecipeManager {
 	@ZenCodeType.Method
-	public void addRecipe(String id, IIngredient input, IItemStack[] outputs, int energy, int time) {
+	public void addRecipe(String id, IIngredient input, MCWeightedItemStack[] outputs, int energy, int time) {
 		ResourceLocation recipeId = new ResourceLocation(CraftTweaker.MODID, id);
 
-		SieveRecipe recipe = new SieveRecipe(recipeId, input.asVanillaIngredient(), Arrays.stream(outputs).map(IItemStack::getInternal).collect(Collectors.toList()), null, energy, time);
+		SieveRecipe recipe = new SieveRecipe(recipeId, input.asVanillaIngredient(), Arrays.stream(outputs).map(MCWeightedItemStack::getItemStack).map(IItemStack::getInternal).collect(Collectors.toList()), Arrays.stream(outputs).map((output) -> (float) output.getWeight()).collect(Collectors.toList()), energy, time);
 		CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
 	}
 
@@ -39,14 +39,6 @@ public class SieveManager implements IRecipeManager {
 		ResourceLocation recipeId = new ResourceLocation(CraftTweaker.MODID, id);
 
 		SieveRecipe recipe = new SieveRecipe(recipeId, input.asVanillaIngredient(), Arrays.stream(outputs).map(IItemStack::getInternal).collect(Collectors.toList()), Floats.asList(outputChances), energy, time);
-		CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
-	}
-
-	@ZenCodeType.Method
-	public void addRecipe(String id, IIngredient input, MCWeightedItemStack[] outputs, int energy, int time) {
-		ResourceLocation recipeId = new ResourceLocation(CraftTweaker.MODID, id);
-
-		SieveRecipe recipe = new SieveRecipe(recipeId, input.asVanillaIngredient(), Arrays.stream(outputs).map(MCWeightedItemStack::getItemStack).map(IItemStack::getInternal).collect(Collectors.toList()), Arrays.stream(outputs).map((output) -> (float) output.getWeight()).collect(Collectors.toList()), energy, time);
 		CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
 	}
 

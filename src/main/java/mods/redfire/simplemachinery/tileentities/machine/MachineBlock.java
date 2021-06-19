@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+// TODO: Drop Inventory Items on Destruction
 public class MachineBlock extends Block {
 	protected final Supplier<? extends MachineTile<?>> supplier;
 

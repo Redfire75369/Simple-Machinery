@@ -14,9 +14,9 @@ import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidTank;
 import mods.redfire.simplemachinery.util.inventory.fluid.TankGroup;
-import mods.redfire.simplemachinery.util.inventory.item.InventoryGroup;
 import mods.redfire.simplemachinery.util.inventory.item.MachineInventory;
 import mods.redfire.simplemachinery.util.inventory.item.MachineItemSlot;
+import mods.redfire.simplemachinery.util.inventory.item.SlotGroup;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.IContainerListener;
@@ -62,9 +62,9 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 
 	protected MachineTile(TileEntityType<?> type, int itemInputs, int itemOutputs, int fluidInputs, int fluidInputsCapacity, int fluidOutputs, int fluidOutputsCapacity, EnergyCoil energy) {
 		super(type);
-		inventory.addSlots(InventoryGroup.INPUT, itemInputs);
+		inventory.addSlots(SlotGroup.INPUT, itemInputs);
 		tankInventory.addTanks(TankGroup.INPUT, fluidInputs, fluidInputsCapacity);
-		inventory.addSlots(InventoryGroup.OUTPUT, itemOutputs);
+		inventory.addSlots(SlotGroup.OUTPUT, itemOutputs);
 		tankInventory.addTanks(TankGroup.OUTPUT, fluidOutputs, fluidOutputsCapacity);
 		this.energy = energy;
 
@@ -73,8 +73,8 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 
 	protected MachineTile(TileEntityType<?> type, List<MachineItemSlot> inputSlots, List<MachineItemSlot> outputSlots, List<MachineFluidTank> inputTanks, List<MachineFluidTank> outputTanks, List<MachineFluidTank> fuelTanks, EnergyCoil energy) {
 		super(type);
-		inventory.addSlots(InventoryGroup.INPUT, inputSlots);
-		inventory.addSlots(InventoryGroup.OUTPUT, outputSlots);
+		inventory.addSlots(SlotGroup.INPUT, inputSlots);
+		inventory.addSlots(SlotGroup.OUTPUT, outputSlots);
 
 		tankInventory.addTanks(TankGroup.FUEL, fuelTanks);
 		tankInventory.addTanks(TankGroup.INPUT, inputTanks);
@@ -159,7 +159,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 				if (output.getCount() + Math.max(0, recipeOutput.getCount()) > output.getMaxStackSize()) {
 					continue;
 				}
-				if (ItemStack.isSame(output, recipeOutput) && ItemStack.tagMatches(output, recipeOutput)) {
+				if (output.getItem() == recipeOutput.getItem() && ItemStack.tagMatches(output, recipeOutput)) {
 					used[i] = true;
 					matched = true;
 					break;
@@ -227,7 +227,6 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 		}
 	}
 
-	// TODO: [FIX] Chanced Item Outputs are transferred to incorrect slots.
 	protected void transferOutputs() {
 		if (!currentRecipe.isPresent()) {
 			return;
@@ -248,7 +247,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 				for (MachineItemSlot slot : outputSlots()) {
 					ItemStack output = slot.getItemStack();
 
-					if (ItemStack.isSame(output, recipeOutput) && ItemStack.tagMatches(output, recipeOutput)
+					if (output.getItem() == recipeOutput.getItem() && ItemStack.tagMatches(output, recipeOutput)
 							&& output.getCount() + outputCount <= output.getMaxStackSize()) {
 						output.grow(outputCount);
 						matched = true;
@@ -319,8 +318,8 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 	}
 
 	protected void initHandlers() {
-		inventory.initHandlers();
-		tankInventory.initHandlers();
+		inventory.initHandler();
+		tankInventory.initHandler();
 	}
 
 	public List<MachineItemSlot> inputSlots() {
@@ -405,12 +404,12 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 
 	protected void updateHandlers() {
 		LazyOptional<?> prevItemCap = itemCap;
-		IItemHandler invHandler = inventory.getHandler(InventoryGroup.ALL);
+		IItemHandler invHandler = inventory.getHandler();
 		itemCap = inventory.hasAccessibleSlots() ? LazyOptional.of(() -> invHandler) : LazyOptional.empty();
 		prevItemCap.invalidate();
 
 		LazyOptional<?> prevFluidCap = fluidCap;
-		IFluidHandler fluidHandler = tankInventory.getHandler(TankGroup.ALL);
+		IFluidHandler fluidHandler = tankInventory.getHandler();
 		fluidCap = tankInventory.hasAccessibleTanks() ? LazyOptional.of(() -> fluidHandler) : LazyOptional.empty();
 		prevFluidCap.invalidate();
 
@@ -454,7 +453,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 
 	protected <T> LazyOptional<T> getItemHandlerCapability(@Nullable Direction side) {
 		if (!itemCap.isPresent() && inventory.hasAccessibleSlots()) {
-			IItemHandler handler = inventory.getHandler(InventoryGroup.ALL);
+			IItemHandler handler = inventory.getHandler();
 			itemCap = LazyOptional.of(() -> handler);
 		}
 		return itemCap.cast();
@@ -462,7 +461,7 @@ public class MachineTile<T extends MachineRecipe> extends TileEntity implements 
 
 	protected <T> LazyOptional<T> getFluidHandlerCapability(@Nullable Direction side) {
 		if (!fluidCap.isPresent() && tankInventory.hasAccessibleTanks()) {
-			IFluidHandler handler = tankInventory.getHandler(TankGroup.ALL);
+			IFluidHandler handler = tankInventory.getHandler();
 			fluidCap = LazyOptional.of(() -> handler);
 		}
 		return fluidCap.cast();

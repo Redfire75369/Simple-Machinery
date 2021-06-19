@@ -6,7 +6,6 @@
 
 package mods.redfire.simplemachinery;
 
-import mods.redfire.simplemachinery.SimpleMachinery;
 import mods.redfire.simplemachinery.registry.Containers;
 import mods.redfire.simplemachinery.tileentities.autoclave.AutoclaveScreen;
 import mods.redfire.simplemachinery.tileentities.fluidcentrifuge.FluidCentrifugeScreen;

@@ -62,7 +62,7 @@ public class MachineItemHandler implements IItemHandlerModifiable {
 	@Nonnull
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if (slot < 0 || slot > getSlots()) {
+		if (slot < 0 || slot >= getSlots()) {
 			return ItemStack.EMPTY;
 		}
 		return slots.get(slot).getItemStack();
@@ -70,7 +70,7 @@ public class MachineItemHandler implements IItemHandlerModifiable {
 
 	@Override
 	public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-		if (slot < 0 || slot > getSlots()) {
+		if (slot < 0 || slot >= getSlots()) {
 			return;
 		}
 		slots.get(slot).setItemStack(stack);
@@ -79,7 +79,7 @@ public class MachineItemHandler implements IItemHandlerModifiable {
 	@Nonnull
 	@Override
 	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-		if (slot < 0 || slot > getSlots()) {
+		if (slot < 0 || slot >= getSlots()) {
 			return stack;
 		}
 
@@ -93,7 +93,7 @@ public class MachineItemHandler implements IItemHandlerModifiable {
 	@Nonnull
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (slot < 0 || slot > getSlots()) {
+		if (slot < 0 || slot >= getSlots()) {
 			return ItemStack.EMPTY;
 		}
 		ItemStack ret = slots.get(slot).extractItem(slot, amount, simulate);
@@ -105,7 +105,7 @@ public class MachineItemHandler implements IItemHandlerModifiable {
 
 	@Override
 	public int getSlotLimit(int slot) {
-		if (slot < 0 || slot > getSlots()) {
+		if (slot < 0 || slot >= getSlots()) {
 			return 0;
 		}
 		return slots.get(slot).getSlotLimit(slot);
@@ -113,7 +113,7 @@ public class MachineItemHandler implements IItemHandlerModifiable {
 
 	@Override
 	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-		if (slot < 0 || slot > getSlots()) {
+		if (slot < 0 || slot >= getSlots()) {
 			return false;
 		}
 		return slots.get(slot).isItemValid(stack);

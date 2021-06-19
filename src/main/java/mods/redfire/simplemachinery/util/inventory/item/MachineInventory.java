@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.EmptyHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,9 +25,7 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 	protected List<MachineItemSlot> inputSlots = new ArrayList<>();
 	protected List<MachineItemSlot> outputSlots = new ArrayList<>();
 
-	protected IItemHandler inputHandler;
-	protected IItemHandler outputHandler;
-	protected IItemHandler combinedHandler;
+	protected IItemHandler handler;
 
 	public MachineInventory(@Nullable IMachineInventoryCallback tile) {
 		this(tile, Collections.emptyList());
@@ -38,8 +35,8 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		super(tile, slots);
 	}
 
-	public void addSlot(InventoryGroup group, MachineItemSlot slot) {
-		if (combinedHandler != null) {
+	public void addSlot(SlotGroup group, MachineItemSlot slot) {
+		if (handler != null) {
 			return;
 		}
 
@@ -55,13 +52,13 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		}
 	}
 
-	public void addSlots(InventoryGroup group, int amount) {
+	public void addSlots(SlotGroup group, int amount) {
 		for (int i = 0; i < amount; ++i) {
 			addSlot(group, new MachineItemSlot());
 		}
 	}
 
-	public void addSlots(InventoryGroup group, List<MachineItemSlot> slots) {
+	public void addSlots(SlotGroup group, List<MachineItemSlot> slots) {
 		for (MachineItemSlot slot : slots) {
 			addSlot(group, slot);
 		}
@@ -73,11 +70,13 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		((ArrayList<MachineItemSlot>) outputSlots).trimToSize();
 	}
 
-	public void initHandlers() {
+	public void initHandler() {
 		optimize();
-		inputHandler = new MachineItemHandler(tile, inputSlots);
-		outputHandler = new MachineItemHandler(tile, outputSlots);
-		combinedHandler = new MachineItemHandler(tile, slots);
+
+		handler = new MachineItemMultiHandler(
+				new GroupedMachineItemHandler(SlotGroup.INPUT, tile, inputSlots),
+				new GroupedMachineItemHandler(SlotGroup.OUTPUT, tile, outputSlots)
+		);
 	}
 
 	@Nonnull
@@ -127,20 +126,11 @@ public class MachineInventory extends MachineItemHandler implements IInventory {
 		return new MachineInventory(tile, getOutputSlots());
 	}
 
-	public IItemHandler getHandler(InventoryGroup group) {
-		if (combinedHandler == null) {
-			initHandlers();
+	public IItemHandler getHandler() {
+		if (handler == null) {
+			initHandler();
 		}
-		switch (group) {
-			case INPUT:
-				return inputHandler;
-			case OUTPUT:
-				return outputHandler;
-			case ALL:
-				return combinedHandler;
-			default:
-		}
-		return EmptyHandler.INSTANCE;
+		return handler;
 	}
 
 	public MachineInventory read(CompoundNBT tag) {

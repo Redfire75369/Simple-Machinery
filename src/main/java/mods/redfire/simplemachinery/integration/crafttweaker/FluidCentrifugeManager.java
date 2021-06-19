@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 @ZenCodeType.Name("mods.simplemachinery.fluidcentrifuge")
 public class FluidCentrifugeManager implements IRecipeManager {
 	@ZenCodeType.Method
-	public void addRecipe(String id, IFluidStack fluidInput, IItemStack[] outputs, IFluidStack[] fluidOutputs, int energy, int time) {
+	public void addRecipe(String id, IFluidStack fluidInput, MCWeightedItemStack[] outputs, IFluidStack[] fluidOutputs, int energy, int time) {
 		ResourceLocation recipeId = new ResourceLocation(CraftTweaker.MODID, id);
 
-		FluidCentrifugeRecipe recipe = new FluidCentrifugeRecipe(recipeId, fluidInput.getInternal(), Arrays.stream(outputs).map(IItemStack::getInternal).collect(Collectors.toList()), null, Arrays.stream(fluidOutputs).map(IFluidStack::getInternal).collect(Collectors.toList()), energy, time);
+		FluidCentrifugeRecipe recipe = new FluidCentrifugeRecipe(recipeId, fluidInput.getInternal(), Arrays.stream(outputs).map(MCWeightedItemStack::getItemStack).map(IItemStack::getInternal).collect(Collectors.toList()), Arrays.stream(outputs).map((output) -> (float) output.getWeight()).collect(Collectors.toList()), Arrays.stream(fluidOutputs).map(IFluidStack::getInternal).collect(Collectors.toList()), energy, time);
 		CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
 	}
 
@@ -39,14 +39,6 @@ public class FluidCentrifugeManager implements IRecipeManager {
 		ResourceLocation recipeId = new ResourceLocation(CraftTweaker.MODID, id);
 
 		FluidCentrifugeRecipe recipe = new FluidCentrifugeRecipe(recipeId, fluidInput.getInternal(), Arrays.stream(outputs).map(IItemStack::getInternal).collect(Collectors.toList()), Floats.asList(outputChances), Arrays.stream(fluidOutputs).map(IFluidStack::getInternal).collect(Collectors.toList()), energy, time);
-		CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
-	}
-
-	@ZenCodeType.Method
-	public void addRecipe(String id, IFluidStack fluidInput, MCWeightedItemStack[] outputs, IFluidStack[] fluidOutputs, int energy, int time) {
-		ResourceLocation recipeId = new ResourceLocation(CraftTweaker.MODID, id);
-
-		FluidCentrifugeRecipe recipe = new FluidCentrifugeRecipe(recipeId, fluidInput.getInternal(), Arrays.stream(outputs).map(MCWeightedItemStack::getItemStack).map(IItemStack::getInternal).collect(Collectors.toList()), Arrays.stream(outputs).map((output) -> (float) output.getWeight()).collect(Collectors.toList()), Arrays.stream(fluidOutputs).map(IFluidStack::getInternal).collect(Collectors.toList()), energy, time);
 		CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
 	}
 

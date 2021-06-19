@@ -6,7 +6,7 @@
 
 package mods.redfire.simplemachinery.util.inventory.item;
 
-public enum InventoryGroup {
+public enum SlotGroup {
 	INPUT,
 	OUTPUT,
 	ALL

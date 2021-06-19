@@ -13,7 +13,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,10 +26,7 @@ public class MachineFluidInventory extends MachineFluidHandler {
 	protected List<MachineFluidTank> outputTanks = new ArrayList<>();
 	protected List<MachineFluidTank> fuelTanks = new ArrayList<>();
 
-	protected IFluidHandler inputHandler;
-	protected IFluidHandler outputHandler;
-	protected IFluidHandler fuelHandler;
-	protected IFluidHandler allHandler;
+	protected IFluidHandler handler;
 
 	public MachineFluidInventory(IMachineInventoryCallback tile) {
 		super(tile);
@@ -41,7 +37,7 @@ public class MachineFluidInventory extends MachineFluidHandler {
 	}
 
 	public void addTank(TankGroup group, MachineFluidTank tank) {
-		if (allHandler != null) {
+		if (handler != null) {
 			return;
 		}
 
@@ -79,13 +75,14 @@ public class MachineFluidInventory extends MachineFluidHandler {
 		((ArrayList<MachineFluidTank>) fuelTanks).trimToSize();
 	}
 
-	public void initHandlers() {
+	public void initHandler() {
 		optimize();
 
-		inputHandler = new MachineFluidHandler(tile, inputTanks);
-		outputHandler = new MachineFluidHandler(tile, outputTanks);
-		fuelHandler = new MachineFluidHandler(tile, fuelTanks);
-		allHandler = new MachineFluidHandler(tile, tanks);
+		handler = new MachineFluidMultiHandler(
+				new GroupedMachineFluidHandler(TankGroup.FUEL, tile, fuelTanks),
+				new GroupedMachineFluidHandler(TankGroup.INPUT, tile, inputTanks),
+				new GroupedMachineFluidHandler(TankGroup.OUTPUT, tile, outputTanks)
+		);
 	}
 
 	@Nonnull
@@ -147,22 +144,11 @@ public class MachineFluidInventory extends MachineFluidHandler {
 		return new MachineFluidInventory(tile, getFuelTanks());
 	}
 
-	public IFluidHandler getHandler(TankGroup group) {
-		if (allHandler == null) {
-			initHandlers();
+	public IFluidHandler getHandler() {
+		if (handler == null) {
+			initHandler();
 		}
-		switch (group) {
-			case INPUT:
-				return inputHandler;
-			case OUTPUT:
-				return outputHandler;
-			case FUEL:
-				return fuelHandler;
-			case ALL:
-				return allHandler;
-			default:
-		}
-		return EmptyFluidHandler.INSTANCE;
+		return handler;
 	}
 
 	public MachineFluidInventory read(CompoundNBT tag) {

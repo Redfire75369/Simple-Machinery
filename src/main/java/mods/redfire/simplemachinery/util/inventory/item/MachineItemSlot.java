@@ -110,7 +110,7 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 				setItemStack(stack);
 			}
 			return EMPTY;
-		} else if (ItemStack.matches(item, stack) && ItemStack.tagMatches(item, stack)) {
+		} else if (item.getItem() == stack.getItem() && ItemStack.tagMatches(item, stack)) {
 			int totalCount = item.getCount() + stack.getCount();
 			int limit = getSlotLimit(0);
 			if (totalCount <= limit) {
@@ -124,6 +124,7 @@ public class MachineItemSlot implements IItemHandlerModifiable {
 			}
 			return new ItemStack(stack.getItem(), totalCount - limit);
 		}
+
 		return stack;
 	}
 
