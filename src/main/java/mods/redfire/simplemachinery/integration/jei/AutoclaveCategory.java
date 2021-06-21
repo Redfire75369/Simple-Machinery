@@ -12,6 +12,7 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mods.redfire.simplemachinery.Config;
 import mods.redfire.simplemachinery.integration.jei.machine.FluidMachineCategory;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.registry.Names;
@@ -74,8 +75,8 @@ public class AutoclaveCategory extends FluidMachineCategory<AutoclaveRecipe> {
 		itemStacks.init(1, false, 83, 8);
 
 		// TODO: Make Steam Tank fill up from left to right instead of bottom to top
-		fluidStacks.init(2, true, 33, 35, 64, 8, 8000, false, null);
-		fluidStacks.init(3, true, 13, 10, 8, 32, 8000, true, null);
+		fluidStacks.init(2, true, 33, 35, 64, 8, Config.AUTOCLAVE_STEAM_CAPACITY.get(), false, null);
+		fluidStacks.init(3, true, 13, 10, 8, 32, Config.AUTOCLAVE_TANK_CAPACITY.get(), true, null);
 
 		itemStacks.set(ingredients);
 		fluidStacks.set(ingredients);

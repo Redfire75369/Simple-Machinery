@@ -6,6 +6,7 @@
 
 package mods.redfire.simplemachinery.tileentities.autoclave;
 
+import mods.redfire.simplemachinery.Config;
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.fluid.FluidMachineTile;
 import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidTank;
@@ -24,12 +25,14 @@ import java.util.Optional;
 
 public class AutoclaveTile extends FluidMachineTile<AutoclaveRecipe> implements INamedContainerProvider {
 	public static final int ITEM_INPUTS = 1;
-	public static final int FLUID_INPUTS = 1;
 	public static final int ITEM_OUTPUTS = 1;
-	public static final int FLUID_FUELS = 1;
 
 	public AutoclaveTile() {
-		super(TileEntities.AUTOCLAVE_TILE.get(), Collections.singletonList(new MachineItemSlot()), Collections.singletonList(new MachineItemSlot()), Collections.singletonList(new MachineFluidTank(8000)), Collections.emptyList(), new MachineFluidTank(8000, e -> e.getFluid().getRegistryName().getPath().equals("steam")));
+		super(TileEntities.AUTOCLAVE_TILE.get(), Collections.singletonList(new MachineItemSlot()),
+				Collections.singletonList(new MachineItemSlot()),
+				Collections.singletonList(new MachineFluidTank(Config.AUTOCLAVE_TANK_CAPACITY.get())),
+				Collections.emptyList(),
+				new MachineFluidTank(Config.AUTOCLAVE_STEAM_CAPACITY.get(), e -> e.getFluid().getRegistryName().getPath().equals("steam")));
 	}
 
 	@Override

@@ -1,33 +1,33 @@
 buildscript {
-    repositories {
-        maven {
-            url = "https://maven.minecraftforge.net"
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.1.+", changing: true
-    }
+	repositories {
+		maven {
+			url = "https://maven.minecraftforge.net"
+		}
+		mavenCentral()
+	}
+	dependencies {
+		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.1.+", changing: true
+	}
 }
 apply plugin: "net.minecraftforge.gradle"
 
 repositories {
-    maven {
-        name = "BlameJared"
-        url = "https://maven.blamejared.com"
-    }
-    maven {
-        name = "Progwml6"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
+	maven {
+		name = "BlameJared"
+		url = "https://maven.blamejared.com"
+	}
+	maven {
+		name = "Progwml6"
+		url = "https://dvs1.progwml6.com/files/maven/"
+	}
 	maven {
 		name = "Tehnut"
 		url = "https://maven.tehnut.info"
 	}
-    maven {
-        name = "ModMaven"
-        url = "https://modmaven.dev/"
-    }
+	maven {
+		name = "ModMaven"
+		url = "https://modmaven.dev/"
+	}
 }
 
 group = "redfire.mods"
@@ -38,80 +38,80 @@ version = "${mc_version}-${mod_version}"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
 minecraft {
-    mappings channel: "official", version: "1.16.5"
+	mappings channel: "official", version: "1.16.5"
 	accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
-    runs {
-        client {
-            workingDirectory project.file("run")
-            property "forge.logging.markers", ""
-            property "forge.logging.console.level", "debug"
+	runs {
+		client {
+			workingDirectory project.file("run")
+			property "forge.logging.markers", ""
+			property "forge.logging.console.level", "debug"
 
-            mods {
-                simplemachinery {
-                    source sourceSets.main
-                }
-            }
-        }
+			mods {
+				simplemachinery {
+					source sourceSets.main
+				}
+			}
+		}
 
-        server {
-            workingDirectory project.file("run")
-            property "forge.logging.markers", ""
-            property "forge.logging.console.level", "debug"
+		server {
+			workingDirectory project.file("run")
+			property "forge.logging.markers", ""
+			property "forge.logging.console.level", "debug"
 
-            mods {
-                simplemachinery {
-                    source sourceSets.main
-                }
-            }
-        }
+			mods {
+				simplemachinery {
+					source sourceSets.main
+				}
+			}
+		}
 
-        data {
-            workingDirectory project.file("run")
-            property "forge.logging.markers", ""
-            property "forge.logging.console.level", "debug"
+		data {
+			workingDirectory project.file("run")
+			property "forge.logging.markers", ""
+			property "forge.logging.console.level", "debug"
 
-            args "--mod", "simplemachinery", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
+			args "--mod", "simplemachinery", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
 
-            mods {
-                simplemachinery {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+			mods {
+				simplemachinery {
+					source sourceSets.main
+				}
+			}
+		}
+	}
 }
 
 sourceSets.main.resources {
-    srcDir "src/generated/resources"
+	srcDir "src/generated/resources"
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+	minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
-    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
+	compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
+	runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_version}:${crafttweaker_version}")
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+	runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
 	runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
 
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:additions")
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:generators")
+	runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}")
+	runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:additions")
+	runtimeOnly fg.deobf("mekanism:Mekanism:${mc_version}-${mekanism_version}:generators")
 }
 
 jar {
-    manifest {
-        attributes([
-            "Specification-Title": "simplemachinery",
-            "Specification-Vendor": "Redfire",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"Redfire",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
+	manifest {
+		attributes([
+				"Specification-Title"     : "simplemachinery",
+				"Specification-Vendor"    : "Redfire",
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : project.name,
+				"Implementation-Version"  : "${version}",
+				"Implementation-Vendor"   : "Redfire",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
 }

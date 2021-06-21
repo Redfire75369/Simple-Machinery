@@ -101,7 +101,7 @@ public class MachineContainer<T extends MachineTile<?>> extends Container {
 				if (!moveItemStackTo(item, 36, 36 + inventorySize - 1, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else  {
+			} else {
 				if (!this.moveItemStackTo(item, 0, 35, false)) {
 					return ItemStack.EMPTY;
 				}

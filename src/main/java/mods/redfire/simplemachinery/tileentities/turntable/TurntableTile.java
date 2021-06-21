@@ -6,6 +6,7 @@
 
 package mods.redfire.simplemachinery.tileentities.turntable;
 
+import mods.redfire.simplemachinery.Config;
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
@@ -25,7 +26,9 @@ public class TurntableTile extends EnergyMachineTile<TurntableRecipe> implements
 	public static final int ITEM_OUTPUTS = 1;
 
 	public TurntableTile() {
-		super(TileEntities.TURNTABLE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, 0, 0, 0, 0, new EnergyCoil(10000, 100));
+		super(TileEntities.TURNTABLE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS,
+				0, 0, 0, 0,
+				new EnergyCoil(Config.TURNTABLE_COIL_CAPACITY.get(), Config.TURNTABLE_COIL_IO.get()));
 	}
 
 	@Override

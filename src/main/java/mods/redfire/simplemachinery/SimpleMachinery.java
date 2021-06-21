@@ -46,7 +46,6 @@ public class SimpleMachinery {
 		ModLoadingContext ctxLoading = ModLoadingContext.get();
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		ctxLoading.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
 		ctxLoading.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 
 		Blocks.register(bus);

@@ -9,6 +9,7 @@ package mods.redfire.simplemachinery.tileentities.autoclave;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mods.redfire.simplemachinery.tileentities.machine.MachineScreen;
 import mods.redfire.simplemachinery.util.CoordinateChecker;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.render.FluidDirection;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -38,11 +39,12 @@ public class AutoclaveScreen extends MachineScreen<AutoclaveContainer> {
 		int y = getGuiTop();
 
 		ITextComponent tooltip = null;
+		MachineFluidInventory tankInventory = menu.tile.getFluidInv();
 
 		if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 24 - 2, y + 66 - 2, x + 24 + 128 + 1, y + 66 + 8 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(0).getAmount(), 8000);
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", tankInventory.getTank(0).getAmount(), tankInventory.getTank(0).getCapacity());
 		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 9 - 2, y + 10 - 2, x + 9 + 8 + 1, y + 10 + 64 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(1).getAmount(), 8000);
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", tankInventory.getTank(1).getAmount(), tankInventory.getTank(1).getCapacity());
 		}
 
 		if (tooltip != null) {

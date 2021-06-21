@@ -23,7 +23,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -63,7 +62,7 @@ public class MachineBlock extends Block {
 	}
 
 
-
+	// TODO: Insert Fluid into Tanks if present when right-clicked with a non-empty Fluid Container
 	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
@@ -83,7 +82,7 @@ public class MachineBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onRemove(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull BlockState state1, boolean p_196243_5_) {
+	public void onRemove(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
 		TileEntity tile = world.getBlockEntity(pos);
 
 		if (tile instanceof MachineTile<?>) {
@@ -94,6 +93,6 @@ public class MachineBlock extends Block {
 			}
 		}
 
-		super.onRemove(state, world, pos, state1, p_196243_5_);
+		super.onRemove(state, world, pos, newState, isMoving);
 	}
 }

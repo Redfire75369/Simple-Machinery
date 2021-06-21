@@ -98,17 +98,17 @@ public abstract class MachineCategory<T extends MachineRecipe> implements IRecip
 		return index;
 	}
 
-	protected int initTankRow(IGuiFluidStackGroup fluidStacks, boolean input, int index, int x, int y, int width, int height, int amount, int dx, int capacity) {
+	protected int initTankRow(IGuiFluidStackGroup fluidStacks, boolean input, int index, int x, int y, int width, int height, int amount, int dx, int capacity, boolean showCapacity) {
 		for (int i = 0; i < amount; i++) {
-			fluidStacks.init(index++, input, x, y, width, height, capacity, true, null);
+			fluidStacks.init(index++, input, x, y, width, height, capacity, showCapacity, null);
 			x += dx;
 		}
 		return index;
 	}
 
-	protected int initTankRectangle(IGuiFluidStackGroup fluidStacks, boolean input, int index, int x, int y, int width, int height, int horAmount, int verAmount, int dx, int dy, int capacity) {
+	protected int initTankRectangle(IGuiFluidStackGroup fluidStacks, boolean input, int index, int x, int y, int width, int height, int horAmount, int verAmount, int dx, int dy, int capacity, boolean showCapacity) {
 		for (int j = 0; j < verAmount; j++) {
-			index = initTankRow(fluidStacks, input, index, x, y, width, height, horAmount, dx, capacity);
+			index = initTankRow(fluidStacks, input, index, x, y, width, height, horAmount, dx, capacity, showCapacity);
 			y += dy;
 		}
 		return index;

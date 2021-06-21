@@ -9,6 +9,7 @@ package mods.redfire.simplemachinery.tileentities.fluidcentrifuge;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mods.redfire.simplemachinery.tileentities.machine.MachineScreen;
 import mods.redfire.simplemachinery.util.CoordinateChecker;
+import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.render.FluidDirection;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -41,15 +42,16 @@ public class FluidCentrifugeScreen extends MachineScreen<FluidCentrifugeContaine
 		int y = getGuiTop();
 
 		ITextComponent tooltip = null;
+		MachineFluidInventory tankInventory = menu.tile.getFluidInv();
 
 		if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 35 - 2, y + 18 - 2, x + 35 + 16 + 1, y + 18 + 32 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(0).getAmount(), 8000);
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", tankInventory.getTank(0).getAmount(), tankInventory.getTank(0).getCapacity());
 		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 89 - 2, y + 35 - 2, x + 89 + 16 + 1, y + 35 + 16 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(1).getAmount(), 8000);
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", tankInventory.getTank(1).getAmount(), tankInventory.getTank(1).getCapacity());
 		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 89 + 18 - 2, y + 35 - 2, x + 89 + 18 + 16 + 1, y + 35 + 16 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(2).getAmount(), 8000);
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", tankInventory.getTank(2).getAmount(), tankInventory.getTank(2).getCapacity());
 		} else if (CoordinateChecker.withinRectangle(mouseX, mouseY, x + 89 + 18 * 2 - 2, y + 35 - 2, x + 89 + 18 * 2 + 16 + 1, y + 35 + 16 + 1)) {
-			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", menu.tile.getFluidInv().get(3).getAmount(), 8000);
+			tooltip = new TranslationTextComponent("screen.simplemachinery.tooltip.fluid", tankInventory.getTank(3).getAmount(), tankInventory.getTank(3).getCapacity());
 		}
 
 		if (tooltip != null) {

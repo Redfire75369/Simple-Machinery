@@ -6,6 +6,7 @@
 
 package mods.redfire.simplemachinery.tileentities.fluidcentrifuge;
 
+import mods.redfire.simplemachinery.Config;
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
@@ -27,7 +28,10 @@ public class FluidCentrifugeTile extends EnergyMachineTile<FluidCentrifugeRecipe
 	public static final int FLUID_OUTPUTS = 3;
 
 	public FluidCentrifugeTile() {
-		super(TileEntities.FLUID_CENTRIFUGE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, FLUID_INPUTS, 8000, FLUID_OUTPUTS, 8000, new EnergyCoil(10000));
+		super(TileEntities.FLUID_CENTRIFUGE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS,
+				FLUID_INPUTS, Config.FLUID_CENTRIFUGE_INPUT_TANK_CAPACITY.get(),
+				FLUID_OUTPUTS, Config.FLUID_CENTRIFUGE_OUTPUT_TANKS_CAPACITY.get(),
+				new EnergyCoil(Config.FLUID_CENTRIFUGE_COIL_CAPACITY.get(), Config.FLUID_CENTRIFUGE_COIL_IO.get()));
 	}
 
 	@Override

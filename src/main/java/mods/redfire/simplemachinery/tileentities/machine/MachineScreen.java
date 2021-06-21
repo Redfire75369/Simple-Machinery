@@ -8,6 +8,7 @@ package mods.redfire.simplemachinery.tileentities.machine;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mods.redfire.simplemachinery.util.Corner;
+import mods.redfire.simplemachinery.util.energy.EnergyCoil;
 import mods.redfire.simplemachinery.util.inventory.fluid.MachineFluidInventory;
 import mods.redfire.simplemachinery.util.render.FluidDirection;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -186,7 +187,10 @@ public abstract class MachineScreen<T extends MachineContainer<?>> extends Conta
 	}
 
 	protected int getEnergyScaled(int pixels) {
-		int i = menu.tile.getCoil().getEnergyStored();
-		return i * pixels / 10000;
+		EnergyCoil coil = menu.tile.getCoil();
+
+		int i = coil.getEnergyStored();
+		int j = coil.getCapacity();
+		return j != 0 ? i * pixels / j : 0;
 	}
 }

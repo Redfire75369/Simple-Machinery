@@ -6,6 +6,7 @@
 
 package mods.redfire.simplemachinery.tileentities.sieve;
 
+import mods.redfire.simplemachinery.Config;
 import mods.redfire.simplemachinery.registry.TileEntities;
 import mods.redfire.simplemachinery.tileentities.machine.energy.EnergyMachineTile;
 import mods.redfire.simplemachinery.util.energy.EnergyCoil;
@@ -25,7 +26,9 @@ public class SieveTile extends EnergyMachineTile<SieveRecipe> implements INamedC
 	public static final int ITEM_OUTPUTS = 6;
 
 	public SieveTile() {
-		super(TileEntities.SIEVE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS, 0, 0, 0, 0, new EnergyCoil(10000, 100));
+		super(TileEntities.SIEVE_TILE.get(), ITEM_INPUTS, ITEM_OUTPUTS,
+				0, 0, 0, 0,
+				new EnergyCoil(Config.SIEVE_COIL_CAPACITY.get(), Config.SIEVE_COIL_IO.get()));
 	}
 
 	@Override

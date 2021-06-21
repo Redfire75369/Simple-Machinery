@@ -12,6 +12,7 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mods.redfire.simplemachinery.Config;
 import mods.redfire.simplemachinery.integration.jei.machine.EnergyMachineCategory;
 import mods.redfire.simplemachinery.registry.Blocks;
 import mods.redfire.simplemachinery.registry.Names;
@@ -70,8 +71,8 @@ public class FluidCentrifugeCategory extends EnergyMachineCategory<FluidCentrifu
 
 		int index = initSlotRow(itemStacks, false, 0, 66, 8, 3, 18);
 
-		fluidStacks.init(index++, true, 13, 10, 16, 32, 8000, false, null);
-		initTankRow(fluidStacks, false, index, 67, 27, 16, 16, 3, 18, 8000);
+		fluidStacks.init(index++, true, 13, 10, 16, 32, Config.FLUID_CENTRIFUGE_INPUT_TANK_CAPACITY.get(), true, null);
+		initTankRow(fluidStacks, false, index, 67, 27, 16, 16, 3, 18, Config.FLUID_CENTRIFUGE_OUTPUT_TANKS_CAPACITY.get(), true);
 
 		itemStacks.set(ingredients);
 		fluidStacks.set(ingredients);

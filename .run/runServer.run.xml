@@ -1,0 +1,23 @@
+<component name="ProjectRunConfigurationManager">
+	<configuration default="false" name="Run Server" type="Application" factoryName="Application" singleton="false">
+		<envs>
+			<env name="MOD_CLASSES"
+				 value="examplemod%%$PROJECT_DIR$/../Simple-Machinery\build\resources\main;examplemod%%$PROJECT_DIR$/../Simple-Machinery\build\classes\java\main"/>
+			<env name="MCP_MAPPINGS" value="official_1.16.5"/>
+			<env name="MCP_VERSION" value="20210115.111550"/>
+			<env name="FORGE_VERSION" value="36.1.18"/>
+			<env name="FORGE_GROUP" value="net.minecraftforge"/>
+			<env name="target" value="fmluserdevserver"/>
+			<env name="MC_VERSION" value="1.16.5"/>
+		</envs>
+		<option name="MAIN_CLASS_NAME" value="net.minecraftforge.userdev.LaunchTesting"/>
+		<module name="Simple-Machinery.main"/>
+		<option name="VM_PARAMETERS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=REGISTRIES"/>
+		<option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run"/>
+		<method v="2">
+			<option name="Make" enabled="true"/>
+			<option name="Gradle.BeforeRunTask" enabled="true" tasks=":prepareRunServer"
+					externalProjectPath="$PROJECT_DIR$"/>
+		</method>
+	</configuration>
+</component>
