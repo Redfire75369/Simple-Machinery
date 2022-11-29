@@ -1,0 +1,103 @@
+<p><img src="https://img.shields.io/discord/579354150639370348?color=7389D8&label=Discord&labelColor=6A7EC2&logo=discord&logoColor=FFFFFF&style=flat-square" alt="Discord Server"/></p>
+<h1><b>Simple Machinery</b></h1>
+<p><img src="https://raw.githubusercontent.com/Redfire75369/Simple-Machinery/1.16.5/src/main/resources/logo.png" alt="Mod Logo" width="200" height="200"/></p>
+
+<p>
+	Simple Machinery is a Minecraft mod that adds simple machines to Minecraft.
+	This mod is made for modpack authors. It does not add any recipes by itself, and is meant to configured to fit into a modpack's progression.
+	The machines that are added, usually don't exist in other mods, such as autoclaves and turntables.
+</p>
+<br/>
+
+<h3>Machines</h3>
+<ul>
+	<li>Autoclave</li>
+	<li>Fluid Centrifuge</li>
+	<li>Sieve</li>
+	<li>Turntable</li>
+</ul>
+<br/>
+
+<h3>Inputs, Outputs and Fuels</h3>
+<details>
+	<div>
+		<h4>Autoclave</h4>
+		<details>
+			<ul>
+				<li>Fuel: Steam</li>
+				<li>Input: 1 Item + 1 Fluid</li>
+				<li>Output: 1 Item</li>
+			</ul>
+		</details>
+	</div>
+	<br/>
+	<div>
+		<h4>Fluid Centrifuge</h4>
+		<details>
+			<ul>
+				<li>Fuel: Forge Energy</li>
+				<li>Input: 1 Liquid</li>
+				<li>Output: 3 Weighted Items + 3 Fluids</li>
+			</ul>
+		</details>
+	</div>
+	<br/>
+	<div>
+		<h4>Sieve</h4>
+		<details>
+			<ul>
+				<li>Fuel: Forge Energy</li>
+				<li>Input: 1 Item</li>
+				<li>Output: 6 Weighted Item</li>
+			</ul>
+		</details>
+	</div>
+	<br/>
+	<div>
+		<h4>Turntable</h4>
+		<details>
+			<ul>
+				<li>Fuel: Forge Energy</li>
+				<li>Input: 1 Item</li>
+				<li>Output: 1 Item</li>
+			</ul>
+		</details>
+	</div>
+</details>
+<br/>
+
+<h3>CraftTweaker Support</h3>
+
+<details>
+	<div>
+		<h4>Autoclave</h4>
+		<code>
+			mods.simplemachinery.autoclave.addRecipe(string id, IIngredient input, IFluidStack fluidInput, IItemStack output, int steam, int time);<br/>
+			mods.simplemachinery.autoclave.removeRecipe(IItemStack output);
+		</code>
+	</div>
+	<br/>
+	<div>
+		<h4>Fluid Centrifuge</h4>
+		<code>
+			mods.simplemachinery.fluid_centrifuge.addRecipe(string id, IFluidStack fluidInput, MCWeightedItemStack[] outputs, IFluidStack[] fluidOutputs, int energy, int ticks);<br/>
+			mods.simplemachinery.fluid_centrifuge.addRecipe(string id, IFluidStack fluidInput, IItemStack[] outputs, float[] outputChances[], IFluidStack[] outputs, int energy, int ticks);
+		</code>
+	</div>
+	<br/>
+	<div>
+		<h4>Sieve</h4>
+		<code>
+			mods.simplemachinery.sieve.addRecipe(string id, IItemStack input, MCWeightedItemStack[] outputs, int energy, int ticks);<br/>
+			mods.simplemachinery.sieve.addRecipe(string id, IItemStack input, IItemStack[] outputs, float[] outputChances, int energy, int ticks);
+		</code>
+	</div>
+	<br/>
+	<div>
+		<h4>Turntable</h4>
+		<code>
+			mods.simplemachinery.turntable.addRecipe(string id, IIngredient input, IItemStack output, int energy, int ticks);<br/>
+			mods.simplemachinery.autoclave.removeRecipe(IItemStack output);
+		</code>
+	</div>
+</details>
